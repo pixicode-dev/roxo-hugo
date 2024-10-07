@@ -15,17 +15,17 @@
       text-align: center;
     }
     &-title{
-      color: $white;
+      color: $black;
       margin-bottom: 30px;
       @include desktop{
         margin-bottom: 20px;
       }
     }
     &-description{
-      color: $white;
+      color: $black;
       line-height: 30px;
       a{
-        color: $white;
+        color: $black;
       }
     }
     &-links{
@@ -34,7 +34,7 @@
       li{
         list-style: none;
         a{
-          color: $white;
+          color: $black;
           transition: all 0.3s $site-ease;
           display: block;
         }
@@ -54,7 +54,7 @@
         margin-bottom: 20px;
       }
       p{
-        color: $white;
+        color: $black;
       }
       &:hover{
         text-decoration: none;
@@ -63,7 +63,7 @@
   }
   &-copyright{
     p{
-      color: $white;
+      color: $black;
       margin: 50px auto 0;
       text-align: center;
     }

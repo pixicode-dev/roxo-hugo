@@ -10,11 +10,6 @@
               {{ .Params.heading }}
             </h1>
           </div>
-          <div class="site-about-description">
-            <p>
-              {{ .Description }}
-            </p>
-          </div>
         </div>
       </div>
     </div>
@@ -24,19 +19,10 @@
 <section class="site-expertise">
   <div class="container">
     <div class="row">
-      {{ with .Params.expertise_title }}
-      <div class="col-md-5">
-        <div class="section-title">
-          <h2>{{ . }}</h2>
-        </div>
-      </div>
-      {{ end }}
-      <div class="col-md-6">
-        <ul class="site-expertise-list">
-          {{ range .Params.expertise_sectors }}
-          <li>{{ . }}</li>
-          {{ end }}
-        </ul>
+      <div class="col-md-9 ml-auto">
+    
+          {{ .Content }}
+
       </div>
     </div>
   </div>

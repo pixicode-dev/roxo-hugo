@@ -2,24 +2,25 @@
   <div class="container">
     <div class="row">
       <div class="col-12">
-        <div class="site-footer-logo"><a href="{{ .Site.BaseURL }}"><img src="{{ .Site.Params.logo_footer | absURL }}" alt="logo-footer"></a></div>
+        <div class="site-footer-logo"><a href="{{ .Site.BaseURL }}"><img src="{{ .Site.Params.logo_footer | absURL }}"
+              alt="logo-footer"></a></div>
       </div>
       {{ with .Site.Params.footer.contactInfo }}
       <div class="col-lg-3 col-md-6">
         <div class="site-footer-widget">
           <h5 class="site-footer-widget-title">{{ .title }}</h5>
           <p class="site-footer-widget-description">
-	    {{ if .address }}
-              {{ .address | safeHTML }}
-	      <br>
-	    {{ end }}
-	    {{ if .phone }}
-              <a href="tel:{{ .phone }}">{{ .phone }}</a>
-              <br>
-	    {{ end }}
-	    {{ if .email }}
-              <a href="mailto:{{ .email }}">{{ .email }}</a>
-	    {{ end }}
+            {{ if .address }}
+            {{ .address | safeHTML }}
+            <br>
+            {{ end }}
+            {{ if .phone }}
+            <a href="tel:{{ .phone }}">{{ .phone }}</a>
+            <br>
+            {{ end }}
+            {{ if .email }}
+            <a href="mailto:{{ .email }}">{{ .email }}</a>
+            {{ end }}
           </p>
         </div>
       </div>
@@ -42,7 +43,7 @@
           <h5 class="site-footer-widget-title">{{ .title }}</h5>
           <ul class="site-footer-widget-links">
             {{ range .link }}
-              <li><a href="{{ .url }}">{{ .name }}</a></li>
+            <li><a href="{{ .url }}">{{ .name }}</a></li>
             {{ end }}
           </ul>
         </div>
@@ -62,13 +63,13 @@
         <a href="#top" class="site-footer-widget-top">
           <img src="{{ "images/to-top.svg" | absURL }}" alt="back-to-top">
           <p>
-	    {{ .Site.Params.footer.back_to_top.description | safeHTML }}
+            {{ .Site.Params.footer.back_to_top.description | safeHTML }}
           </p>
         </a>
       </div>
       <div class="col-12">
         <div class="site-footer-copyright">
-          <p>© Copyright {{ dateFormat "2006" now }} - All Rights Reserved by <a href="https://staticmania.com/" target="_blank">StaticMania</a> </p>
+          <p>© Copyright {{ dateFormat "2006" now }} - All Rights Reserved by PixiCode</p>
         </div>
       </div>
     </div>
@@ -80,11 +81,11 @@
 
         <div id="qrcode">
           <script type="text/javascript">
-           new QRCode(document.getElementById("qrcode"), {
-             text: "{{ .Page.RelPermalink | absURL }}",
-             width: 128,
-             height: 128,
-           });
+            new QRCode(document.getElementById("qrcode"), {
+              text: "{{ .Page.RelPermalink | absURL }}",
+              width: 128,
+              height: 128,
+            });
           </script>
         </div>
       </div>
