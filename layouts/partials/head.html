@@ -30,13 +30,13 @@
   <link rel="shortcut icon" href="{{ .Site.Params.favicon_shortcut_icon | absURL }}" type="image/x-icon" />
   <link rel="icon" href="{{ .Site.Params.favicon_icon | absURL }}" type="image/x-icon" />
 </head>
-{{ if .Site.Params.googleAnalyticsID }}
+{{ if .Site.Params.googleAnalitycsID }}
 <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id={{ .Site.Params.googleAnalyticsID }}"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id={{ .Site.Params.googleAnalitycsID }}"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag() { dataLayer.push(arguments); }
   gtag('js', new Date());
-  gtag('config', '{{ .Site.Params.googleAnalyticsID }}');
+  gtag('config', '{{ .Site.Params.googleAnalitycsID }}');
 </script>
 {{ end }}
