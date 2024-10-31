@@ -13,11 +13,6 @@ window.addEventListener("DOMContentLoaded", function () {
     status.innerHTML = "Oops! There was a problem.";
   }
 
-  function onSubmit(token) {
-    document.getElementById("contact-form").submit();
-  }
-
-
   // handle the form submission event
 
   form.addEventListener("submit", function (ev) {
