@@ -1,4 +1,10 @@
 {{ define "main" }}
+<script>
+  function onSubmit(token) {
+    document.getElementById("contact-form-button").submit();
+  }
+</script>
+
 <section class="site-contact">
   <div class="container">
     <div class="row">
@@ -13,19 +19,24 @@
           <form id="contact-form" action="{{ .Site.Params.fabform }}" method="post">
             <div class="row">
               <div class="col-lg-6">
-                <input type="text" class="form-control" name="first-name" id="first-name" placeholder="{{ .Site.Params.contactForm.placeholder_first_name }}" required>
+                <input type="text" class="form-control" name="first-name" id="first-name"
+                  placeholder="{{ .Site.Params.contactForm.placeholder_first_name }}" required>
               </div>
               <div class="col-lg-6">
-                <input type="text" class="form-control" name="last-name" id="last-name" placeholder="{{ .Site.Params.contactForm.placeholder_last_name }}" required>
+                <input type="text" class="form-control" name="last-name" id="last-name"
+                  placeholder="{{ .Site.Params.contactForm.placeholder_last_name }}" required>
               </div>
               <div class="col-lg-6">
-                <input type="email" class="form-control" name="email" id="email" placeholder="{{ .Site.Params.contactForm.placeholder_email }}" required>
+                <input type="email" class="form-control" name="email" id="email"
+                  placeholder="{{ .Site.Params.contactForm.placeholder_email }}" required>
               </div>
               <div class="col-12">
-                <textarea class="form-control" id="aboutProject" name="about-project" rows="6" placeholder="{{ .Site.Params.contactForm.placeholder_about_the_project }}"></textarea>
+                <textarea class="form-control" id="aboutProject" name="about-project" rows="6"
+                  placeholder="{{ .Site.Params.contactForm.placeholder_about_the_project }}"></textarea>
               </div>
               <div class="col-12">
-                <button formtarget="_blank" type="submit" class="btn btn-primary" id="contact-form-button">
+                <button formtarget="_blank" type="submit" class="btn btn-primary g-recaptcha" id="contact-form-button"
+                  data-sitekey="{{ .Site.Params.contactForm.captcha_key}}" data-action='submit'>
                   <span class="btn-area">
                     <span data-text="{{ .Site.Params.contactForm.send_message }}">
                       {{ .Site.Params.contactForm.send_message }}
@@ -37,7 +48,6 @@
             </div>
           </form>
           <p class="contact-form-generator">
-          <a href="https://fabform.io/" target="_blank">form backend service</a>
           </p>
         </div>
       </div>
