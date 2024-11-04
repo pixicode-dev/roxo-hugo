@@ -2,6 +2,11 @@
   background: $secondary-color;
   padding: 100px 0;
   &-logo{
+    &>a{
+      &>img{
+        max-width: 90%;
+      }
+    }
     margin-bottom: 50px;
     @include mobile{
       text-align: center;
