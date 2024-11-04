@@ -5,11 +5,30 @@
     position: relative;
     margin-bottom: 30px;
     transition: all 0.3s ease-in;
-    &-thumb{
-      img{
-        width: 100%;
+    &-thumb { 
+
+      @media (min-width: 768px) { 
+        img{
+          width: 100%; /* Définir la largeur */
+          height: 450px; /* Définir la hauteur */
+          object-fit: cover; /* Remplir tout en gardant le ratio */
+        }
       }
-    }
+
+        @media (max-width: 768px) { 
+          img{
+            width: 100%; /* Définir la largeur */
+            height: 450px; /* Définir la hauteur */
+            object-fit: cover; /* Remplir tout en gardant le ratio */
+          }
+        }
+        @media (max-width: 576px) { 
+          img{
+            width: 100%; /* Définir la largeur */
+            object-fit: cover; /* Remplir tout en gardant le ratio */
+          }
+        }     
+      }  
     &-content{
       position: absolute;
       background: $gray;
@@ -60,6 +79,27 @@
       0px 30px 45px 0px rgba(0, 0, 0, 0.03),
       0px 30px 45px 0px rgba(0, 0, 0, 0.04);
       .site-project-item-content{
+        @media (min-width: 768px) { 
+          img{
+            width: 100%; /* Définir la largeur */
+            height: 250px; /* Définir la hauteur */
+            object-fit: cover; /* Remplir tout en gardant le ratio */
+          }
+        }
+          @media (max-width: 768px) { 
+            img{
+              width: 150%; /* Définir la largeur */
+              height: 250px; /* Définir la hauteur */
+              object-fit: cover; /* Remplir tout en gardant le ratio */
+            }
+          }
+          @media (max-width: 576px) { 
+            img{
+              width: 150%; /* Définir la largeur */
+              height: 270px; /* Définir la hauteur */
+              object-fit: cover; /* Remplir tout en gardant le ratio */
+            }
+          }    
         a{
           transform: translateY(0);
           opacity: 1;
