@@ -24,7 +24,7 @@
   <div class="container">
     <div class="row">
       {{ range (.Paginator 4).Pages }}
-      <div class="col-lg-5 col-md-6 col-sm-9 col-9 mx-auto">
+      <div class="col-lg-5 col-md-6 col-sm-9 col-9 mx-auto" id="itemClickId">
         <div class="site-project-item">
           <div class="site-project-item-thumb">
             <img src="{{ .Params.Image | absURL }}" alt="project-thumb">
@@ -45,7 +45,8 @@
     </div>
   </div>
 </section>
-
+{{ $script := resources.Get "js/one_click.js" | minify }}
+<script src="{{ $script.Permalink }}"></script>
 {{ partial "call-to-action.html" . }}
 
 {{ end }}
