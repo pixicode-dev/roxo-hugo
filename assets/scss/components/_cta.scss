@@ -2,6 +2,11 @@
   padding: 130px 0;
   background-size: cover;
   background-position: center center;
+  @media (max-width: 370px) {
+    h1{
+      font-size: 36px;
+    }  
+  }
   @include desktop{
     padding: 100px 0;
   }
