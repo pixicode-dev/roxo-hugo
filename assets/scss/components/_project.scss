@@ -10,22 +10,25 @@
       @media (min-width: 768px) { 
         img{
           width: 100%; /* Définir la largeur */
-          height: 450px; /* Définir la hauteur */
+          //height: 450px; /* Définir la hauteur */
           object-fit: cover; /* Remplir tout en gardant le ratio */
+          margin-bottom: 25%;
         }
       }
 
         @media (max-width: 768px) { 
           img{
             width: 100%; /* Définir la largeur */
-            height: 450px; /* Définir la hauteur */
+            //height: 450px; /* Définir la hauteur */
             object-fit: cover; /* Remplir tout en gardant le ratio */
+            margin-bottom: 55%;
           }
         }
         @media (max-width: 576px) { 
           img{
             width: 100%; /* Définir la largeur */
             object-fit: cover; /* Remplir tout en gardant le ratio */
+            margin-bottom: 75%;
           }
         }     
       }  
@@ -95,8 +98,8 @@
           }
           @media (max-width: 576px) { 
             img{
-              width: 150%; /* Définir la largeur */
-              height: 270px; /* Définir la hauteur */
+              width: 80%; /* Définir la largeur */
+              //height: 200px; /* Définir la hauteur */
               object-fit: cover; /* Remplir tout en gardant le ratio */
             }
           }    
