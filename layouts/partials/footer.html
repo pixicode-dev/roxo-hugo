@@ -43,7 +43,7 @@
           <h5 class="site-footer-widget-title">{{ .title }}</h5>
           <ul class="site-footer-widget-links">
             {{ range .link }}
-            <li><a target="_blank" href="{{ .url }}" >{{ .name }}</a></li>
+            <li><a target="_blank" href="{{ .url }}">{{ .name }}</a></li>
             {{ end }}
           </ul>
         </div>
@@ -61,7 +61,7 @@
       {{ end }}
       <div class="col-lg-2 col-12">
         <a href="#top" class="site-footer-widget-top">
-          <img src="{{ " images/to-top.svg" | absURL }}" alt="back-to-top">
+          <img src="{{"images/to-top.svg" | absURL }}" alt="back-to-top">
           <p>
             {{ .Site.Params.footer.back_to_top.description | safeHTML }}
           </p>
