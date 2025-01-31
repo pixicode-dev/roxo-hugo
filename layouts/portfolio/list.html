@@ -5,9 +5,9 @@
     <div class="row align-items-center">
       <div class="col-lg-8">
         <div class="site-project-header-content">
-          <h1>
+          <h3>
             {{ .Title | safeHTML }}
-          </h1>
+          </h3>
         </div>
       </div>
       <div class="col-lg-4">
@@ -20,7 +20,7 @@
   </div>
 </section>
 
-<section class="site-project" id="project">
+<section class="site-project" id="project" >
   <div class="container">
     <div class="row">
       {{ range (.Paginator 4).Pages }}

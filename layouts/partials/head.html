@@ -29,7 +29,13 @@
   <!--Favicon-->
   <link rel="shortcut icon" href="{{ .Site.Params.favicon_shortcut_icon | absURL }}" type="image/x-icon" />
   <link rel="icon" href="{{ .Site.Params.favicon_icon | absURL }}" type="image/x-icon" />
+ 
+  <!--Glider-->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glider-js@1/glider.min.css">  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glider-js/glider.min.css">
+
 </head>
+
 <script src="https://www.google.com/recaptcha/api.js"></script>
 {{ if .Site.Params.googleAnalitycsID }}
 <!-- Google tag (gtag.js) -->
@@ -40,4 +46,7 @@
   gtag('js', new Date());
   gtag('config', '{{ .Site.Params.googleAnalitycsID }}');
 </script>
+<script src="https://cdn.jsdelivr.net/npm/glider-js@1/glider.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/glider-js/glider.min.js"></script>
+
 {{ end }}

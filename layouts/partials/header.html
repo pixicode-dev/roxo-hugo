@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg site-navigation">
+<nav class="navbar navbar-expand-lg site-navigation" >
   <div class="container">
     <a class="navbar-brand" href="{{ .Site.BaseURL }}">
       <img src="{{ .Site.Params.logo | absURL }}" alt="pixicode logo" />
@@ -9,15 +9,15 @@
       <span class="icon-bar"></span>
     </button>
 
-    <div class="collapse navbar-collapse" id="sitenavbar">
+    <div class="collapse navbar-collapse" id="sitenavbar" >
       <ul class="navbar-nav ml-auto main-nav">
         {{$menu := (.Site.Menus.nav)}}
         {{$len := (len $menu)}}
         {{ range $index, $element := $menu }}
         {{ if eq (add $index 1) $len }}
-        <li class="nav-item">
-          <a class="nav-link btn btn-sm btn-primary btn-sm-rounded" href="{{ .URL | absURL }}">
-            <span class="btn-area">
+        <li class="nav-item" >
+          <a class="nav-link btn btn-sm btn-primary btn-sm-rounded" style="background-color: #f4d160;" href="{{ .URL | absURL }}">
+            <span class="btn-area" >
               <span data-text="{{ .Name }}">
                 {{ .Name }}
               </span>
