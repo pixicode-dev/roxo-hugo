@@ -12,6 +12,7 @@
           <div class="site-project-single-description">
             {{ .Content }}
           </div>
+          {{ if .Params.project_images}}
           <div class="glider-contain">
             <button class="glider-prev">«</button>
             <div class="glider">
@@ -21,7 +22,7 @@
             </div>
             <button class="glider-next">»</button>
           </div>
-          
+          {{ end }}
         
           <!--<div class="site-project-single-image">
             {{ range .Params.project_images }}
