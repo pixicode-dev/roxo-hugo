@@ -1,40 +1,55 @@
-window.addEventListener("DOMContentLoaded", function () {
+function success() {
   var form = document.getElementById("contact-form");
   var button = document.getElementById("contact-form-button");
   var status = document.getElementById("contact-form-status");
 
-  function success() {
-    form.reset();
-    button.style = "display: none ";
-    status.innerHTML = "Thanks! Contact form is submitted successfully.";
+  form.reset();
+  button.disabled = "true ";
+  status.innerHTML = "Merci ! Le formulaire de contact a été envoyé avec succès.";
+  status.style.color = "green";
+}
+
+function error() {
+  var form = document.getElementById("contact-form");
+  var button = document.getElementById("contact-form-button");
+  var status = document.getElementById("contact-form-status");
+
+  status.innerHTML = "Oups! Un problème est survenu.";
+  status.style.color = "red"; 
+}
+
+function onSubmit(token) {
+  const form = document.getElementById('contact-form');
+
+  if (!form.checkValidity()) {
+    form.reportValidity();
+    return;
   }
+  data = {};
 
-  function error() {
-    status.innerHTML = "Oops! There was a problem.";
-  }
+  Array.from(form.elements).forEach((element) => {
+    if (!element.id || !element.name) return;
+    data[element.id] = element.value;
+  })
 
-  // handle the form submission event
+  data['token'] = token;
 
-  form.addEventListener("submit", function (ev) {
-    ev.preventDefault();
-    var data = new FormData(form);
-    ajax(form.method, form.action, data, success, error);
-  });
-});
-
-// helper function for sending an AJAX request
-
-function ajax(method, url, data, success, error) {
-  var xhr = new XMLHttpRequest();
-  xhr.open(method, url);
-  xhr.setRequestHeader("Accept", "application/json");
-  xhr.onreadystatechange = function () {
-    if (xhr.readyState !== XMLHttpRequest.DONE) return;
-    if (xhr.status === 200) {
-      success(xhr.response, xhr.responseType);
-    } else {
-      error(xhr.status, xhr.response, xhr.responseType);
+  fetch(form.action, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+  })
+  .then((response) => {
+    console.log(response)
+    if(response.status == 200){
+      success()
+    }else{
+      error()
     }
-  };
-  xhr.send(data);
+    })
+  .catch((response) => 
+    error()
+  );
 }
