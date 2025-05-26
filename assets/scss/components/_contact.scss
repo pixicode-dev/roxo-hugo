@@ -48,3 +48,11 @@
     }
   }
 }
+  #contact-form-status.success {
+    color: green;
+    font-weight: bold;
+  }
+  #contact-form-status.error {
+    color: red;
+    font-weight: bold;
+  }
