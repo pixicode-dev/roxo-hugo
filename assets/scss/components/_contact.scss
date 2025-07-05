@@ -1,58 +1,76 @@
-.site-contact{
+.site-contact {
   padding: 150px 0 100px;
   background: $gray;
-  @include mobile{
+
+  @include mobile {
     padding: 120px 0 100px;
   }
-  &-title{
+
+  &-title {
     font-weight: 700;
-    @include tablet{
+
+    @include tablet {
       font-size: 40px;
     }
-    span{
+
+    span {
       color: $primary-color;
     }
+
+    padding: 20px 0;
+    ;
   }
-  &-form{
+
+  &-form {
     margin-top: 20px;
-    h4{
+
+    h4 {
       font-weight: 300;
       text-transform: uppercase;
       margin-bottom: 50px;
       letter-spacing: 3px;
-      @include tablet{
+
+      @include tablet {
         font-size: 20px;
       }
-      @include desktop{
+
+      @include desktop {
         margin-bottom: 70px;
       }
     }
   }
 }
+
 .contact-form-generator {
   margin-top: 20px;
-    a{
+
+  a {
     color: $text-color-dark;
     font-size: 13px;
     text-transform: uppercase;
     margin-bottom: 50px;
     letter-spacing: 3px;
-    &:hover{
+
+    &:hover {
       text-decoration: none;
     }
-    @include tablet{
+
+    @include tablet {
       font-size: 20px;
     }
-    @include desktop{
+
+    @include desktop {
       margin-bottom: 70px;
     }
   }
 }
-  #contact-form-status.success {
-    color: green;
-    font-weight: bold;
-  }
-  #contact-form-status.error {
-    color: red;
-    font-weight: bold;
-  }
+
+#contact-form-status.success {
+  color: green;
+  font-weight: bold;
+}
+
+#contact-form-status.error {
+  color: red;
+  font-weight: bold;
+}

@@ -5,7 +5,7 @@ function success() {
 
   form.reset();
   button.disabled = "true ";
-  status.innerHTML = "Merci ! Le formulaire de contact a été envoyé avec succès.";
+  status.innerHTML = "✅ Merci pour votre message ! Nous reviendrons vers vous rapidement.";
   status.style.color = "green";
 }
 
@@ -14,8 +14,8 @@ function error() {
   var button = document.getElementById("contact-form-button");
   var status = document.getElementById("contact-form-status");
 
-  status.innerHTML = "Oups! Un problème est survenu.";
-  status.style.color = "red"; 
+  status.innerHTML = "Oups ! Un problème est survenu.";
+  status.style.color = "red";
 }
 
 function onSubmit(token) {
@@ -35,21 +35,21 @@ function onSubmit(token) {
   data['token'] = token;
 
   fetch(form.action, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
   })
-  .then((response) => {
-    console.log(response)
-    if(response.status == 200){
-      success()
-    }else{
-      error()
-    }
+    .then((response) => {
+      console.log(response)
+      if (response.status == 200) {
+        success()
+      } else {
+        error()
+      }
     })
-  .catch((response) => 
-    error()
-  );
+    .catch((response) =>
+      error()
+    );
 }

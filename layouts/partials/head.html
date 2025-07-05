@@ -1,23 +1,28 @@
 <head>
   <meta charset="utf-8" />
-  <title>{{ .Title }}</title>
-
-  {{ "<!-- mobile responsive meta -->" | safeHTML }}
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-  <meta name="description" content="{{ .Params.Descritpion }}">
-  <meta name="keywords" content="{{ .Params.Keywords }}">
+  <title>{{ .Title }}</title>
+  <meta name="description" content="{{ .Params.description }}">
+  <meta name="keywords" content="{{ .Params.keywords }}">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://pixicode.dev/">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="{{ .Title }}" />
+  <meta property="og:description" content="{{ .Params.description }}" />
+  <meta property="og:image" content="{{ .Params.image | absURL }}" />
+  <meta property="og:url" content="{{ .Permalink }}" />
+
   {{ with .Site.Params.author }}
   <meta name="author" content="{{ . }}">
   {{ end }}
-  {{ hugo.Generator }}
 
-  {{ "<!-- Bootstrap -->" | safeHTML }}
+  <!-- CSS -->
   {{ $bootstrap := resources.Get "css/bootstrap.css" | minify }}
   <link rel="stylesheet" href="{{ $bootstrap.Permalink }}" />
-  {{ "<!-- font-awesome -->" | safeHTML }}
-  <link rel="stylesheet" href="{{ " font-awesome/css/font-awesome.min.css" | absURL }}" />
-  {{ "<!-- Main Stylesheets -->" | safeHTML }}
+
+  <link rel="stylesheet" href="{{ "font-awesome/css/font-awesome.min.css" | absURL }}" />
+
   {{ $style := resources.Get "scss/style.scss" | toCSS | minify }}
   <link href="{{ $style.Permalink }}" rel="stylesheet" />
 
@@ -26,17 +31,17 @@
   <link href="{{ $style.Permalink }}" rel="stylesheet" />
   {{- end }}
 
-  <!--Favicon-->
+  <!-- Favicon -->
   <link rel="shortcut icon" href="{{ .Site.Params.favicon_shortcut_icon | absURL }}" type="image/x-icon" />
   <link rel="icon" href="{{ .Site.Params.favicon_icon | absURL }}" type="image/x-icon" />
- 
-  <!--Glider-->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glider-js@1/glider.min.css">  
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glider-js/glider.min.css">
 
+  <!-- Glider -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glider-js/glider.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/glider-js@1/glider.min.js"></script>
+
+  <!-- Matomo -->
   <script>
     var _paq = window._paq = window._paq || [];
-    /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
     _paq.push(['trackPageView']);
     _paq.push(['enableLinkTracking']);
     (function () {
@@ -47,6 +52,26 @@
       g.async = true; g.src = u + 'matomo.js'; s.parentNode.insertBefore(g, s);
     })();
   </script>
-</head>
 
-<script src="https://www.google.com/recaptcha/api.js"></script>
+  <!-- JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "PixiCode",
+    "url": "https://pixicode.dev",
+    "logo": "https://pixicode.dev/images/logo.png",
+    "sameAs": ["https://www.linkedin.com/company/pixicode"],
+    "description": "Agence de développement spécialisée dans les applications web et mobiles sur mesure.",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Angoulême",
+      "postalCode": "16000",
+      "addressCountry": "FR"
+    }
+  }
+  </script>
+
+  <!-- reCAPTCHA -->
+  <script src="https://www.google.com/recaptcha/api.js"></script>
+</head>
