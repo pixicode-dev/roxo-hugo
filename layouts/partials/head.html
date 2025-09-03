@@ -1,7 +1,8 @@
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-  <title>{{ .Title }}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{
+    .Title }}</title>
   <meta name="description" content="{{ .Params.description }}">
   <meta name="keywords" content="{{ .Params.keywords }}">
   <meta name="robots" content="index, follow">
@@ -17,34 +18,62 @@
   <meta name="author" content="{{ . }}">
   {{ end }}
 
+  <!-- Josefin Sans -->
+  <link rel="preload" href="/fonts/josefin-sans-latin-300-normal.woff2"
+    as="font"
+    type="font/woff2" crossorigin>
+  <link rel="preload" href="/fonts/josefin-sans-latin-700-normal.woff2"
+    as="font"
+    type="font/woff2" crossorigin>
+
+  <!-- Montserrat -->
+  <link rel="preload" href="/fonts/montserrat-cyrillic-300-normal.woff2"
+    as="font"
+    type="font/woff2" crossorigin>
+  <link rel="preload" href="/fonts/montserrat-cyrillic-700-normal.woff2"
+    as="font"
+    type="font/woff2" crossorigin>
+
   <!-- CSS -->
   {{ $bootstrap := resources.Get "css/bootstrap.css" | minify }}
-  <link rel="stylesheet" href="{{ $bootstrap.Permalink }}" />
+  <link rel="preload" href="{{ $bootstrap.Permalink }}" as="style"
+    onload="this.rel='stylesheet'" />
+  <link rel="preload" href="{{ "font-awesome/css/font-awesome.min.css" |
+    absURL }}" as="style"
+    onload="this.rel='stylesheet'" />
 
-  <link rel="stylesheet" href="{{ "font-awesome/css/font-awesome.min.css" | absURL }}" />
+  <link rel="preload" href="/scss/style.min.css" as="style"
+    onload="this.rel='stylesheet'">
 
+  <noscript><link rel="preload stylesheet"
+      href="/scss/style.min.css"></noscript>
   {{ $style := resources.Get "scss/style.scss" | toCSS | minify }}
-  <link href="{{ $style.Permalink }}" rel="stylesheet" />
+  <link href="{{ $style.Permalink }}" rel="preload stylesheet" />
 
   {{ range .Site.Params.custom_stylesheets -}}
   {{ $style := resources.Get . | toCSS | minify }}
-  <link href="{{ $style.Permalink }}" rel="stylesheet" />
+  <link href="{{ $style.Permalink }}" rel="preload stylesheet" />
   {{- end }}
 
   <!-- Favicon -->
-  <link rel="shortcut icon" href="{{ .Site.Params.favicon_shortcut_icon | absURL }}" type="image/x-icon" />
-  <link rel="icon" href="{{ .Site.Params.favicon_icon | absURL }}" type="image/x-icon" />
+  <link rel="shortcut icon"
+    href="{{ .Site.Params.favicon_shortcut_icon | absURL }}"
+    type="image/x-icon" />
+  <link rel="icon" href="{{ .Site.Params.favicon_icon | absURL }}"
+    type="image/x-icon" />
 
   <!-- Glider -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glider-js/glider.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/glider-js@1/glider.min.js"></script>
+  <link rel="preload" href="{{ "glider/css/glider.min.css" |
+    absURL }}" as="style"
+    onload="this.rel='stylesheet'" />
 
   <!-- Matomo -->
   <script>
     var _paq = window._paq = window._paq || [];
+    _paq.push(["disableCookies"]);
     _paq.push(['trackPageView']);
     _paq.push(['enableLinkTracking']);
-    (function () {
+      (function () {
       var u = "//matomo.pixicode.dev/";
       _paq.push(['setTrackerUrl', u + 'matomo.php']);
       _paq.push(['setSiteId', '1']);
@@ -55,23 +84,16 @@
 
   <!-- JSON-LD -->
   <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    "name": "PixiCode",
-    "url": "https://pixicode.dev",
-    "logo": "https://pixicode.dev/images/logo.png",
-    "sameAs": ["https://www.linkedin.com/company/pixicode"],
-    "description": "Agence de développement spécialisée dans les applications web et mobiles sur mesure.",
-    "address": {
-      "@type": "PostalAddress",
-      "addressLocality": "Angoulême",
-      "postalCode": "16000",
-      "addressCountry": "FR"
-    }
-  }
-  </script>
-
-  <!-- reCAPTCHA -->
-  <script src="https://www.google.com/recaptcha/api.js"></script>
+{
+ "@context":"https://schema.org",
+ "@type":"Organization",
+ "name":"PixiCode",
+ "url":"https://pixicode.dev/",
+ "logo":"https://pixicode.dev/images/logo.png",
+ "email":"contact@pixicode.dev",
+ "telephone":"+33545913857",
+ "address":{"@type":"PostalAddress","addressLocality":"Angoulême","postalCode":"16000","addressCountry":"FR"},
+ "sameAs":["https://www.linkedin.com/company/pixicode","https://www.instagram.com/pixicode_dev/", "https://www.facebook.com/profile.php?viewas=100000686899395&id=61579743967992", "https://www.tiktok.com/@pixicode"]
+}
+</script>
 </head>

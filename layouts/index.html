@@ -2,8 +2,8 @@
 
 {{ partial "hero.html" . }}
 
-<section class="site-about-header" >
-    <div class="container" >
+<section class="site-about-header">
+    <div class="container">
         <div class="row">
             <div class="col-12">
                 <div class="site-about-wrapper">
@@ -63,7 +63,7 @@
             <div class="col-md-6">
                 <ul class="site-expertise-list">
                     {{ range .Params.valor_sectors }}
-                        <li>{{ . | markdownify }}</li>
+                    <li>{{ . | markdownify }}</li>
                     {{ end }}
                 </ul>
             </div>
@@ -72,5 +72,28 @@
 </section>
 
 {{ partial "call-to-action.html" . }}
+
+<div id="cookie-banner" style="position:fixed;bottom:0;left:0;right:0;
+    background:#111;color:#fff;font-size:14px;line-height:1.4;
+    padding:12px 16px;z-index:9999;display:flex;justify-content:space-between;align-items:center">
+
+    <div>
+        Ce site n’utilise aucun cookie.
+        Des données techniques anonymisées sont collectées uniquement à
+        des fins de statistiques de fréquentation.
+        <a href="/privacy"
+            style="color:#9cf;text-decoration:underline">
+            En savoir plus
+        </a>
+    </div>
+
+    <div style="display:flex;align-items:center;gap:8px">
+        <button id="cookie-ok"
+            style="padding:6px 12px;border:0;border-radius:6px;
+        background:#F4D160;color:#111;cursor:pointer">
+            OK
+        </button>
+    </div>
+</div>
 
 {{ end }}

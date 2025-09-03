@@ -1,7 +1,6 @@
 {{ define "main" }}
 
-<section class="site-project-single-section" style="background-color: #f7f9ff !important;">
-  
+<section class="site-project-single-section">
   <div class="container">
     <div class="row">
       <div class="col-lg-8 mx-auto">
@@ -17,15 +16,15 @@
             <button class="glider-prev">«</button>
             <div class="glider">
               {{ range .Params.project_images }}
-            <img src="{{ . | absURL }}" alt="project image">
-            {{ end }}
+              <img loading="lazy" src="{{ . | absURL }}" alt="project image">
+              {{ end }}
             </div>
             <button class="glider-next">»</button>
           </div>
           {{ end }}
-        
+
           {{ if .NextInSection }}
-          <div class="site-project-single-action"> 
+          <div class="site-project-single-action">
             <a href="{{.NextInSection.Permalink}}">
               <span class="link-area">
                 <span data-text="Next Project">
@@ -41,7 +40,6 @@
     </div>
   </div>
 
-  
 </section>
 
 {{ partial "call-to-action.html" . }}

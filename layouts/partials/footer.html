@@ -2,7 +2,8 @@
   <div class="container">
     <div class="row">
       <div class="col-12">
-        <div class="site-footer-logo"><a href="{{ .Site.BaseURL }}"><img src="{{ .Site.Params.logo_footer | absURL }}"
+        <div class="site-footer-logo"><a href="{{ .Site.BaseURL }}"><img
+              src="{{ .Site.Params.logo_footer | absURL }}"
               alt="Logo de PixiCode, agence de développement web à Angoulême"></a></div>
       </div>
       {{ with .Site.Params.footer.contactInfo }}
@@ -55,7 +56,8 @@
           <h5 class="site-footer-widget-title">{{ .title }}</h5>
           <ul class="site-footer-widget-links">
             {{ range .link }}
-            <li><a target="_blank" href="{{ .url | absURL }}">{{ .name }}</a></li>
+            <li><a target="_blank" href="{{ .url | absURL }}">{{ .name
+                }}</a></li>
             {{ end }}
           </ul>
         </div>
@@ -63,7 +65,7 @@
       {{ end }}
       <div class="col-lg-2 col-12">
         <a href="#top" class="site-footer-widget-top">
-          <img src="{{"images/to-top.svg" | absURL }}" alt="back-to-top"> 
+          <img src="{{"images/to-top.svg" | absURL }}" alt="back-to-top">
           <p>
             {{ .Site.Params.footer.back_to_top.description | safeHTML }}
           </p>
@@ -71,7 +73,7 @@
       </div>
       <div class="col-12">
         <div class="site-footer-copyright">
-          <p>© Copyright {{ dateFormat "2006" now }} - All Rights Reserved by PixiCode</p>
+          <p>© Copyright 2023 - All Rights Reserved by PixiCode</p>
         </div>
       </div>
     </div>
@@ -79,8 +81,27 @@
 </footer>
 
 {{ $formhandler := resources.Get "js/formhandler.js" | minify }}
-<script src="{{ $formhandler.Permalink }}"></script>
+<script src="{{ $formhandler.Permalink }}" defer></script>
 {{ $vendor := resources.Get "js/vendor.js" | minify }}
-<script src="{{ $vendor.Permalink }}"></script>
+<script src="{{ $vendor.Permalink }}" defer></script>
 {{ $script := resources.Get "js/script.js" | minify }}
-<script src="{{ $script.Permalink }}"></script>
+<script src="{{ $script.Permalink }}" defer></script>
+<script defer>
+    (function(){
+      const banner = document.getElementById('cookie-banner');
+      const okBtn = document.getElementById('cookie-ok');
+      const KEY = 'pixicode_cookie_banner_seen';
+
+      // Vérifie si déjà accepté/fermé
+      if(localStorage.getItem(KEY)){
+        banner.remove();
+      }
+
+      function hideBanner(){
+        localStorage.setItem(KEY,'1');
+        banner.remove();
+      }
+
+      okBtn.addEventListener('click', hideBanner);
+    })();
+</script>

@@ -2,31 +2,62 @@
 //   scroll-behavior: smooth;
 // }
 
+@font-face {
+  font-family: "Josefin Sans";
+  src: url("/fonts/josefin-sans-latin-300-normal.woff2") format("woff2");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Josefin Sans";
+  src: url("/fonts/josefin-sans-latin-700-normal.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Montserrat */
+@font-face {
+  font-family: "Montserrat";
+  src: url("/fonts/montserrat-cyrillic-300-normal.woff2") format("woff2");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Montserrat";
+  src: url("/fonts/montserrat-cyrillic-700-normal.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 body {
   background: $body-color;
 }
 
-.section-title{
+.section-title {
   margin-bottom: 70px;
-  @include desktop{
+  @include desktop {
     text-align: center;
   }
-  h2{
+  h2 {
     font-weight: 300;
     letter-spacing: 2px;
     text-transform: uppercase;
     margin-bottom: 15px;
-    @include desktop{
+    @include desktop {
       font-size: 40px;
     }
   }
-  p{
+  p {
     font-size: 20px;
     font-weight: 300;
   }
 }
 
-.form-control{
+.form-control {
   background: transparent;
   border-radius: 0;
   margin-bottom: 30px;
@@ -37,26 +68,26 @@ body {
   letter-spacing: 1px;
   -webkit-appearance: none;
   height: 42px;
-  &:focus{
+  &:focus {
     box-shadow: none;
     background: transparent;
     border-color: $text-color;
   }
 }
 
-select.form-control{
+select.form-control {
   height: 42px !important;
   position: relative;
 }
 
-.select-wrapper{
+.select-wrapper {
   position: relative;
-  &::before{
-    content: '';
+  &::before {
+    content: "";
     position: absolute;
     width: 16px;
     height: 10px;
-    background: url('../images/angle-down-select.svg');
+    background: url("../images/angle-down-select.svg");
     background-size: contain;
     background-repeat: no-repeat;
     right: 15px;
@@ -65,6 +96,6 @@ select.form-control{
   }
 }
 
-textarea.form-control{
+textarea.form-control {
   height: auto;
 }

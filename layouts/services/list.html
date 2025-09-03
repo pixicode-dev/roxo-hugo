@@ -1,0 +1,43 @@
+{{ define "main" }}
+
+<section class="site-about-header">
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <div class="site-about-wrapper">
+          <div class="site-about-company">
+            <h1>
+              {{ .Params.heading }}
+            </h1>
+          </div>
+
+          {{ with .Params.description }}
+          <div class="site-about-description">
+            <p>{{ . }}</p>
+          </div>
+          {{ end }}
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Section de contenu principal -->
+<section class="site-expertise section-padding">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-10 col-md-11">
+        <article class="about-content">
+          {{ .Content }}
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+
+{{ partial "clients.html" . }}
+{{ partial "team.html" . }}
+{{ partial "call-to-action.html" . }}
+
+{{ end }}

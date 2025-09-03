@@ -11,30 +11,41 @@
       <div class="col-lg-6 ml-auto">
         <div class="site-contact-form">
           <h4>{{ .Params.form_heading }}</h4>
-          <form id="contact-form" action="{{ .Site.Params.action }}" method="post"> 
+          <form id="contact-form" action="{{ .Site.Params.action }}"
+            method="post">
             <div class="row">
               <div class="col-lg-6">
-                <input type="text" class="form-control" name="firstname" id="firstname"
-                  placeholder="{{ .Site.Params.contactForm.placeholder_first_name }}" required>
+                <input type="text" class="form-control" name="firstname"
+                  id="firstname"
+                  placeholder="{{ .Site.Params.contactForm.placeholder_first_name }}"
+                  required>
               </div>
               <div class="col-lg-6">
-                <input type="text" class="form-control" name="lastname" id="lastname"
-                  placeholder="{{ .Site.Params.contactForm.placeholder_last_name }}" required>
+                <input type="text" class="form-control" name="lastname"
+                  id="lastname"
+                  placeholder="{{ .Site.Params.contactForm.placeholder_last_name }}"
+                  required>
               </div>
               <div class="col-lg-6">
                 <input type="email" class="form-control" name="email" id="email"
-                  placeholder="{{ .Site.Params.contactForm.placeholder_email }}" required>
+                  placeholder="{{ .Site.Params.contactForm.placeholder_email }}"
+                  required>
               </div>
               <div class="col-12">
-                <textarea class="form-control" id="message" name="message" rows="6"
+                <textarea class="form-control" id="message" name="message"
+                  rows="6"
                   placeholder="{{ .Site.Params.contactForm.placeholder_about_the_project }}"></textarea>
               </div>
               <div class="col-12">
                 <button data-callback="onSubmit"
                   class="btn btn-primary g-recaptcha" id="contact-form-button"
-                  data-sitekey="{{ .Site.Params.contactForm.captcha_key }}" data-action="submit" type="submit">
-                  <span class="spinner-border spinner-border-sm d-none" id="loading-spinner" role="status" aria-hidden="true"></span>
-                  <span id="button-text">{{ .Site.Params.contactForm.send_message }}</span>
+                  data-sitekey="{{ .Site.Params.contactForm.captcha_key }}"
+                  data-action="submit" type="submit">
+                  <span class="spinner-border spinner-border-sm d-none"
+                    id="loading-spinner" role="status"
+                    aria-hidden="true"></span>
+                  <span id="button-text">{{
+                    .Site.Params.contactForm.send_message }}</span>
                 </button>
               </div>
               <div class="col-12">
@@ -47,5 +58,8 @@
     </div>
   </div>
 </section>
+
+<!-- reCAPTCHA -->
+<script src="https://www.google.com/recaptcha/api.js" defer></script>
 
 {{ end }}
