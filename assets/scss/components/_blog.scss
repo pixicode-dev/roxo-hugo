@@ -4,8 +4,14 @@
     @include mobile {
       padding: 70px 0;
     }
+
+    &-header {
+      padding: 170px 0 100px;
+      background: $gray;
+    }
+
     &-details {
-      padding: 0px 0 80px;
+      padding: 20px 0 80px;
       @include tablet {
         padding: 100px 0 60px;
       }
