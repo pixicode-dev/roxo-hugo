@@ -6,7 +6,7 @@
   <meta name="description" content="{{ .Params.description }}">
   <meta name="keywords" content="{{ .Params.keywords }}">
   <meta name="robots" content="index, follow">
-  <link rel="canonical" href="https://pixicode.dev/">
+  <link rel="canonical" href="{{ .Permalink | safeURL }}">
 
   <!-- Open Graph -->
   <meta property="og:title" content="{{ .Title }}" />
