@@ -80,8 +80,14 @@
   </div>
 </footer>
 
+{{ if eq .Section "contact" }}
 {{ $formhandler := resources.Get "js/formhandler.js" | minify }}
 <script src="{{ $formhandler.Permalink }}" defer></script>
+{{ end }}
+{{ if eq .Section "portfolio" }}
+{{ $glider := resources.Get "js/glider.min.js" | minify }}
+<script src="{{ $glider.Permalink }}" defer></script>
+{{ end }}
 {{ $vendor := resources.Get "js/vendor.js" | minify }}
 <script src="{{ $vendor.Permalink }}" defer></script>
 {{ $script := resources.Get "js/script.js" | minify }}
