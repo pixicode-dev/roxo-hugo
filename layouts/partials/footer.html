@@ -92,22 +92,3 @@
 <script src="{{ $vendor.Permalink }}" defer></script>
 {{ $script := resources.Get "js/script.js" | minify }}
 <script src="{{ $script.Permalink }}" defer></script>
-<script defer>
-    (function(){
-      const banner = document.getElementById('cookie-banner');
-      const okBtn = document.getElementById('cookie-ok');
-      const KEY = 'pixicode_cookie_banner_seen';
-
-      // Vérifie si déjà accepté/fermé
-      if(localStorage.getItem(KEY)){
-        banner.remove();
-      }
-
-      function hideBanner(){
-        localStorage.setItem(KEY,'1');
-        banner.remove();
-      }
-
-      okBtn.addEventListener('click', hideBanner);
-    })();
-</script>
