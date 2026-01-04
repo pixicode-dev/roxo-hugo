@@ -1,0 +1,90 @@
+{{ if .Site.Data.testimonials }}
+<section class="testimonials-section">
+  <div class="container position-relative z-2">
+    <div class="embla" id="testimonials-carousel">
+      <div class="embla__container">
+        {{ range .Site.Data.testimonials.items }}
+        <div class="embla__slide testimonial-slide">
+          <div class="testimonial-content-wrapper">
+
+            <div class="testimonial-logo-box"
+              style="background-color: {{ .color | default "#D4F568" }};">
+              <img src="{{ .logo | relURL }}" alt="Logo {{ .company }}"
+                loading="lazy">
+            </div>
+
+            <div class="testimonial-text-box">
+              <p class="overline-dash text-uppercase mb-3">{{
+                $.Site.Data.testimonials.title }}</p>
+              <h2 class="h2 fw-bold mb-3">{{ .company }}</h2> <div
+                class="quote-icon">
+                <img src="/images/quote.svg" alt aria-hidden="true">
+                <blockquote class="testimonial-quote mb-0">
+                  {{ .quote }}
+                </blockquote>
+              </div>
+
+            </div>
+          </div>
+        </div>
+        {{ end }}
+      </div>
+
+      <div class="embla__dots mt-4"></div>
+    </div>
+  </div>
+</section>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const testimonialNode = document.getElementById("testimonials-carousel");
+  if (!testimonialNode) return;
+
+  const initTestimonials = () => {
+    // Vérification présence librairies
+    if (typeof EmblaCarousel === "undefined" || typeof EmblaCarouselAutoplay === "undefined") {
+      setTimeout(initTestimonials, 100);
+      return;
+    }
+
+    // 1. Initialisation avec Autoplay
+    const plugins = [EmblaCarouselAutoplay({ delay: 5000, stopOnInteraction: true })];
+    const emblaApi = EmblaCarousel(testimonialNode, { loop: true }, plugins);
+    
+    // 2. Gestion des Dots (Points)
+    const dotsNode = testimonialNode.querySelector(".embla__dots");
+    if (dotsNode) {
+      
+      // Générer le HTML des points
+      const renderDots = () => {
+        dotsNode.innerHTML = emblaApi.scrollSnapList().map(() => 
+          '<button class="embla__dot" type="button" aria-label="Voir le témoignage suivant"></button>'
+        ).join('');
+        
+        const dots = Array.from(dotsNode.querySelectorAll(".embla__dot"));
+        
+        // Clic sur un point
+        dots.forEach((dot, index) => {
+          dot.addEventListener("click", () => emblaApi.scrollTo(index));
+        });
+        
+        // Mise à jour de la classe active au scroll
+        const onSelect = () => {
+          const selected = emblaApi.selectedScrollSnap();
+          dots.forEach((dot, index) => {
+            dot.classList.toggle("embla__dot--selected", index === selected);
+          });
+        };
+        
+        emblaApi.on("select", onSelect);
+        emblaApi.on("init", onSelect);
+      };
+
+      renderDots();
+    }
+  };
+
+  initTestimonials();
+});
+</script>
+{{ end }}

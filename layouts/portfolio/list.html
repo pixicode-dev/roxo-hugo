@@ -1,72 +1,136 @@
 {{ define "main" }}
-{{ $parts := split .RawContent "<!--SPLIT-->" }}
+<div class="bg-header">
+  <img src="/images/Background2.svg" alt="Blog Header"
+    class="page-header2-bg img-fluid">
+</div>
+<section class="page-header">
+  <div
+    class="container h-100 d-flex flex-column justify-content-center align-items-center">
+    <h1 class="text-uppercase fw-bold mb-2">{{ .Title }}</h1>
 
-<section class="site-project-header">
-  <div class="container">
-    <div class="row align-items-center">
-      <div class="col-lg-8">
-        <div class="site-project-header-content">
-          <h1>
-            {{ .Title | safeHTML }}
-          </h1>
-        </div>
-      </div>
-      <div class="col-lg-4">
-        <a href="#project" class="site-project-header-action scroll-to">
-          <span>{{ .Site.Params.portfolio.scroll_down }}</span>
-          <img src="{{ "images/arrow-down.svg" | absURL }}" alt="arrow-down">
-        </a>
-      </div>
-    </div>
+    <div class="overline-dash"></div>
+
+    <p class="breadcrumb-text">ACCUEIL / {{ .Title }}</p>
   </div>
 </section>
 
-<section class="site-project" id="project">
+<section class="section-padding">
   <div class="container">
-    <div class="row">
-      {{ index $parts 0 | markdownify }}
-    </div>
-  </div>
-</section>
 
-<section class="site-project" id="project">
-  <div class="container">
-    <div class="row">
-      {{ range (.Paginator 4).Pages }}
-      <div class="col-lg-5 col-md-6 col-sm-9 col-9 mx-auto" id="itemClickId">
-        <div class="site-project-item">
-          <div class="site-project-item-thumb">
-            <img loading="lazy" src="{{ .Params.Image | absURL }}"
-              alt="project-thumb">
-          </div>
-          <div class="site-project-item-content">
-            <span>{{ delimit .Params.categories ", " }}</span>
-            <h3>{{ .Title }}</h3>
-            <a href="{{ .Permalink }}" class="read-more">{{
-              .Site.Params.portfolio.view_project }}</a>
+    <div class="portfolio-filters text-center mb-5">
+      {{ range $index, $filter := .Params.filters }}
+      <button class="btn-filter {{ if eq $index 0 }}active{{ end }}"
+        data-filter="{{ .filter }}">
+        {{ .name }}
+      </button>
+      {{ end }}
+    </div>
+
+    <div class="row g-4" id="portfolio-grid">
+      {{ range .Pages }} <div class="col-lg-4 col-md-6 portfolio-item"
+        data-category="{{ .Params.category }}">
+        <div class="project-card">
+          <img src="{{ .Params.image | relURL }}" alt="{{ .Title }}"
+            class="img-fluid project-img">
+
+          <div class="project-overlay">
+            <div class="project-content text-center">
+              <h3 class="project-title text-white mb-4">{{ .Title }}</h3>
+
+              <div class="d-flex gap-3 justify-content-center">
+                <a href="{{ .Permalink }}" class="btn-icon"
+                  title="Voir les détails">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round"><line x1="12" y1="5" x2="12"
+                      y2="19"></line><line x1="5" y1="12" x2="19"
+                      y2="12"></line></svg>
+                </a>
+
+                {{ if .Params.external_link }}
+                <a href="{{ .Params.external_link }}" target="_blank"
+                  class="btn-icon" title="Voir le site">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round"><circle cx="12" cy="12"
+                      r="10"></circle><line x1="2" y1="12" x2="22"
+                      y2="12"></line><path
+                      d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                </a>
+                {{ end }}
+              </div>
+
+              <span class="project-cat mt-3 d-block text-yellow">{{
+                .Params.category | upper }}</span>
+            </div>
           </div>
         </div>
       </div>
       {{ end }}
-      <div class="col-12">
-        <div class="site-project-pagination">
-          {{ template "_internal/pagination.html" . }}
-        </div>
-      </div>
     </div>
+
   </div>
 </section>
 
-<section class="site-project" id="project">
-  <div class="container">
-    <div class="row">
-      {{ index $parts 1 | markdownify }}
-    </div>
-  </div>
-</section>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    
+    // --- 1. FILTRAGE ---
+    const filterBtns = document.querySelectorAll('.btn-filter');
+    const portfolioItems = document.querySelectorAll('.portfolio-item');
 
-{{ $script := resources.Get "js/on_click.js" | minify }}
-<script src="{{ $script.Permalink }}"></script>
-{{ partial "call-to-action.html" . }}
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            // Gestion de la classe Active
+            filterBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            const filterValue = btn.getAttribute('data-filter');
+
+            portfolioItems.forEach(item => {
+                const category = item.getAttribute('data-category');
+                
+                if (filterValue === 'all' || category === filterValue) {
+                    item.style.display = 'block';
+                    // Petite animation d'apparition
+                    setTimeout(() => {
+                        item.style.opacity = '1';
+                        item.style.transform = 'scale(1)';
+                    }, 50);
+                } else {
+                    item.style.opacity = '0';
+                    item.style.transform = 'scale(0.9)';
+                    setTimeout(() => {
+                        item.style.display = 'none';
+                    }, 300); // Attend la fin de la transition
+                }
+            });
+        });
+    });
+
+    // --- 2. GESTION MOBILE (CLIC POUR AFFICHER L'OVERLAY) ---
+    const projectCards = document.querySelectorAll('.project-card');
+
+    projectCards.forEach(card => {
+        card.addEventListener('click', function(e) {
+            // Si on clique sur un bouton (lien), on ne fait rien (laisser le lien agir)
+            if (e.target.closest('a')) return;
+
+            // Sur mobile/tablette, le clic toggle la classe 'active'
+            // Sur desktop, le hover CSS gère déjà tout, mais ce JS ne gêne pas
+            const wasActive = this.classList.contains('mobile-active');
+            
+            // Ferme les autres (optionnel, pour n'en avoir qu'un ouvert à la fois)
+            projectCards.forEach(c => c.classList.remove('mobile-active'));
+
+            if (!wasActive) {
+                this.classList.add('mobile-active');
+            }
+        });
+    });
+});
+</script>
 
 {{ end }}

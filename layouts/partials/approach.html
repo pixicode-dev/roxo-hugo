@@ -1,0 +1,69 @@
+{{ with .Params.approach }}
+<section class="approach-section">
+    <div class="container">
+        <div class="text-center mb-5">
+            <p
+                class="overline-dash text-uppercase fw-bold justify-content-center">{{
+                .title }}</p>
+            <h2 class="section-headline fw-bold">{{ .headline }}</h2>
+        </div>
+
+        <div class="embla" id="approach-carousel">
+            <div class="embla__container approach-container">
+                <svg class="connecting-line-svg d-none d-lg-block"
+                    viewBox="0 0 1000 140" preserveAspectRatio="none"
+                    aria-hidden="true">
+                    <path d="M 125,25 L 375,60 L 625,25 L 875,60" fill="none"
+                        stroke="#1d5d9b" stroke-width="1"
+                        stroke-dasharray="5,5" />
+                </svg>
+
+                {{ range .items }}
+                <div class="embla__slide approach-slide">
+                    <div class="approach-card">
+                        <div class="icon-wrapper">
+                            <img src="{{ .icon | relURL }}" alt
+                                aria-hidden="true"> </div>
+                        <h3 class="card-title black-title fw-bold">{{ .title
+                            }}</h3>
+                        <p class="card-text small">{{ .description }}</p>
+
+                        {{ if .link_text }}
+                        <a href="{{ .url }}" class="btn-approach">{{ .link_text
+                            }}</a>
+                        {{ end }}
+                    </div>
+                </div>
+                {{ end }}
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const approachNode = document.getElementById("approach-carousel");
+  
+  // Sécurité : Si le carousel n'est pas sur cette page, on arrête.
+  if (!approachNode) return;
+
+  // On vérifie si la librairie est chargée, sinon on réessaie un peu plus tard
+  const initApproach = () => {
+    if (typeof EmblaCarousel === "undefined") {
+      setTimeout(initApproach, 100);
+      return;
+    }
+    
+    // Initialisation
+    EmblaCarousel(approachNode, {
+      loop: false, 
+      align: "center", 
+      containScroll: "trimSnaps",
+      breakpoints: { "(min-width: 992px)": { active: false } }, // Désactive sur Desktop
+    });
+  };
+
+  initApproach();
+});
+</script>
+{{ end }}

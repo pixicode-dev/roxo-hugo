@@ -1,0 +1,63 @@
+<section class="news-section">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-5">
+            <p class="overline-dash text-uppercase">NOS DERNIÈRES ACTUALITÉS</p>
+
+            <div class="news-nav-desktop d-none d-lg-flex gap-3">
+                <button class="embla__prev btn-nav-arrow-news">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2"><path
+                            d="M19 12H5M12 19l-7-7 7-7" /></svg>
+                </button>
+                <button class="embla__next btn-nav-arrow-news">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2"><path
+                            d="M5 12h14M12 5l7 7-7 7" /></svg>
+                </button>
+            </div>
+        </div>
+
+        <div class="embla" id="news-carousel">
+            <div class="embla__container news-container">
+                {{ range first 5 (where .Site.RegularPages "Section" "blog") }}
+                <div class="embla__slide news-slide">
+                    <div class="news-card">
+                        <div class="news-bg-img">
+                            <img src="{{ .Params.cover | relURL }}"
+                                alt="{{ .Title }}">
+                        </div>
+
+                        <div class="news-content">
+
+                            <div class="mt-auto">
+                                {{ if .Params.categories }}
+                                <span class="text-yellow">></span>
+                                {{ index .Params.categories 0 | upper }}
+                                {{ end }}
+
+                                <h3 class="news-title">{{ .Title }}</h3>
+                                <a href="{{ .Permalink }}"
+                                    class="btn-news">Lire</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {{ end }}
+            </div>
+        </div>
+
+        <div
+            class="news-nav-mobile d-flex d-lg-none justify-content-between mt-4">
+            <button class="embla__prev btn-nav-arrow-mobile">
+                <svg width="30" height="30" viewBox="0 0 24 24" fill="none"
+                    stroke="#1d5d9b" stroke-width="2"><path
+                        d="M19 12H5M12 19l-7-7 7-7" /></svg>
+            </button>
+            <button class="embla__next btn-nav-arrow-mobile">
+                <svg width="30" height="30" viewBox="0 0 24 24" fill="none"
+                    stroke="#1d5d9b" stroke-width="2"><path
+                        d="M5 12h14M12 5l7 7-7 7" /></svg>
+            </button>
+        </div>
+    </div>
+</section>

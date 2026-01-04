@@ -1,65 +1,120 @@
 {{ define "main" }}
-<section class="site-contact">
+<div class="bg-header">
+  <img src="/images/Background2.svg" alt="Blog Header"
+    class="page-header2-bg img-fluid">
+</div>
+
+<section class="page-header">
+  <div
+    class="container h-100 d-flex flex-column justify-content-center align-items-center">
+    <h1 class="text-uppercase fw-bold  mb-2">{{ .Title }}</h1>
+    <p class="breadcrumb-text ">ACCUEIL / {{ .Title }}</p>
+  </div>
+</section>
+
+<section class="contact-content-section">
   <div class="container">
-    <div class="row">
-      <div class="col-lg-5">
-        <h1 class="site-contact-title" style="font-size: 2.8rem !important;">
-          {{ .Params.heading | safeHTML }}
-        </h1>
-        {{ .Content}}
-      </div>
-      <div class="col-lg-6 ml-auto">
-        <div class="site-contact-form">
-          <h4>{{ .Params.form_heading }}</h4>
-          <form id="contact-form" action="{{ .Site.Params.action }}"
+    <div class="row gy-5">
+
+      <div class="col-lg-6">
+        <div class="contact-form-card">
+          <h3 class="form-title mb-4">PARLEZ-NOUS DE VOS BESOINS</h3>
+
+          <form id="contact-form" action="{{ .Site.Params.contactForm.action }}"
             method="post">
-            <div class="row">
-              <div class="col-lg-6">
-                <input type="text" class="form-control" name="firstname"
-                  id="firstname"
-                  placeholder="{{ .Site.Params.contactForm.placeholder_first_name }}"
+
+            <div class="row g-3 mb-3">
+              <div class="col-md-6">
+                <input type="text" class="form-control pixi-input"
+                  name="lastname" id="lastname" placeholder="Votre nom*"
                   required>
               </div>
-              <div class="col-lg-6">
-                <input type="text" class="form-control" name="lastname"
-                  id="lastname"
-                  placeholder="{{ .Site.Params.contactForm.placeholder_last_name }}"
+              <div class="col-md-6">
+                <input type="text" class="form-control pixi-input"
+                  name="firstname" id="firstname" placeholder="Votre prénom*"
                   required>
-              </div>
-              <div class="col-lg-6">
-                <input type="email" class="form-control" name="email" id="email"
-                  placeholder="{{ .Site.Params.contactForm.placeholder_email }}"
-                  required>
-              </div>
-              <div class="col-12">
-                <textarea class="form-control" id="message" name="message"
-                  rows="6"
-                  placeholder="{{ .Site.Params.contactForm.placeholder_about_the_project }}"></textarea>
-              </div>
-              <div class="col-12">
-                <button data-callback="onSubmit"
-                  class="btn btn-primary g-recaptcha" id="contact-form-button"
-                  data-sitekey="{{ .Site.Params.contactForm.captcha_key }}"
-                  data-action="submit" type="submit">
-                  <span class="spinner-border spinner-border-sm d-none"
-                    id="loading-spinner" role="status"
-                    aria-hidden="true"></span>
-                  <span id="button-text">{{
-                    .Site.Params.contactForm.send_message }}</span>
-                </button>
-              </div>
-              <div class="col-12">
-                <p id="contact-form-status" class="mt-3"></p>
               </div>
             </div>
+
+            <div class="mb-3">
+              <input type="email" class="form-control pixi-input" name="email"
+                id="email" placeholder="Votre email*" required>
+            </div>
+
+            <div class="mb-4">
+              <textarea class="form-control pixi-input" id="message"
+                name="message" rows="5"
+                placeholder="Racontez-nous votre projet..."></textarea>
+            </div>
+
+            <div class="form-check mb-4">
+              <input class="form-check-input" type="checkbox" value
+                id="gdprCheck" required>
+              <label class="form-check-label small text-muted" for="gdprCheck">
+                Je suis d'accord pour que mes données soient collectées et
+                stockées. Pour plus d'informations, consultez notre <a
+                  href="/politique-confidentialite"
+                  class="text-decoration-underline text-dark">Politique de
+                  confidentialité</a>.
+              </label>
+            </div>
+
+            <button data-callback="onSubmit"
+              class="btn-pixi primary w-100 g-recaptcha"
+              id="contact-form-button"
+              data-sitekey="{{ .Site.Params.contactForm.captcha_key }}"
+              data-action="submit" type="submit">
+              LANCER MON PROJET
+            </button>
+
+            <p id="contact-form-status" class="mt-3 text-center"></p>
           </form>
         </div>
       </div>
+
+      <div class="col-lg-5 offset-lg-1">
+        <div class="contact-text-box bg-white p-4 rounded shadow-sm mb-5">
+          {{ .Content }}
+        </div>
+
+        <div class="contact-support">
+          <p class="overline-dash text-uppercase text-dark mb-3">SUPPORT
+            CLIENT</p>
+
+          <ul class="list-unstyled support-list">
+            <li class="mb-3 d-flex align-items-center">
+              <div class="icon-box-small me-3">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                  viewBox="0 0 24 24" fill="none" stroke="#75c2f6"
+                  stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round"><path
+                    d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline
+                    points="22,6 12,13 2,6"></polyline></svg>
+              </div>
+              <a href="mailto:{{ .Site.Params.email }}"
+                class="text-dark fw-bold text-decoration-none">contact@pixicode.dev</a>
+            </li>
+            <li class="d-flex align-items-center">
+              <div class="icon-box-small me-3">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                  viewBox="0 0 24 24" fill="none" stroke="#75c2f6"
+                  stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round"><rect x="5" y="2" width="14"
+                    height="20" rx="2" ry="2"></rect><line x1="12" y1="18"
+                    x2="12.01" y2="18"></line></svg>
+              </div>
+              <a href="tel:{{ .Site.Params.phone }}"
+                class="text-dark fw-bold text-decoration-none">05 45 91 38
+                57</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
     </div>
   </div>
 </section>
 
-<!-- reCAPTCHA -->
 <script src="https://www.google.com/recaptcha/api.js" defer></script>
 
 {{ end }}

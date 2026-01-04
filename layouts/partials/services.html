@@ -1,0 +1,23 @@
+{{ $data := .Site.Data.homepage.services }}
+<section class="site-services" id="services">
+    <div class="container">
+        <h2 class="h2 text-blue">{{ $data.title }}</h2>
+        <div class="services-list">
+            {{ range $data.items }}
+            <div class="service-card">
+                <div class="service-info">
+                    <span class="service-number">{{ .number }}</span>
+                    <h3 class="h3">{{ .title }}</h3>
+                </div>
+                <div class="service-icon">
+                    <svg viewBox="0 0 24 24" width="30"><path
+                            d="M1 1 L12 11 L23 1" stroke="currentColor"
+                            fill="none" /></svg>
+                </div>
+                <img src="{{ .image | relURL }}" alt="{{ .title }}"
+                    loading="lazy" class="service-hover-img">
+            </div>
+            {{ end }}
+        </div>
+    </div>
+</section>

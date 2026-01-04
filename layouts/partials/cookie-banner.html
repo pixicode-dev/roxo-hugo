@@ -1,0 +1,157 @@
+<div id="cookie-banner" class="cookie-banner" style="display: none;">
+    <div class="cookie-content">
+        <div class="cookie-text">
+            <h4>🍪 On aime les cookies, mais surtout les vôtres.</h4>
+            <p>Nous utilisons Matomo pour mesurer l'audience de manière anonyme.
+                Acceptez-vous le dépôt de cookies pour nous aider à améliorer le
+                site ?</p>
+        </div>
+        <div class="cookie-buttons">
+            <button id="btn-decline" class="btn-cookie decline">Non
+                merci</button>
+            <button id="btn-accept" class="btn-cookie accept">J'accepte</button>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* STYLE PIXICODE */
+    .cookie-banner {
+        position: fixed;
+        bottom: 20px;
+        left: 20px;
+        right: 20px;
+        background-color: #1d5d9b; /* Bleu PixiCode */
+        color: #fff;
+        padding: 1.5rem;
+        border-radius: 8px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        z-index: 9999;
+        border: 1px solid rgba(255,255,255,0.1);
+        max-width: 600px;
+        margin: 0 auto; /* Centré si écran large */
+        animation: slideUp 0.5s ease-out;
+    }
+
+    .cookie-content {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .cookie-text h4 {
+        margin: 0 0 0.5rem 0;
+        color: #fbbf24; /* Jaune PixiCode */
+        font-size: 1.1rem;
+    }
+
+    .cookie-text p {
+        margin: 0;
+        font-size: 0.9rem;
+        line-height: 1.4;
+        color: #e0e0e0;
+    }
+
+    .cookie-buttons {
+        display: flex;
+        gap: 10px;
+        justify-content: flex-end;
+    }
+
+    .btn-cookie {
+        padding: 0.5rem 1.2rem;
+        border-radius: 4px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.2s;
+        border: none;
+        font-size: 0.9rem;
+    }
+
+    .btn-cookie.accept {
+        background-color: #f4d160; /* Jaune */
+        color: #1d5d9b; /* Texte Bleu */
+    }
+    .btn-cookie.accept:hover {
+        background-color: #f4d160;
+    }
+
+    .btn-cookie.decline {
+        background-color: transparent;
+        border: 1px solid rgba(255,255,255,0.3);
+        color: #fff;
+    }
+    .btn-cookie.decline:hover {
+        background-color: rgba(255,255,255,0.1);
+    }
+
+    @media (min-width: 768px) {
+        .cookie-content {
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .cookie-banner {
+            left: 0%;
+            transform: translateX(-50%);
+            bottom: 30px;
+            width: auto;
+        }
+    }
+
+    @keyframes slideUp {
+        from { transform: translate(-50%, 100px); opacity: 0; }
+        to { transform: translate(-50%, 0); opacity: 1; }
+    }
+    /* Correction animation mobile */
+    @media (max-width: 767px) {
+        @keyframes slideUp {
+            from { transform: translateY(100px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .cookie-banner { transform: none; left: 20px; right: 20px; }
+    }
+</style>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const banner = document.getElementById('cookie-banner');
+        const btnAccept = document.getElementById('btn-accept');
+        const btnDecline = document.getElementById('btn-decline');
+        
+        // Clé de stockage dans le navigateur
+        const CONSENT_KEY = 'pixicode_cookie_consent';
+
+        // 1. Vérifier si l'utilisateur a déjà choisi
+        const userChoice = localStorage.getItem(CONSENT_KEY);
+
+        if (!userChoice) {
+            // Pas de choix : On affiche le bandeau
+            // Et on dit à Matomo d'attendre
+            window._paq = window._paq || [];
+            window._paq.push(['requireConsent']); 
+            banner.style.display = 'block';
+        } else if (userChoice === 'accepted') {
+            // Déjà accepté : On active Matomo
+            window._paq = window._paq || [];
+            window._paq.push(['setConsentGiven']);
+        } else {
+            // Refusé : Matomo reste bloqué (par défaut si on ne donne pas le consentement)
+        }
+
+        // 2. Action : J'accepte
+        btnAccept.addEventListener('click', function() {
+            localStorage.setItem(CONSENT_KEY, 'accepted');
+            window._paq = window._paq || [];
+            window._paq.push(['setConsentGiven']); // On libère Matomo
+            banner.style.display = 'none';
+        });
+
+        // 3. Action : Je refuse
+        btnDecline.addEventListener('click', function() {
+            localStorage.setItem(CONSENT_KEY, 'declined');
+            // On ne fait rien pour Matomo, il reste en attente de consentement
+            banner.style.display = 'none';
+        });
+    });
+</script>

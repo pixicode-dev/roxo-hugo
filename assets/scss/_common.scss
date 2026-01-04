@@ -2,37 +2,6 @@
 //   scroll-behavior: smooth;
 // }
 
-@font-face {
-  font-family: "Josefin Sans";
-  src: url("/fonts/josefin-sans-latin-300-normal.woff2") format("woff2");
-  font-weight: 300;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: "Josefin Sans";
-  src: url("/fonts/josefin-sans-latin-700-normal.woff2") format("woff2");
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-
-/* Montserrat */
-@font-face {
-  font-family: "Montserrat";
-  src: url("/fonts/montserrat-latin-300-normal.woff2") format("woff2");
-  font-weight: 300;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: "Montserrat";
-  src: url("/fonts/montserrat-latin-700-normal.woff2") format("woff2");
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-
 body {
   background: $body-color;
 

@@ -1,53 +1,308 @@
 {{ define "main" }}
+<div class="bg-header">
+  <img src="/images/Background.svg" alt="Blog Header"
+    class="page-header-bg img-fluid">
+</div>
 
-<section class="site-blog-header">
-  <div class="container">
-    <div class="row justify-content-center">
-      <div class="col-lg-8 text-center">
-        <h1>{{ .Title }}</h1>
-        <p>{{ .Params.description }}</p>
-      </div>
-    </div>
+<section class="page-header">
+  <div
+    class="container h-100 d-flex flex-column justify-content-center align-items-center">
+    <h1 class="text-uppercase fw-bold mb-2">{{ .Title }}</h1>
+    <div class="overline-dash"></div>
+    <p class="breadcrumb-text">ACCUEIL / {{ .Title }}</p>
   </div>
 </section>
 
-<section class="site-blog">
+<section class="section-padding bg-light" id="blogTopAnchor">
   <div class="container">
     <div class="row">
-      {{ $p := (.Paginator 4) }}
-      {{ range $p.Pages }}
-      <div class="col-lg-6">
-        <article class="site-blog-post">
 
-          {{ with .Params.cover }}
-          <div class="site-blog-post-thumb">
-            <img src="{{ . | absURL }}" alt="post cover" loading="lazy">
+      <div class="col-lg-8 mb-5 mb-lg-0">
+
+        <div class="blog-list" id="blogListContainer">
+
+          <div id="noResultsMessage"
+            style="display:none; text-align:center; padding: 3rem;">
+            <h3 class="text-muted">Aucun résultat trouvé 🕵️‍♂️</h3>
+            <p>Essayez d'autres filtres ou <a
+                href="{{ .Site.BaseURL }}blog/">affichez tout</a>.</p>
           </div>
+
+          {{/* LOGIQUE DE FUSION */}}
+          {{ $blogs := where .Site.RegularPages "Section" "blog" }}
+          {{ $projects := where .Site.RegularPages "Section" "portfolio" }}
+          {{ $mixed := union $blogs $projects }}
+          {{ $posts := $mixed.ByDate.Reverse }}
+
+          {{ range $posts }}
+
+          <article class="blog-card mb-5 filter-item"
+            style="display: none;"
+            data-title="{{ .Title | lower }}"
+            data-category="{{ with .Params.categories }}{{ delimit . "," | lower
+            | urlize }}{{ end }}"
+            data-tags="{{ with .Params.tags }}{{ delimit . "," | lower | urlize
+            }}{{ end }}">
+
+            {{ if .Params.cover }}
+            <div class="blog-card-img position-relative">
+              <a href="{{ .Permalink }}">
+                <img src="{{ .Params.cover | relURL }}"
+                  alt="{{ .Title }}"
+                  class="img-fluid"
+                  loading="lazy"
+                  width="800" height="400">
+
+                {{ if eq .Section "portfolio" }}
+                <span class="badge-type project">PROJET</span>
+                {{ else }}
+                <span class="badge-type blog">ARTICLE</span>
+                {{ end }}
+              </a>
+            </div>
+            {{ end }}
+
+            <div class="blog-card-body color-transition">
+              <div class="blog-meta mb-2">
+                <span class="meta-date fw-bold">{{ .Date.Format "02 Jan 2006"
+                  }}</span>
+                {{ if .Params.categories }}
+                <span class="mx-2 meta-sep">|</span>
+                {{ $cat := index .Params.categories 0 }}
+                <a href="?category={{ $cat | urlize }}"
+                  class="text-uppercase small category-link meta-cat">
+                  {{ $cat }}
+                </a>
+                {{ end }}
+              </div>
+
+              <h2 class="blog-title mb-3">
+                <a href="{{ .Permalink }}">{{ .Title }}</a>
+              </h2>
+
+              <p class="blog-excerpt mb-4 text-content">
+                {{ if .Description }}
+                {{ .Description | truncate 180 }}
+                {{ else }}
+                {{ .Summary | truncate 180 }}
+                {{ end }}
+              </p>
+
+              <a href="{{ .Permalink }}" class="btn-pixi secondary btn-sm">
+                {{ if eq .Section "portfolio" }}
+                VOIR LE PROJET
+                {{ else }}
+                LIRE L'ARTICLE
+                {{ end }}
+              </a>
+            </div>
+          </article>
           {{ end }}
-
-          <div class="site-blog-post-content">
-            <span>{{ .PublishDate.Format "January 2, 2006" }}</span>
-            <h3><a href="{{ .Permalink }}">{{ .Title }}</a></h3>
-            <p>{{ with .Params.summary }}{{ . }}{{ else }}{{ .Summary }}{{ end
-              }}</p>
-            <a href="{{ .Permalink }}" class="read-more">
-              {{ with $.Site.Params.blog.read_more }}{{ . }}{{ else }}Read
-              more{{ end }}
-            </a>
-          </div>
-        </article>
-      </div>
-      {{ end }}
-
-      <div class="col-12">
-        <div class="site-blog-pagination">
-          {{ template "_internal/pagination.html" . }}
         </div>
+
+        <div id="jsPagination"
+          class="pagination mt-5 d-flex justify-content-center gap-2">
+        </div>
+
       </div>
+
+      <div class="col-lg-4 ps-lg-5">
+        {{ partial "sidebar.html" . }}
+      </div>
+
     </div>
   </div>
 </section>
 
-{{ partial "call-to-action.html" . }}
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    
+    // CONFIGURATION
+    const itemsPerPage = 6; 
+    let currentPage = 1;
+    let validArticles = []; 
+
+    // ÉLÉMENTS DOM
+    const allArticles = Array.from(document.querySelectorAll('.filter-item'));
+    const noResults = document.getElementById('noResultsMessage');
+    const paginationContainer = document.getElementById('jsPagination');
+    const inputField = document.querySelector('input[name="q"]');
+    
+    // 1. INITIALISATION & FILTRAGE
+    function init() {
+        const params = new URLSearchParams(window.location.search);
+        const categoryFilter = params.get('category') ? params.get('category').toLowerCase() : null;
+        const tagFilter = params.get('tag') ? params.get('tag').toLowerCase() : null;
+        const searchQuery = params.get('q') ? params.get('q').toLowerCase() : null;
+
+        if(searchQuery && inputField) inputField.value = searchQuery;
+
+        validArticles = allArticles.filter(article => {
+            let isMatch = true;
+            // Logique de filtre (inchangée)
+            if (categoryFilter) {
+                const cats = article.getAttribute('data-category');
+                if (!cats || !cats.includes(categoryFilter)) isMatch = false;
+            }
+            if (isMatch && tagFilter) {
+                const tags = article.getAttribute('data-tags');
+                if (!tags || !tags.includes(tagFilter)) isMatch = false;
+            }
+            if (isMatch && searchQuery) {
+                const title = article.getAttribute('data-title');
+                if (!title.includes(searchQuery)) isMatch = false;
+            }
+            return isMatch;
+        });
+
+        if (validArticles.length === 0) {
+            noResults.style.display = 'block';
+            paginationContainer.innerHTML = '';
+        } else {
+            noResults.style.display = 'none';
+            renderPage(1); 
+        }
+    }
+
+    // 2. RENDU D'UNE PAGE (MODIFIÉ POUR LES COULEURS)
+    function renderPage(page) {
+        currentPage = page;
+        
+        // Reset de l'affichage
+        allArticles.forEach(el => {
+            el.style.display = 'none';
+            // On nettoie les anciennes classes de couleur pour éviter les conflits
+            el.querySelector('.blog-card-body').classList.remove('variant-1', 'variant-2', 'variant-3', 'variant-4');
+        });
+
+        const start = (page - 1) * itemsPerPage;
+        const end = start + itemsPerPage;
+        const pageItems = validArticles.slice(start, end);
+
+        // Boucle d'affichage AVEC attribution des couleurs
+        pageItems.forEach((el, index) => {
+            el.style.display = 'block';
+            el.style.animation = "fadeIn 0.5s"; 
+            
+            // Calcul du cycle de couleur (0, 1, 2, 3)
+            const colorIndex = index % 4; 
+            
+            // Ajout de la classe correspondante (variant-1 à variant-4)
+            el.querySelector('.blog-card-body').classList.add(`variant-${colorIndex + 1}`);
+        });
+
+        renderPaginationControls();
+        
+        if(page > 1) {
+            document.getElementById('blogTopAnchor').scrollIntoView({behavior: 'smooth'});
+        }
+    }
+
+    // 3. PAGINATION (Inchangée)
+    function renderPaginationControls() {
+        paginationContainer.innerHTML = '';
+        const totalPages = Math.ceil(validArticles.length / itemsPerPage);
+        if (totalPages <= 1) return;
+        if (currentPage > 1) createBtn('<', () => renderPage(currentPage - 1));
+        for (let i = 1; i <= totalPages; i++) createBtn(i, () => renderPage(i), i === currentPage);
+        if (currentPage < totalPages) createBtn('>', () => renderPage(currentPage + 1));
+    }
+
+    function createBtn(text, onClick, isActive = false) {
+        const btn = document.createElement('button');
+        btn.innerText = text;
+        btn.className = isActive ? 'btn-page active' : 'btn-page';
+        btn.onclick = onClick;
+        paginationContainer.appendChild(btn);
+    }
+
+    init();
+});
+</script>
+
+<style>
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- BOUTONS PAGINATION --- */
+.btn-page {
+    border: 1px solid #ddd;
+    background: #fff;
+    color: #333;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-radius: 4px;
+}
+.btn-page:hover { background: #f0f0f0; }
+.btn-page.active { background: #007bff; color: #fff; border-color: #007bff; }
+
+/* --- BADGES --- */
+.position-relative { position: relative; }
+.badge-type {
+    position: absolute;
+    top: 15px; right: 15px;
+    padding: 5px 10px;
+    font-size: 0.75rem; font-weight: bold;
+    color: #fff; border-radius: 4px;
+    text-transform: uppercase; z-index: 2;
+}
+.badge-type.project { background-color: #1d5d9b; }
+.badge-type.blog { background-color: #f4d160; color: #000; }
+
+/* --- GESTION DES COULEURS DE CARTES --- */
+.blog-card-body {
+    padding: 2rem;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    border: 1px solid rgba(0,0,0,0.05); /* Bordure subtile */
+}
+
+/* 1. BLEU FONCÉ (Texte Blanc) */
+.variant-1 {
+    background-color: #1d5d9b; /* Ton bleu PixiCode foncé */
+    color: #ffffff;
+}
+.variant-1 .blog-title a { color: #ffffff !important; }
+.variant-1 .meta-date { color: #fbbf24; } /* Jaune pour la date */
+.variant-1 .meta-sep { color: rgba(255,255,255,0.5); }
+.variant-1 .meta-cat { color: rgba(255,255,255,0.8); }
+.variant-1 .text-content { color: rgba(255,255,255,0.9) !important; }
+
+/* 2. JAUNE CLAIR (Texte Foncé) */
+.variant-2 {
+    background-color: #fbeeac; /* Jaune très pâle */
+    color: #1a1a1a;
+}
+.variant-2 .blog-title a { color: #1a1a1a !important; }
+.variant-2 .meta-date { color: #d97706; } /* Ocre */
+.variant-2 .text-content { color: #4b5563 !important; }
+
+/* 3. BLEU CLAIR (Texte Foncé) */
+.variant-3 {
+    background-color: #75c2f6; /* Bleu ciel très pâle */
+    color: #1a1a1a;
+}
+.variant-3 .blog-title a { color: #0c4a6e !important; }
+.variant-3 .meta-date { color: #0284c7; } /* Bleu vif */
+.variant-3 .text-content { color: #4b5563 !important; }
+
+/* 4. JAUNE FONCÉ / MOUTARDE (Texte Blanc ou très foncé) */
+.variant-4 {
+    background-color: #f4d160; /* Jaune PixiCode */
+    color: #ffffff; /* Ou #1a1a1a si tu préfères le contraste noir */
+}
+.variant-4 .blog-title a { color: #ffffff !important; } /* Ou Noir */
+.variant-4 .meta-date { color: #78350f; } /* Marron */
+.variant-4 .meta-sep { color: rgba(255,255,255,0.5); }
+.variant-4 .meta-cat { color: rgba(255,255,255,0.9); }
+.variant-4 .text-content { color: rgba(255,255,255,0.95) !important; }
+
+/* Ajustement boutons pour qu'ils ressortent sur tous les fonds */
+.variant-1 .btn-pixi { background: #fff; color: #1a3b5c; border: none; }
+.variant-4 .btn-pixi { background: #fff; color: #d97706; border: none; }
+
+</style>
 
 {{ end }}

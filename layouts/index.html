@@ -1,76 +1,114 @@
 {{ define "main" }}
 
-{{ partial "hero.html" . }}
-
-<section class="site-about-header">
-    <div class="container">
-        <div class="row">
-            <div class="col-12">
-                <div class="site-about-wrapper">
-                    <div class="site-about-company">
-                        <h1>
-                            {{ .Params.heading }}
-                        </h1>
-                    </div>
-                    <div class="site-about-description">
-                        <p>
-                            {{ .Params.Details }}
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
+{{/* --- HERO SECTION --- */}}
+{{ with .Site.Params.hero }}
+{{ if .enable }}
+<section class="site-hero container"
+  style="background-image: url('{{ .background_image | relURL }}');">
+  <div class="column-section">
+    <h1 class="grand-titre">
+      <span class="d-block">{{ .title }}</span>
+    </h1>
+    <p class="mt-4 hero-description">{{ .description }}</p>
+    <div class="hero-actions mt-5">
+      <a href="{{ .primary_link | relURL }}" class="btn-pixi primary">{{
+        .primary_btn }}</a>
+      <a href="{{ .secondary_link | relURL }}" class="btn-pixi secondary">{{
+        .secondary_btn }}</a>
     </div>
+  </div>
+  {{/* J'ai ajouté un alt par défaut ici si vide dans la config */}}
+  <img src="{{ .image | relURL }}" alt="Présentation des interfaces PixiCode">
+</section>
+{{ end }}
+{{ end }}
+
+{{/* --- ABOUT SECTION --- */}}
+<section class="about-section">
+  <img src="{{ "images/2screen.svg" | relURL }}" alt class="about-decor-img"
+    aria-hidden="true">
+  <div class="container">
+    <p class="text-uppercase overline-dash">À PROPOS</p>
+    <h2 class="propos-title">{{ .Params.intro.title }}</h2>
+    <div class="row">
+      <div class="col-md-8">
+        {{ .Params.intro.text | markdownify }}
+      </div>
+    </div>
+  </div>
 </section>
 
-<section class="site-expertise">
-    <div class="container">
-        {{ .Content }}
-    </div>
-</section>
+{{/* --- APPROACH (Gère son propre JS en interne) --- */}}
+<div class="approach-wrapper position-relative">
+  <div class="bg-hashtag" aria-hidden="true">#</div>
+  <div class="position-relative z-2">
+    {{ partial "approach.html" . }}
+  </div>
+</div>
 
-<section class="site-expertise">
-    <div class="container">
-        <div class="row">
-            {{ with .Params.expertise_title }}
-            <div class="col-md-5">
-                <div class="section-title">
-                    <h2>{{ . }}</h2>
-                </div>
-            </div>
-            {{ end }}
-            <div class="col-md-6">
-                <ul class="site-expertise-list">
-                    {{ range .Params.expertise_sectors }}
-                    <li>{{ . | markdownify }}</li>
-                    {{ end }}
-                </ul>
-            </div>
-        </div>
-    </div>
-</section>
+{{/* --- PORTFOLIO (JS géré en bas de cette page) --- */}}
+{{ partial "portfolio.html" . }}
 
-<section class="site-expertise">
-    <div class="container">
-        <div class="row">
-            {{ with .Params.valor_title }}
-            <div class="col-md-5">
-                <div class="section-title">
-                    <h2>{{ . }}</h2>
-                </div>
-            </div>
-            {{ end }}
-            <div class="col-md-6">
-                <ul class="site-expertise-list">
-                    {{ range .Params.valor_sectors }}
-                    <li>{{ . | markdownify }}</li>
-                    {{ end }}
-                </ul>
-            </div>
-        </div>
-    </div>
-</section>
+<div class="sections-wrapper position-relative">
+  <div class="big-t-letter" aria-hidden="true">T</div>
 
-{{ partial "call-to-action.html" . }}
+  {{/* --- TESTIMONIALS (Gère son propre JS en interne) --- */}}
+  {{ partial "testimonials.html" . }}
+
+  {{/* --- NEWS (JS géré en bas de cette page) --- */}}
+  {{ partial "news.html" . }}
+</div>
+
+{{/* --- CTA --- */}}
+{{ with .Site.Params.call_to_action }}
+{{ if .enable }}
+{{ partial "cta.html" . }}
+{{ end }}
+{{ end }}
+
+{{/* --- SCRIPTS SPÉCIFIQUES INDEX --- */}}
+{{/* NOTE: On ne charge PAS les librairies Embla ici, elles doivent être dans le
+footer global */}}
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  
+  const initIndexCarousels = (id, navSelector) => {
+    const node = document.querySelector(id);
+    if (!node) return;
+
+    // On attend que Embla soit chargé (depuis le footer)
+    if (typeof EmblaCarousel === "undefined") {
+      setTimeout(() => initIndexCarousels(id, navSelector), 100);
+      return;
+    }
+
+    const api = EmblaCarousel(node, {
+      loop: false, align: "start", slidesToScroll: 1,
+      breakpoints: { "(min-width: 992px)": { slidesToScroll: 1 } },
+    });
+
+    // Gestion des flèches
+    if (navSelector) {
+      const prevBtns = document.querySelectorAll(`${navSelector} .embla__prev`);
+      const nextBtns = document.querySelectorAll(`${navSelector} .embla__next`);
+      prevBtns.forEach(btn => btn.addEventListener("click", () => api.scrollPrev()));
+      nextBtns.forEach(btn => btn.addEventListener("click", () => api.scrollNext()));
+    }
+    
+    // Exception pour le portfolio qui boucle
+    if (id === "#portfolio-carousel") {
+       api.reInit({ loop: true }); 
+    }
+  };
+
+  // 1. PORTFOLIO (News et Approach ne sont PAS ici car gérés ailleurs ou par défaut)
+  initIndexCarousels("#portfolio-carousel", ".portfolio-nav-desktop, .portfolio-nav-mobile");
+
+  // 2. NEWS
+  initIndexCarousels("#news-carousel", ".btn-nav-arrow-news, .news-nav-mobile");
+
+});
+</script>
 
 {{ end }}

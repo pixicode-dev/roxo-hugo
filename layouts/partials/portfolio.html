@@ -1,34 +1,64 @@
-{{ with .Site.Params.portfolio }}
-  {{ if .enable }}
-  <section class="site-project" id="project">
-    <div class="container">
-      <div class="row">
-        <div class="col-12">
-          <div class="section-title">
-            <h2>{{ .title }}</h2>
-            <p>{{ .subtitle }}</p>
-          </div>
-        </div>
-        {{ range first 4 (where $.Site.RegularPages "Type" "portfolio") }}
-        <div class="col-lg-4 col-md-4 mx-auto">
-          <div class="site-project-item">
-            <div class="site-project-item-thumb">
-              
-              <img src="{{ .Params.Image | absURL }}" alt="project-thumb">
+<section class="portfolio-section">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-end mb-5">
+      <div>
+        <p class="overline-dash text-white text-uppercase">NOS RÉALISATIONS</p>
+      </div>
+
+      <div class="portfolio-nav-desktop d-none d-lg-flex gap-3">
+        <button class="embla__prev btn-nav-arrow">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2"><path
+              d="M19 12H5M12 19l-7-7 7-7" /></svg>
+        </button>
+        <button class="embla__next btn-nav-arrow">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2"><path
+              d="M5 12h14M12 5l7 7-7 7" /></svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="embla" id="portfolio-carousel">
+      <div class="embla__container portfolio-container">
+        {{ range where .Site.RegularPages "Section" "portfolio" }}
+        <div class="embla__slide portfolio-slide">
+          <div class="portfolio-card">
+            <div class="card-bg-img">
+              <img src="{{ .Params.image | relURL }}" alt="{{ .Title }}">
             </div>
-            <div class="site-project-item-content">
-              <span>{{ delimit .Params.category ", " }}</span>
-              <h3>{{ .Title }}</h3>
-              <a href="{{ .Permalink }}" class="read-more">{{ .Site.Params.portfolio.view_project }}</a>
+
+            <div class="card-content">
+              <div class="card-text-group">
+                <span class="card-category">
+                  <span class="text-yellow">></span> {{ index .Params.categories
+                  0 | upper }} </span>
+                <h3 class="card-title"
+                  style="font-size: 1.5rem; margin-top: 5px;">{{ .Title }}</h3>
+              </div>
+              <a href="{{ .Permalink }}" class="btn-portfolio">Voir le
+                projet</a>
             </div>
+
+            <div class="card-overlay"></div>
           </div>
         </div>
         {{ end }}
-        <div class="col-12 text-center text-lg-left">
-          <a href="portfolio" class="site-project-cta">{{ .Site.Params.portfolio.more_works }}</a>
-        </div>
       </div>
     </div>
-  </section>
-  {{ end }}
-{{ end }}
+
+    <div
+      class="portfolio-nav-mobile d-flex d-lg-none justify-content-between mt-4">
+      <button class="embla__prev btn-nav-arrow-mobile">
+        <svg width="30" height="30" viewBox="0 0 24 24" fill="none"
+          stroke="#FDD835" stroke-width="2"><path
+            d="M19 12H5M12 19l-7-7 7-7" /></svg>
+      </button>
+      <button class="embla__next btn-nav-arrow-mobile">
+        <svg width="30" height="30" viewBox="0 0 24 24" fill="none"
+          stroke="#FDD835" stroke-width="2"><path
+            d="M5 12h14M12 5l7 7-7 7" /></svg>
+      </button>
+    </div>
+  </div>
+</section>

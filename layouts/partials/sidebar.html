@@ -1,0 +1,100 @@
+<div class="blog-sidebar">
+
+    <div class="sidebar-widget">
+        <span class="widget-dash"></span>
+        <h4 class="widget-title">RECHERCHER</h4>
+
+        <form action="{{ .Site.BaseURL }}blog/" method="get"
+            class="search-form-design">
+            <input type="text" name="q" placeholder="Mot-clé..."
+                class="search-input" id="searchInput">
+            <button type="submit" class="search-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2.5" stroke-linecap="round"
+                    stroke-linejoin="round"><circle cx="11" cy="11"
+                        r="8"></circle><line x1="21" y1="21" x2="16.65"
+                        y2="16.65"></line></svg>
+            </button>
+        </form>
+    </div>
+
+    {{ $allPages := where .Site.RegularPages "Section" "in" (slice "blog"
+    "portfolio") }}
+
+    {{ $cats := slice }}
+    {{ range $allPages }}
+    {{ if .Params.categories }}
+    {{ $cats = $cats | append .Params.categories }}
+    {{ end }}
+    {{ end }}
+    {{ $cats = $cats | uniq | sort }}
+
+    {{ if gt (len $cats) 0 }}
+    <div class="sidebar-widget">
+        <span class="widget-dash"></span>
+        <h4 class="widget-title">CATÉGORIES</h4>
+
+        <ul class="widget-list">
+            <li><a href="{{ .Site.BaseURL }}blog/">TOUT VOIR</a></li>
+
+            {{ range $cats }}
+            <li>
+                <a href="{{ $.Site.BaseURL }}blog/?category={{ . | urlize }}">
+                    {{ . | humanize | upper }}
+                </a>
+            </li>
+            {{ end }}
+        </ul>
+    </div>
+    {{ end }}
+
+    <div class="sidebar-widget">
+        <span class="widget-dash"></span>
+        <h4 class="widget-title">PUBLIÉS RÉCEMMENT</h4>
+        <div class="recent-posts-list">
+            {{ range first 3 $allPages.ByDate.Reverse }}
+            <a href="{{ .Permalink }}" class="recent-item">
+                <div class="recent-thumb">
+                    {{ if .Params.cover }}
+                    <img src="{{ .Params.cover | relURL }}" alt="{{ .Title }}">
+                    {{ else }}
+                    <img src="{{ "images/placeholder.jpg" | relURL }}"
+                        alt="PixiCode">
+                    {{ end }}
+                </div>
+                <div class="recent-info">
+                    <h5 class="recent-title">{{ .Title }}</h5>
+                    <span class="recent-date">{{ .Date.Format "02 Jan 2006"
+                        }}</span>
+                </div>
+            </a>
+            {{ end }}
+        </div>
+    </div>
+
+    {{ $tags := slice }}
+    {{ range $allPages }}
+    {{ if .Params.tags }}
+    {{ $tags = $tags | append .Params.tags }}
+    {{ end }}
+    {{ end }}
+    {{ $tags = $tags | uniq | sort }}
+
+    {{ if gt (len $tags) 0 }}
+    <div class="sidebar-widget">
+        <span class="widget-dash"></span>
+        <h4 class="widget-title">TAGS</h4>
+
+        <div class="tag-cloud-design">
+            {{ range $tags }}
+            <a href="{{ $.Site.BaseURL }}blog/?tag={{ . | urlize }}"
+                class="tag-btn">
+                {{ . | upper }}
+            </a>
+            {{ end }}
+        </div>
+    </div>
+    {{ end }}
+
+</div>

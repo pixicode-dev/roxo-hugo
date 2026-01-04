@@ -1,22 +1,156 @@
 {{ define "main" }}
 
-<section class="site-project-single-section">
+<div class="bg-header">
+  <img src="/images/Background2.svg" alt="Blog Header"
+    class="page-header2-bg img-fluid">
+</div>
+
+<section class="page-header">
+  <div
+    class="container h-100 d-flex flex-column justify-content-center align-items-center">
+    <h1 class="text-uppercase fw-bold mb-2">{{ .Title }}</h1>
+
+    <div class="overline-dash"></div>
+
+    <p class="breadcrumb-text">ACCUEIL / {{ .Title }}</p>
+  </div>
+</section>
+
+<section class="section-padding">
   <div class="container">
-    <div class="row">
-      <div class="col-lg-8 mx-auto">
-        <div class="site-project-single">
-          <h1>
-            {{ .Title }}
-          </h1>
-          <div class="site-project-single-description">
-            {{ .Content }}
-          </div>
+    <div class="row align-items-center gy-5">
+      <div class="col-lg-6">
+        <p class="overline-dash text-uppercase">{{ .Params.service_intro.title
+          }}</p>
+        <h2 class="section-headline fw-bold mb-4">{{ .Title }}</h2>
+        <p>{{ .Params.service_intro.text | markdownify
+          }}</p>
+      </div>
+      <div class="col-lg-6">
+        <div class="img-wrapper-rounded">
+          <img src="{{ .Params.service_intro.image | relURL }}"
+            alt="{{ .Title }}" class="img-fluid">
         </div>
       </div>
     </div>
   </div>
 </section>
 
-{{ partial "call-to-action.html" . }}
+<section class="section-padding bg-white">
+  <div class="container">
+
+    <div class="row mb-5 align-items-end">
+      <div class="col-lg-6">
+        <p class="overline-dash text-uppercase text-dark mb-2">{{
+          .Params.service_benefits.title }}</p>
+        <h2 class="fw-bold display-6 mb-0">{{ .Params.service_benefits.headline
+          }}</h2>
+      </div>
+    </div>
+
+    <div class="embla" id="benefits-carousel">
+      <div class=" row gx-4 gy-4 wrap-on-desktop">
+        {{ range .Params.service_benefits.items }}
+        <div class=" col-lg-3 col-md-6 benefit-slide">
+          <div
+            class="benefit-card {{ if .highlight }}highlight-yellow{{ end }}">
+
+            <div class="benefit-top">
+              <span class=" overline-dash benefit-number"> {{ .number }}</span>
+              <div class="benefit-icon">
+                <img src="{{ .icon | relURL }}" alt="{{ .title }}">
+              </div>
+            </div>
+
+            <div class="benefit-content text-center">
+              <h3 class="benefit-title text-uppercase">{{ .title }}</h3>
+              <p class="benefit-desc">{{ .description }}</p>
+            </div>
+
+          </div>
+        </div>
+        {{ end }}
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section-padding methode-section">
+  <div class="container">
+    <div class="row align-items-center gy-5">
+      <div class="col-lg-6 order-2 order-lg-1">
+        <div class="img-wrapper-rounded">
+          <img src="{{ .Params.service_process.image | relURL }}"
+            alt="Notre approche" class="img-fluid">
+        </div>
+      </div>
+      <div class="col-lg-6 order-1 order-lg-2 mb-4 mb-lg-0">
+        <p class="overline-dash text-uppercase">NOTRE MÉTHODE</p>
+        <h2 class="section-headline fw-bold mb-4">{{
+          .Params.service_process.title }}</h2>
+        <p class="text-muted">{{ .Params.service_process.text }}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section-padding pricing-section">
+  <div class="container">
+    <div class="text-center mb-5">
+      <p class="overline-dash justify-content-center text-uppercase">{{
+        .Params.pricing.title }}</p>
+      <h2 class="section-headline fw-bold">{{ .Params.pricing.headline }}</h2>
+    </div>
+
+    <div class="embla" id="pricing-carousel">
+      <div
+        class=" row gx-4 gy-4 wrap-on-desktop justify-content-center">
+        {{ range .Params.pricing.items }}
+        <div class=" col-lg-4 pricing-slide">
+          <div class="service-card h-100">
+            <div class="service-icon-wrapper">
+              <img src="{{ .icon | relURL }}" alt="{{ .title }}" width="60"
+                height="60">
+            </div>
+            <h3 class="service-card-title">{{ .title }}</h3>
+            <p class="service-card-desc">{{ .price }}</p>
+            <div class="pricing-body">
+              <ul class="pricing-features">
+                {{ range .features }}
+                <li>{{ . }}</li>
+                {{ end }}
+              </ul>
+            </div>
+
+            <a href="{{ .link_url }}" class="btn-pixi secondary btn-sm mt-auto">
+              {{ .button_text }}
+            </a>
+          </div>
+
+        </div>
+        {{ end }}
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section-padding bg-blue-dark text-white">
+  <div class="container">
+    <div class="row align-items-center gy-5">
+      <div class="col-lg-6">
+        <h2 class="overline-dash text-yellow text-uppercase mb-2">{{
+          .Params.service_cta.title }}
+        </h2>
+        <p class="opacity-75 lead">{{ .Params.service_cta.text }}</p>
+      </div>
+      <div class="col-lg-6">
+        <div class="img-wrapper-rounded">
+          <img src="{{ .Params.service_cta.image | relURL }}"
+            alt="Collaboration" class="img-fluid">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
 {{ end }}

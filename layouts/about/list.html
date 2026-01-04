@@ -1,43 +1,114 @@
 {{ define "main" }}
+<div class="bg-header">
+  <img src="/images/Background2.svg" alt="Blog Header"
+    class="page-header2-bg img-fluid">
+</div>
 
-<section class="site-about-header">
+<section class="page-header">
+  <div
+    class="container h-100 d-flex flex-column justify-content-center align-items-center">
+    <h1 class="text-uppercase fw-bold mb-2">{{ .Title }}</h1>
+
+    <div class="overline-dash"></div>
+
+    <p class="breadcrumb-text">ACCUEIL / {{ .Title }}</p>
+  </div>
+</section>
+
+<section class="section-padding section-who-we-are">
   <div class="container">
-    <div class="row">
-      <div class="col-12">
-        <div class="site-about-wrapper">
-          <div class="site-about-company">
-            <h1>
-              {{ .Params.heading }}
-            </h1>
-          </div>
+    <div class="row align-items-center">
 
-          {{ with .Params.description }}
-          <div class="site-about-description">
-            <p>{{ . }}</p>
-          </div>
-          {{ end }}
+      <div class="col-lg-6 mb-4 mb-lg-0 order-2 order-lg-1">
+        <p class="overline-dash text-uppercase">QUI SOMMES-NOUS ?</p>
+        <h2 class="section-title mb-4">{{ .Params.intro.title }}</h2>
+        <p>{{ .Params.intro.text | markdownify }}</p>
+      </div>
 
+      <div class="col-lg-6 order-1 order-lg-2 mb-4 mb-lg-0">
+        <div class="img-wrapper-rounded">
+          <img src="{{ .Params.intro.image | relURL }}" alt="Qui sommes nous"
+            class="img-fluid">
         </div>
       </div>
+
     </div>
   </div>
 </section>
 
-<!-- Section de contenu principal -->
-<section class="site-expertise section-padding">
-  <div class="container">
-    <div class="row justify-content-center">
-      <div class="col-lg-10 col-md-11">
-        <article class="about-content">
-          {{ .Content }}
-        </article>
+{{ partial "approach.html" . }}
+
+<section class="section-padding position-relative"
+  style="background-color: var(--clr-yellow-light);">
+  <div class="bg-hashtag-big">#</div>
+
+  <div class="container position-relative z-2">
+    <div class="row align-items-center">
+      <div class="col-lg-6 order-2 order-lg-1">
+        <div class="img-wrapper-rounded">
+          <img src="{{ .Params.history.image | relURL }}" alt="Notre histoire"
+            class="img-fluid">
+        </div>
+      </div>
+      <div class="col-lg-6 order-1 order-lg-2 mb-4 mb-lg-0">
+        <p class="overline-dash text-uppercase">NOTRE HISTOIRE</p>
+        <h2 class="section-title mb-4">{{ .Params.history.title }}</h2>
+        <p>{{ .Params.history.text }}</p>
       </div>
     </div>
   </div>
 </section>
 
-{{ partial "clients.html" . }}
-{{ partial "team.html" . }}
-{{ partial "call-to-action.html" . }}
+<section class="team-section">
+  <div class="container">
+    <div class="text-center mb-5 text-white">
+      <p
+        class="overline-dash text-white justify-content-center text-uppercase">{{
+        .Params.team.title }}</p>
+      <h2 class="fw-bold team-subtitle">{{ .Params.team.subtitle }}</h2>
+    </div>
+
+    <div class="embla" id="team-carousel">
+      <div class="embla__container portfolio-container"> {{ range
+        .Params.team.members }}
+        <div class="embla__slide portfolio-slide"> <div class="team-card">
+            <div class="team-photo">
+              <img src="{{ .photo | relURL }}" alt="{{ .name }}">
+            </div>
+            <h3 class="team-name">{{ .name }}</h3>
+            <p class="team-role text-yellow">> {{ .role }}</p>
+          </div>
+        </div>
+        {{ end }}
+      </div>
+
+      <div class="d-flex justify-content-center gap-3 mt-4">
+        <button class="embla__prev btn-nav-arrow"><svg width="24" height="24"
+            viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7" /></svg></button>
+        <button class="embla__next btn-nav-arrow"><svg width="24" height="24"
+            viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7" /></svg></button>
+      </div>
+    </div>
+  </div>
+</section>
+
+{{ partial "testimonials.html" . }}
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+    // Initialisation Team Carousel (Même logique que Portfolio)
+    const teamNode = document.querySelector("#team-carousel");
+    if (teamNode && typeof EmblaCarousel !== "undefined") {
+        const teamApi = EmblaCarousel(teamNode, { loop: true, align: "start", slidesToScroll: 1, breakpoints: { "(min-width: 992px)": { slidesToScroll: 1 } } });
+        
+        const prevBtns = teamNode.querySelectorAll(".embla__prev");
+        const nextBtns = teamNode.querySelectorAll(".embla__next");
+        prevBtns.forEach(btn => btn.addEventListener("click", () => teamApi.scrollPrev()));
+        nextBtns.forEach(btn => btn.addEventListener("click", () => teamApi.scrollNext()));
+    }
+});
+</script>
 
 {{ end }}

@@ -1,143 +1,160 @@
 <head>
-  <!-- Connection hints -->
-  <link rel="preconnect" href="https://consent.cookiebot.com" crossorigin>
-  <link rel="preconnect" href="https://consentcdn.cookiebot.com" crossorigin>
-  <link rel="preconnect" href="https://matomo.pixicode.dev" crossorigin>
-  <link rel="dns-prefetch" href="//consent.cookiebot.com">
-  <link rel="dns-prefetch" href="//consentcdn.cookiebot.com">
-  <link rel="dns-prefetch" href="//matomo.pixicode.dev">
-
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="generator" content="Hugo {{ hugo.Version }}">
+  <meta property="og:site_name" content="{{ .Site.Title }}">
+  <meta property="og:locale" content="{{ .Site.LanguageCode }}">
 
-  <title>{{ .Title | plainify }}</title>
+  {{/* --- TITRE DYNAMIQUE --- */}}
+  <title>
+    {{ if .IsHome }}
+    {{ .Site.Title }} | {{ .Site.Params.agency.slogan }}
+    {{ else }}
+    {{ .Title }} | {{ .Site.Title }}
+    {{ end }}
+  </title>
 
-  {{ $desc := (cond (isset .Params "description") (.Params.description |
-  plainify) (.Site.Params.description | plainify)) }}
+  {{/* --- DESCRIPTION & KEYWORDS --- */}}
+  {{ $desc := .Description | plainify }}
   <meta name="description" content="{{ $desc }}">
-  {{ with .Params.keywords }}<meta name="keywords" content="{{ . }}">{{ end }}
-  <meta name="robots" content="index, follow">
-  <link rel="canonical" href="{{ .Permalink | safeURL }}">
 
-  {{/* ---- Open Graph ---- */}}
-  {{ $img := "" }}
-  {{ if .Params.cover }} {{ $img = .Params.cover | absURL }}
-  {{ else if .Params.image }} {{ $img = .Params.image | absURL }}
-  {{ else }} {{ $img = "/uploads/og-default.jpg" | absURL }}
+  {{ with .Site.Params.keywords }}
+  <meta name="keywords" content="{{ delimit . " , " }}">
   {{ end }}
 
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="{{ .Permalink }}">
+  <meta name="author" content="{{ .Site.Params.client.name }}">
+  <meta name="designer" content="Pixicode - https://pixicode.dev">
+
+  {{/* --- OPEN GRAPH / TWITTER --- */}}
+  {{ $ogImage := .Params.image | default .Site.Params.image | absURL }}
   <meta property="og:type" content="{{ if eq .Section "blog" }}article{{ else
     }}website{{ end }}">
-  <meta property="og:site_name" content="{{ .Site.Title | plainify }}">
-  <meta property="og:url" content="{{ .Permalink | safeURL }}">
-  <meta property="og:title" content="{{ .Title | plainify }}">
+  <meta property="og:url" content="{{ .Permalink }}">
+  <meta property="og:title" content="{{ .Title | default .Site.Title }}">
   <meta property="og:description" content="{{ $desc }}">
-  <meta property="og:image" content="{{ $img }}">
-
-  {{ if eq .Section "blog" }}
-  <meta property="article:published_time"
-    content="{{ .PublishDate.Format "2006-01-02T15:04:05Z07:00" }}">
-  <meta property="article:modified_time"
-    content="{{ .Lastmod.Format "2006-01-02T15:04:05Z07:00" }}">
-  {{ end }}
-
-  {{/* ---- Twitter Cards ---- */}}
+  <meta property="og:image" content="{{ $ogImage }}">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="{{ .Title | plainify }}">
-  <meta name="twitter:description" content="{{ $desc }}">
-  <meta name="twitter:image" content="{{ $img }}">
+  <meta name="twitter:image" content="{{ $ogImage }}">
 
-  {{ with .Site.Params.author }}<meta name="author" content="{{ . }}">{{ end }}
-
-  <link rel="preload" href="/fonts/josefin-sans-latin-300-normal.woff2"
-    as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="/fonts/josefin-sans-latin-700-normal.woff2"
-    as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="/fonts/montserrat-latin-300-normal.woff2" as="font"
-    type="font/woff2" crossorigin>
-  <link rel="preload" href="/fonts/montserrat-latin-700-normal.woff2" as="font"
-    type="font/woff2" crossorigin>
-
-  {{ $bootstrap := resources.Get "css/bootstrap.css" | minify | fingerprint }}
-  <link rel="preload" href="{{ $bootstrap.Permalink }}" as="style"
-    onload="this.onload=null;this.rel='stylesheet'">
-  <noscript><link rel="stylesheet" href="{{ $bootstrap.Permalink }}"></noscript>
-
-  <link rel="preload" href="{{"font-awesome/css/font-awesome.min.css" | absURL
-    }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
-  <noscript><link rel="stylesheet"
-      href="{{ "font-awesome/css/font-awesome.min.css" | absURL }}"></noscript>
-
-  {{ if eq .Section "portfolio" }}
-  <link rel="preload" href="{{ "glider/css/glider.min.css" | absURL }}"
-    as="style" onload="this.onload=null;this.rel='stylesheet'">
-  <noscript><link rel="stylesheet" href="{{ "glider/css/glider.min.css" | absURL
-      }}"></noscript>
+  {{/* --- METADONNÉES BLOG & DATES --- */}}
+  {{ if .IsPage }}
+  {{ if not .PublishDate.IsZero }}
+  <meta property="article:published_time"
+    content="{{ .PublishDate.Format "2006-01-02T15:04:05-07:00" | safeHTML }}">
+  {{ end }}
+  {{ if not .Lastmod.IsZero }}
+  <meta property="article:modified_time"
+    content="{{ .Lastmod.Format "2006-01-02T15:04:05-07:00" | safeHTML }}">
+  {{ end }}
   {{ end }}
 
-  {{ $style := resources.Get "scss/style.scss" | toCSS | minify | fingerprint }}
-  <link href="{{ $style.Permalink }}" rel="preload stylesheet"
-    onload="this.onload=null;this.rel='stylesheet'">
-  <noscript><link rel="stylesheet" href="{{ $style.Permalink }}"></noscript>
+  {{/* Si c'est un article de blog, on ajoute les tags et la section */}}
+  {{ if eq .Section "blog" }}
+  {{ with .Params.categories }}
+  <meta property="article:section" content="{{ index . 0 }}">
+  {{ end }}
+  {{ range .Params.tags }}
+  <meta property="article:tag" content="{{ . }}">
+  {{ end }}
+  {{ end }}
 
-  {{ range .Site.Params.custom_stylesheets -}}
-  {{ $s := resources.Get . | toCSS | minify | fingerprint }}
-  <link href="{{ $s.Permalink }}" rel="preload stylesheet"
-    onload="this.onload=null;this.rel='stylesheet'">
-  <noscript><link rel="stylesheet" href="{{ $s.Permalink }}"></noscript>
-  {{- end }}
-
-  <!-- Favicons -->
+  {{/* --- FAVICONS --- */}}
   <link rel="shortcut icon"
     href="{{ .Site.Params.favicon_shortcut_icon | absURL }}"
-    type="image/x-icon" />
+    type="image/x-icon">
   <link rel="icon" href="{{ .Site.Params.favicon_icon | absURL }}"
-    type="image/x-icon" />
+    type="image/x-icon">
 
-  <!-- Cookiebot -->
-  {{ $cookibot := resources.Get "js/uc.js" | minify }}
-  <script id="Cookiebot"
-    src="{{ $cookibot.Permalink }}"
-    data-cbid="68953ecb-60a7-4638-9dca-07e6d962a661"
-    data-blockingmode="auto"
-    type="text/javascript"></script>
+  {{ $bootstrap := resources.Get "css/bootstrap.css" | minify | fingerprint }}
+  <link rel="stylesheet" href="{{ $bootstrap.Permalink }}"
+    integrity="{{ $bootstrap.Data.Integrity }}">
 
-  <!-- Matomo -->
-  <script type="text/plain" data-cookiecategory="statistics">
+  <link rel="stylesheet" href="{{ "font-awesome/css/font-awesome.min.css" |
+    absURL }}">
+
+  {{ $style := resources.Get "scss/style.scss" | toCSS | minify | fingerprint }}
+  <link rel="stylesheet" href="{{ $style.Permalink }}"
+    integrity="{{ $style.Data.Integrity }}">
+
+  {{ range .Site.Params.custom_stylesheets }}
+  {{ $res := resources.Get . }}
+  {{ if $res }}
+  {{ $s := $res | toCSS | minify | fingerprint }}
+  <link rel="stylesheet" href="{{ $s.Permalink }}">
+  {{ end }}
+  {{ end }}
+
+  {{/* --- THEME COLOR (Pour mobile) --- */}}
+  <meta name="theme-color" content="#1d5d9b">
+
+  {{/* --- SCHEMA.ORG (JSON-LD) --- */}}
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    {{ if eq .Section "blog" }}
+      {{/* CAS 1 : C'est un Article de Blog */}}
+      "@type": "BlogPosting",
+      "headline": "{{ .Title }}",
+      "image": "{{ .Params.image | default .Site.Params.image | absURL }}",
+      "author": {
+        "@type": "Organization",
+        "name": "{{ .Site.Params.agency.name }}"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "{{ .Site.Params.client.name }}",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "{{ .Site.Params.client.logo | absURL }}"
+        }
+      },
+      "datePublished": "{{ .PublishDate.Format "2006-01-02" }}",
+      "dateModified": "{{ .Lastmod.Format "2006-01-02" }}",
+      "description": "{{ .Description | plainify }}"
+    {{ else }}
+      {{/* CAS 2 : C'est une page normale (Accueil, Contact...) */}}
+      "@graph": [
+        {
+          "@type": "LocalBusiness",
+          "name": "{{ .Site.Params.client.name }}",
+          "image": "{{ .Site.Params.client.logo | absURL }}",
+          "url": "{{ .Site.BaseURL }}",
+          "telephone": "{{ .Site.Params.client.phone }}",
+          "email": "{{ .Site.Params.client.email }}",
+          "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "{{ .Site.Params.client.address }}",
+            "addressLocality": "Angoulême",
+            "postalCode": "16000",
+            "addressCountry": "FR"
+          }
+        },
+        {
+          "@type": "WebSite",
+          "name": "{{ .Site.Title }}",
+          "url": "{{ .Site.BaseURL }}"
+        }
+      ]
+    {{ end }}
+  }
+  </script>
+
+  {{/* --- MATOMO ANALYTICS --- */}}
+  {{ with .Site.Params.matomo_id }}
+  <script>
     var _paq = window._paq = window._paq || [];
+    _paq.push(['requireConsent']);
     _paq.push(['trackPageView']);
     _paq.push(['enableLinkTracking']);
     (function() {
-      var u = "//matomo.pixicode.dev/";
+      var u = "{{ $.Site.Params.matomo_url }}";
       _paq.push(['setTrackerUrl', u + 'matomo.php']);
-      _paq.push(['setSiteId', '1']);
+      _paq.push(['setSiteId', '{{ . }}']);
       var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
-      g.async = true; g.src = u + 'matomo.js'; s.parentNode.insertBefore(g, s);
+      g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
     })();
   </script>
-
-  <!-- Sync Matomo consent state with Cookiebot (optional; auto-blocking already protects) -->
-  <script>
-    window.addEventListener('CookiebotOnAccept', function () {
-      if (Cookiebot.consent.statistics && window._paq) { _paq.push(['setConsentGiven']); }
-    });
-    window.addEventListener('CookiebotOnDecline', function () {
-      if (window._paq) { _paq.push(['forgetConsentGiven']); }
-    });
-  </script>
-
-  <!-- JSON-LD Organization -->
-  <script type="application/ld+json">
-  {
-    "@context":"https://schema.org",
-    "@type":"Organization",
-    "name":"PixiCode",
-    "url":"https://pixicode.dev/",
-    "logo":"https://pixicode.dev/images/logo.png",
-    "email":"contact@pixicode.dev",
-    "telephone":"+33545913857",
-    "address":{"@type":"PostalAddress","addressLocality":"Angoulême","postalCode":"16000","addressCountry":"FR"},
-    "sameAs":["https://www.linkedin.com/company/pixicode","https://www.instagram.com/pixicode_dev/","https://www.facebook.com/profile.php?viewas=100000686899395&id=61579743967992","https://www.tiktok.com/@pixicode"]
-  }
-  </script>
+  {{ end }}
 </head>
