@@ -1,14 +1,11 @@
-{{ $data := .Site.Data.homepage.cta }}
-<section class="site-cta">
-  <div class="cta-svg-container">
-    <svg viewBox="0 0 1000 400" preserveAspectRatio="xMidYMid slice"
-      class="cta-bg-svg">
-      <path d="M0 0 L1000 0 L1000 400 L0 400 Z" fill="#1D5D9B" /> </svg>
+{{ $showGradient := .gradient | default false }}
 
-    <div class="cta-content container">
-      <h2 class="grand-titre text-white">{{ $data.title }}</h2>
-      <p class="body-text text-yellow">{{ $data.subtitle }}</p>
-      <a href="/contact" class="btn btn-yellow-dark">{{ $data.button }}</a>
-    </div>
-  </div>
-</section>
+<a href="/contact"
+  class="cta-link {{ if $showGradient }}has-bg-gradient{{ end }}">
+
+  <img src="/images/CTA.svg" alt="Contactez-nous" class="cta-img cta-desktop">
+
+  <img src="/images/CTA_PHONE.svg" alt="Contactez-nous"
+    class="cta-img cta-mobile">
+
+</a>

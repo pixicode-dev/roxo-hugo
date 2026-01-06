@@ -16,7 +16,7 @@
   </div>
 </section>
 
-<section class="section-padding bg-white">
+<section class="section-padding ">
   <div class="container">
     <div class="row">
 
@@ -61,10 +61,10 @@
           <div class="post-footer mt-5 pt-4 border-top">
             <div class="row align-items-center">
               <div class="col-md-6 mb-3 mb-md-0">
-                <span class="fw-bold me-2">TAGS:</span>
+                <span class="overline-dash fw-bold me-2">TAGS:</span>
                 {{ range .Params.tags }}
                 <a href="{{ "/tags/" | relURL }}{{ . | urlize }}"
-                  class="badge bg-light text-dark text-decoration-none border me-1">{{
+                  class="badge text-dark text-decoration-none border me-1">{{
                   . }}</a>
                 {{ end }}
               </div>

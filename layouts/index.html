@@ -59,16 +59,7 @@
   {{ partial "news.html" . }}
 </div>
 
-{{/* --- CTA --- */}}
-{{ with .Site.Params.call_to_action }}
-{{ if .enable }}
-{{ partial "cta.html" . }}
-{{ end }}
-{{ end }}
-
-{{/* --- SCRIPTS SPÉCIFIQUES INDEX --- */}}
-{{/* NOTE: On ne charge PAS les librairies Embla ici, elles doivent être dans le
-footer global */}}
+{{ partial "call-to-action.html" (dict "gradient" true) }}
 
 <script>
 document.addEventListener("DOMContentLoaded", function () {

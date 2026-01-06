@@ -13,7 +13,7 @@
   </div>
 </section>
 
-<section class="section-padding bg-light" id="blogTopAnchor">
+<section class="section-padding" id="blogTopAnchor">
   <div class="container">
     <div class="row">
 
@@ -39,10 +39,8 @@
           <article class="blog-card mb-5 filter-item"
             style="display: none;"
             data-title="{{ .Title | lower }}"
-            data-category="{{ with .Params.categories }}{{ delimit . "," | lower
-            | urlize }}{{ end }}"
-            data-tags="{{ with .Params.tags }}{{ delimit . "," | lower | urlize
-            }}{{ end }}">
+            data-category="{{ range .Params.categories }}{{ . | urlize }} {{ end }}"
+            data-tags="{{ range .Params.tags }}{{ . | urlize }} {{ end }}">
 
             {{ if .Params.cover }}
             <div class="blog-card-img position-relative">
@@ -128,20 +126,30 @@ document.addEventListener("DOMContentLoaded", function() {
     const paginationContainer = document.getElementById('jsPagination');
     const inputField = document.querySelector('input[name="q"]');
     
+    // --- NOUVEAU : Fonction pour nettoyer les accents (é -> e) ---
+    function normalizeString(str) {
+        if (!str) return null;
+        return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
+    }
+
     // 1. INITIALISATION & FILTRAGE
     function init() {
         const params = new URLSearchParams(window.location.search);
-        const categoryFilter = params.get('category') ? params.get('category').toLowerCase() : null;
-        const tagFilter = params.get('tag') ? params.get('tag').toLowerCase() : null;
-        const searchQuery = params.get('q') ? params.get('q').toLowerCase() : null;
+        
+        // --- MODIFICATION ICI : On utilise normalizeString au lieu de toLowerCase ---
+        const categoryFilter = normalizeString(params.get('category'));
+        const tagFilter = normalizeString(params.get('tag'));
+        const searchQuery = normalizeString(params.get('q'));
 
-        if(searchQuery && inputField) inputField.value = searchQuery;
+        // On remet la valeur dans l'input (optionnel, pour l'UX)
+        if(params.get('q') && inputField) inputField.value = params.get('q');
 
         validArticles = allArticles.filter(article => {
             let isMatch = true;
-            // Logique de filtre (inchangée)
+            
+            // Logique de filtre
             if (categoryFilter) {
-                const cats = article.getAttribute('data-category');
+                const cats = article.getAttribute('data-category'); // Contient déjà "site-web actualites"
                 if (!cats || !cats.includes(categoryFilter)) isMatch = false;
             }
             if (isMatch && tagFilter) {
@@ -149,7 +157,8 @@ document.addEventListener("DOMContentLoaded", function() {
                 if (!tags || !tags.includes(tagFilter)) isMatch = false;
             }
             if (isMatch && searchQuery) {
-                const title = article.getAttribute('data-title');
+                // On normalise aussi le titre pour la recherche texte
+                const title = normalizeString(article.getAttribute('data-title')); 
                 if (!title.includes(searchQuery)) isMatch = false;
             }
             return isMatch;
@@ -164,14 +173,12 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 
-    // 2. RENDU D'UNE PAGE (MODIFIÉ POUR LES COULEURS)
+    // 2. RENDU D'UNE PAGE (Inchangé)
     function renderPage(page) {
         currentPage = page;
         
-        // Reset de l'affichage
         allArticles.forEach(el => {
             el.style.display = 'none';
-            // On nettoie les anciennes classes de couleur pour éviter les conflits
             el.querySelector('.blog-card-body').classList.remove('variant-1', 'variant-2', 'variant-3', 'variant-4');
         });
 
@@ -179,26 +186,24 @@ document.addEventListener("DOMContentLoaded", function() {
         const end = start + itemsPerPage;
         const pageItems = validArticles.slice(start, end);
 
-        // Boucle d'affichage AVEC attribution des couleurs
         pageItems.forEach((el, index) => {
             el.style.display = 'block';
             el.style.animation = "fadeIn 0.5s"; 
             
-            // Calcul du cycle de couleur (0, 1, 2, 3)
             const colorIndex = index % 4; 
-            
-            // Ajout de la classe correspondante (variant-1 à variant-4)
             el.querySelector('.blog-card-body').classList.add(`variant-${colorIndex + 1}`);
         });
 
         renderPaginationControls();
         
+        // Scroll automatique en haut si on change de page
         if(page > 1) {
-            document.getElementById('blogTopAnchor').scrollIntoView({behavior: 'smooth'});
+             const anchor = document.getElementById('blogTopAnchor');
+             if(anchor) anchor.scrollIntoView({behavior: 'smooth'});
         }
     }
 
-    // 3. PAGINATION (Inchangée)
+    // 3. PAGINATION (Inchangé)
     function renderPaginationControls() {
         paginationContainer.innerHTML = '';
         const totalPages = Math.ceil(validArticles.length / itemsPerPage);

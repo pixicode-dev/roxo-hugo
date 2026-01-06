@@ -1,15 +1,14 @@
 {{ define "main" }}
 <div class="bg-header">
-  <img src="/images/Background2.svg" alt="Blog Header"
+  <img src="/images/Background2.svg" alt="Header"
     class="page-header2-bg img-fluid">
 </div>
+
 <section class="page-header">
   <div
     class="container h-100 d-flex flex-column justify-content-center align-items-center">
     <h1 class="text-uppercase fw-bold mb-2">{{ .Title }}</h1>
-
     <div class="overline-dash"></div>
-
     <p class="breadcrumb-text">ACCUEIL / {{ .Title }}</p>
   </div>
 </section>
@@ -17,56 +16,69 @@
 <section class="section-padding">
   <div class="container">
 
-    <div class="portfolio-filters text-center mb-5">
-      {{ range $index, $filter := .Params.filters }}
-      <button class="btn-filter {{ if eq $index 0 }}active{{ end }}"
-        data-filter="{{ .filter }}">
-        {{ .name }}
+    <div class="portfolio-filters mb-5 text-center">
+      {{ range .Params.filters }}
+      {{ if and (ne .filter "Tout") (ne .filter "All") }}
+      <button class="btn-filter" data-filter="{{ .filter | urlize }}">
+        {{ .name | upper }}
       </button>
+      {{ end }}
       {{ end }}
     </div>
 
     <div class="row g-4" id="portfolio-grid">
-      {{ range .Pages }} <div class="col-lg-4 col-md-6 portfolio-item"
-        data-category="{{ .Params.category }}">
+      {{ range .Pages }}
+
+      {{ $currentCat := "" }}
+      {{ if .Params.categories }}
+      {{ $currentCat = index .Params.categories 0 }}
+      {{ end }}
+
+      <div class="col-lg-4 col-md-6 portfolio-item"
+        data-category="{{ $currentCat | urlize }}">
+
         <div class="project-card">
           <img src="{{ .Params.image | relURL }}" alt="{{ .Title }}"
             class="img-fluid project-img">
 
           <div class="project-overlay">
-            <div class="project-content text-center">
-              <h3 class="project-title text-white mb-4">{{ .Title }}</h3>
+            <div class="overlay-icons d-flex justify-content-center gap-3">
 
-              <div class="d-flex gap-3 justify-content-center">
-                <a href="{{ .Permalink }}" class="btn-icon"
-                  title="Voir les détails">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                    stroke-width="2" stroke-linecap="round"
-                    stroke-linejoin="round"><line x1="12" y1="5" x2="12"
-                      y2="19"></line><line x1="5" y1="12" x2="19"
-                      y2="12"></line></svg>
-                </a>
+              <a href="{{ .Permalink }}" class="icon-circle"
+                title="Voir la fiche">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                  viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round"><line x1="12" y1="5" x2="12"
+                    y2="19"></line><line x1="5" y1="12" x2="19"
+                    y2="12"></line></svg>
+              </a>
 
-                {{ if .Params.external_link }}
-                <a href="{{ .Params.external_link }}" target="_blank"
-                  class="btn-icon" title="Voir le site">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                    stroke-width="2" stroke-linecap="round"
-                    stroke-linejoin="round"><circle cx="12" cy="12"
-                      r="10"></circle><line x1="2" y1="12" x2="22"
-                      y2="12"></line><path
-                      d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
-                </a>
-                {{ end }}
-              </div>
+              {{ if .Params.external_link }}
+              <a href="{{ .Params.external_link }}" target="_blank"
+                class="icon-circle" title="Visiter le site">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                  viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round"><circle cx="12" cy="12"
+                    r="10"></circle><line x1="2" y1="12" x2="22"
+                    y2="12"></line><path
+                    d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+              </a>
+              {{ end }}
 
-              <span class="project-cat mt-3 d-block text-yellow">{{
-                .Params.category | upper }}</span>
+            </div>
+
+            <div class="text-center mt-3">
+              <h3 class="project-title">{{ .Title }}</h3>
+              <span class="project-cat text-white small text-uppercase"
+                style="opacity: 0.8; letter-spacing: 1px;">
+                {{ $currentCat }}
+              </span>
             </div>
           </div>
         </div>
+
       </div>
       {{ end }}
     </div>
@@ -77,60 +89,60 @@
 <script>
 document.addEventListener("DOMContentLoaded", function() {
     
-    // --- 1. FILTRAGE ---
     const filterBtns = document.querySelectorAll('.btn-filter');
     const portfolioItems = document.querySelectorAll('.portfolio-item');
 
-    filterBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            // Gestion de la classe Active
-            filterBtns.forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-
-            const filterValue = btn.getAttribute('data-filter');
-
-            portfolioItems.forEach(item => {
-                const category = item.getAttribute('data-category');
-                
-                if (filterValue === 'all' || category === filterValue) {
-                    item.style.display = 'block';
-                    // Petite animation d'apparition
-                    setTimeout(() => {
-                        item.style.opacity = '1';
-                        item.style.transform = 'scale(1)';
-                    }, 50);
-                } else {
-                    item.style.opacity = '0';
-                    item.style.transform = 'scale(0.9)';
-                    setTimeout(() => {
+    // Fonction de filtrage
+    function filterItems(filterValue) {
+        portfolioItems.forEach(item => {
+            const itemCategory = item.getAttribute('data-category');
+            
+            // Comparaison (all ou correspondance exacte après urlize)
+            if (filterValue === 'all' || itemCategory === filterValue) {
+                item.style.display = 'block';
+                // Petit délai pour l'animation
+                setTimeout(() => {
+                    item.classList.remove('hidden');
+                }, 10);
+            } else {
+                item.classList.add('hidden');
+                setTimeout(() => {
+                    if (item.classList.contains('hidden')) {
                         item.style.display = 'none';
-                    }, 300); // Attend la fin de la transition
-                }
-            });
+                    }
+                }, 400);
+            }
+        });
+    }
+
+    // Click sur les boutons
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            filterBtns.forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            
+            const filterValue = this.getAttribute('data-filter');
+            filterItems(filterValue);
         });
     });
 
-    // --- 2. GESTION MOBILE (CLIC POUR AFFICHER L'OVERLAY) ---
-    const projectCards = document.querySelectorAll('.project-card');
-
-    projectCards.forEach(card => {
+    // Mobile Clic
+    const cards = document.querySelectorAll('.project-card');
+    cards.forEach(card => {
         card.addEventListener('click', function(e) {
-            // Si on clique sur un bouton (lien), on ne fait rien (laisser le lien agir)
             if (e.target.closest('a')) return;
-
-            // Sur mobile/tablette, le clic toggle la classe 'active'
-            // Sur desktop, le hover CSS gère déjà tout, mais ce JS ne gêne pas
             const wasActive = this.classList.contains('mobile-active');
-            
-            // Ferme les autres (optionnel, pour n'en avoir qu'un ouvert à la fois)
-            projectCards.forEach(c => c.classList.remove('mobile-active'));
-
-            if (!wasActive) {
-                this.classList.add('mobile-active');
-            }
+            cards.forEach(c => c.classList.remove('mobile-active'));
+            if (!wasActive) this.classList.add('mobile-active');
         });
+    });
+
+    // Init: Tout afficher
+    portfolioItems.forEach(item => {
+        item.style.display = 'block';
+        item.classList.remove('hidden');
     });
 });
 </script>
-
 {{ end }}
