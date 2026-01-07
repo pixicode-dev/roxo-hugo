@@ -119,10 +119,8 @@
 minify }}
 <script src="{{ $vendor.Permalink }}" defer></script>
 
-{{ $embla := resources.Get "js/embla-carousel.umd.js" | js.Build (dict "minify"
-true) | minify }}
+{{ $embla := resources.Get "js/embla-carousel.umd.js" | minify }}
 <script src="{{ $embla.Permalink }}" defer></script>
 
-{{ $autoplay := resources.Get "js/embla-carousel-autoplay.umd.js" | js.Build
-(dict "minify" true) | minify }}
+{{ $autoplay := resources.Get "js/embla-carousel-autoplay.umd.js" | minify }}
 <script src="{{ $autoplay.Permalink }}" defer></script>
