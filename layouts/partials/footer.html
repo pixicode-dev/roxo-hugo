@@ -119,9 +119,6 @@
 minify }}
 <script src="{{ $vendor.Permalink }}" defer></script>
 
-{{ $script := resources.Get "js/script.js" | minify }}
-<script src="{{ $script.Permalink }}" defer></script>
-
 {{ $embla := resources.Get "js/embla-carousel.umd.js" | js.Build (dict "minify"
 true) | minify }}
 <script src="{{ $embla.Permalink }}" defer></script>
