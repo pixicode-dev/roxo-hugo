@@ -17,8 +17,10 @@
         .secondary_btn }}</a>
     </div>
   </div>
-  {{/* J'ai ajouté un alt par défaut ici si vide dans la config */}}
-  <img src="{{ .image | relURL }}" alt="Présentation des interfaces PixiCode">
+  <img src="{{ .image | relURL }}" alt="Présentation des interfaces PixiCode"
+    width="800"
+    height="600"
+    fetchpriority="high">
 </section>
 {{ end }}
 {{ end }}
@@ -26,7 +28,7 @@
 {{/* --- ABOUT SECTION --- */}}
 <section class="about-section">
   <img src="{{ "images/2screen.svg" | relURL }}" alt class="about-decor-img"
-    aria-hidden="true">
+    aria-hidden="true" width="600" height="400">
   <div class="container">
     <p class="text-uppercase overline-dash">À PROPOS</p>
     <h2 class="propos-title">{{ .Params.intro.title }}</h2>
