@@ -5,6 +5,13 @@
   <meta property="og:site_name" content="{{ .Site.Title }}">
   <meta property="og:locale" content="{{ .Site.LanguageCode }}">
 
+  <link rel="preload" href="/fonts/josefin-sans-latin-700-normal.woff2"
+    as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/fonts/montserrat-latin-400-normal.woff2" as="font"
+    type="font/woff2" crossorigin>
+  <link rel="preload" href="/fonts/montserrat-latin-700-normal.woff2" as="font"
+    type="font/woff2" crossorigin>
+
   {{/* --- TITRE DYNAMIQUE --- */}}
   <title>
     {{ if .IsHome }}
@@ -147,7 +154,6 @@
   {{ with .Site.Params.matomo_id }}
   <script>
     var _paq = window._paq = window._paq || [];
-    _paq.push(['requireConsent']);
     _paq.push(['trackPageView']);
     _paq.push(['enableLinkTracking']);
     (function() {
