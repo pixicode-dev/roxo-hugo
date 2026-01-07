@@ -67,19 +67,23 @@
   <link rel="icon" href="{{ .Site.Params.favicon_icon | absURL }}"
     type="image/x-icon">
 
-  {{ $bootstrap := resources.Get "css/bootstrap.css" | minify | fingerprint }}
+  {{ $bootstrap := resources.Get "css/bootstrap.css" | postCSS | minify |
+  fingerprint }}
   <link rel="stylesheet" href="{{ $bootstrap.Permalink }}">
 
-  <link rel="stylesheet" href="{{ "font-awesome/css/font-awesome.min.css" |
-    absURL }}">
+  {{ $fontawesome := resources.Get "css/font-awesome.min.css" | postCSS | minify
+  |
+  fingerprint }}
+  <link rel="stylesheet" href="{{ $fontawesome.Permalink }}">
 
-  {{ $style := resources.Get "scss/style.scss" | toCSS | minify | fingerprint }}
+  {{ $style := resources.Get "scss/style.scss" | toCSS | postCSS | minify |
+  fingerprint }}
   <link rel="stylesheet" href="{{ $style.Permalink }}">
 
   {{ range .Site.Params.custom_stylesheets }}
   {{ $res := resources.Get . }}
   {{ if $res }}
-  {{ $s := $res | toCSS | minify | fingerprint }}
+  {{ $s := $res | toCSS | postCSS | minify | fingerprint }}
   <link rel="stylesheet" href="{{ $s.Permalink }}">
   {{ end }}
   {{ end }}

@@ -115,14 +115,17 @@
 <script src="{{ $formhandler.Permalink }}" defer></script>
 {{ end }}
 
-{{ $vendor := resources.Get "js/vendor.js" | minify }}
+{{ $vendor := resources.Get "js/vendor.js" | js.Build (dict "minify" true) |
+minify }}
 <script src="{{ $vendor.Permalink }}" defer></script>
 
 {{ $script := resources.Get "js/script.js" | minify }}
 <script src="{{ $script.Permalink }}" defer></script>
 
-{{ $embla := resources.Get "js/embla-carousel.umd.js" | minify }}
+{{ $embla := resources.Get "js/embla-carousel.umd.js" | js.Build (dict "minify"
+true) | minify }}
 <script src="{{ $embla.Permalink }}" defer></script>
 
-{{ $autoplay := resources.Get "js/embla-carousel-autoplay.umd.js" | minify }}
+{{ $autoplay := resources.Get "js/embla-carousel-autoplay.umd.js" | js.Build
+(dict "minify" true) | minify }}
 <script src="{{ $autoplay.Permalink }}" defer></script>
