@@ -68,15 +68,13 @@
     type="image/x-icon">
 
   {{ $bootstrap := resources.Get "css/bootstrap.css" | minify | fingerprint }}
-  <link rel="stylesheet" href="{{ $bootstrap.Permalink }}"
-    integrity="{{ $bootstrap.Data.Integrity }}">
+  <link rel="stylesheet" href="{{ $bootstrap.Permalink }}">
 
   <link rel="stylesheet" href="{{ "font-awesome/css/font-awesome.min.css" |
     absURL }}">
 
   {{ $style := resources.Get "scss/style.scss" | toCSS | minify | fingerprint }}
-  <link rel="stylesheet" href="{{ $style.Permalink }}"
-    integrity="{{ $style.Data.Integrity }}">
+  <link rel="stylesheet" href="{{ $style.Permalink }}">
 
   {{ range .Site.Params.custom_stylesheets }}
   {{ $res := resources.Get . }}
