@@ -104,15 +104,13 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 </script>
 
-{{ end }}
-
 <style>
   /* Fix immédiat pour éviter que le Hero soit invisible au départ */
   .site-hero {
     display: flex !important;
     visibility: visible !important;
     opacity: 1 !important;
-    min-height: 100vh; /* Ou la hauteur réelle de ton hero */
+    min-height: 80vh; /* Ou la hauteur réelle de ton hero */
     position: relative;
     align-items: center;
     justify-content: center;
@@ -122,3 +120,5 @@ document.addEventListener("DOMContentLoaded", function () {
     margin-top: 0;
   }
 </style>
+
+{{ end }}
