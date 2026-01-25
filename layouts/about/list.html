@@ -7,11 +7,12 @@
 <section class="page-header">
   <div
     class="container h-100 d-flex flex-column justify-content-center align-items-center">
-    <h1 class="text-uppercase fw-bold mb-2">{{ .Title }}</h1>
+    <h1 class="text-uppercase fw-bold mb-2">{{ .Params.title_content
+      }}</h1>
 
     <div class="overline-dash"></div>
 
-    <p class="breadcrumb-text">ACCUEIL / {{ .Title }}</p>
+    <p class="breadcrumb-text">ACCUEIL / {{ .Params.title_content }}</p>
   </div>
 </section>
 
@@ -95,6 +96,9 @@
 </section>
 
 {{ partial "testimonials.html" . }}
+
+{{ partial "call-to-action.html" .}}
+
 <script>
 
 document.addEventListener("DOMContentLoaded", function () {

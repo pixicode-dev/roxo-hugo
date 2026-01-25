@@ -98,54 +98,59 @@
                 <span
                   class="overline-dash fw-bold me-2 text-uppercase small">Tags:</span>
                 {{ range .Params.tags }}
-                <a href="{{ "/tags/" | relURL }}{{ . | urlize }}"
-                  class="badge  text-dark text-decoration-none border me-1">{{
-                  . | upper }}</a>
-                {{ end }}
+                <div class="tag-cloud-design">
+                  <a href="{{ $.Site.BaseURL }}blog/?tag={{ . | urlize }}"
+                    class="tag-btn">
+                    {{ . | upper }}
+                  </a>
+
+                  {{ end }}
+                </div>
               </div>
             </div>
+
+          </article>
+
+          <div class="post-nav mt-5 d-flex justify-content-between">
+            {{ if .PrevInSection }}
+            <a href="{{ .PrevInSection.Permalink }}"
+              class="btn-pixi secondary btn-sm d-flex align-items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="me-2"><line x1="19" y1="12" x2="5"
+                  y2="12"></line><polyline
+                  points="12 19 5 12 12 5"></polyline></svg>
+              Projet Précédent
+            </a>
+            {{ else }}<span></span>{{ end }}
+
+            {{ if .NextInSection }}
+            <a href="{{ .NextInSection.Permalink }}"
+              class="btn-pixi secondary btn-sm d-flex align-items-center">
+              Projet Suivant
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="ms-2"><line x1="5" y1="12" x2="19"
+                  y2="12"></line><polyline
+                  points="12 5 19 12 12 19"></polyline></svg>
+            </a>
+            {{ end }}
           </div>
 
-        </article>
+        </div>
 
-        <div class="post-nav mt-5 d-flex justify-content-between">
-          {{ if .PrevInSection }}
-          <a href="{{ .PrevInSection.Permalink }}"
-            class="btn-pixi secondary btn-sm d-flex align-items-center">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-              viewBox="0 0 24 24" fill="none" stroke="currentColor"
-              stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-              class="me-2"><line x1="19" y1="12" x2="5" y2="12"></line><polyline
-                points="12 19 5 12 12 5"></polyline></svg>
-            Projet Précédent
-          </a>
-          {{ else }}<span></span>{{ end }}
-
-          {{ if .NextInSection }}
-          <a href="{{ .NextInSection.Permalink }}"
-            class="btn-pixi secondary btn-sm d-flex align-items-center">
-            Projet Suivant
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-              viewBox="0 0 24 24" fill="none" stroke="currentColor"
-              stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-              class="ms-2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline
-                points="12 5 19 12 12 19"></polyline></svg>
-          </a>
-          {{ end }}
+        <div class="col-lg-4 ps-lg-5">
+          {{ partial "sidebar.html" . }}
         </div>
 
       </div>
-
-      <div class="col-lg-4 ps-lg-5">
-        {{ partial "sidebar.html" . }}
-      </div>
-
     </div>
-  </div>
-</section>
+  </section>
 
-<script src="https://unpkg.com/embla-carousel/embla-carousel.umd.js"></script>
-<script>
+  <script src="https://unpkg.com/embla-carousel/embla-carousel.umd.js"></script>
+  <script>
 document.addEventListener("DOMContentLoaded", function () {
     const projectNode = document.querySelector("#project-carousel");
     
@@ -167,4 +172,4 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 </script>
-{{ end }}
+  {{ end }}

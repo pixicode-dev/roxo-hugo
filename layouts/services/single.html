@@ -8,11 +8,11 @@
 <section class="page-header">
   <div
     class="container h-100 d-flex flex-column justify-content-center align-items-center">
-    <h1 class="text-uppercase fw-bold mb-2">{{ .Title }}</h1>
+    <h1 class="text-uppercase fw-bold mb-2">{{ .Params.title_content }}</h1>
 
     <div class="overline-dash"></div>
 
-    <p class="breadcrumb-text">ACCUEIL / {{ .Title }}</p>
+    <p class="breadcrumb-text">ACCUEIL / {{ .Params.title_content }}</p>
   </div>
 </section>
 
@@ -22,7 +22,8 @@
       <div class="col-lg-6">
         <p class="overline-dash text-uppercase">{{ .Params.service_intro.title
           }}</p>
-        <h2 class="section-headline fw-bold mb-4">{{ .Title }}</h2>
+        <h2 class="section-headline fw-bold mb-4">{{ .Params.title_content
+          }}</h2>
         <p>{{ .Params.service_intro.text | markdownify
           }}</p>
       </div>
@@ -88,7 +89,7 @@
         <p class="overline-dash text-uppercase">NOTRE MÉTHODE</p>
         <h2 class="section-headline fw-bold mb-4">{{
           .Params.service_process.title }}</h2>
-        <p class="text-muted">{{ .Params.service_process.text }}</p>
+        <p>{{ .Params.service_process.text }}</p>
       </div>
     </div>
   </div>
@@ -152,5 +153,7 @@
     </div>
   </div>
 </section>
+
+{{ partial "call-to-action.html" .}}
 
 {{ end }}

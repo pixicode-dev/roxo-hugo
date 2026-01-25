@@ -61,7 +61,7 @@
   {{ partial "news.html" . }}
 </div>
 
-{{ partial "call-to-action.html" (dict "gradient" true) }}
+{{ partial "call-to-action.html" .}}
 
 <script>
 document.addEventListener("DOMContentLoaded", function () {

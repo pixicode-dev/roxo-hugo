@@ -1,11 +1,34 @@
-{{ $showGradient := .gradient | default false }}
+{{ with .Params.cta_block }}
+<section class="cta-phone-section"
+  style="background-color: {{ .cta_background | default "transparent" }};">
+  <div class="container cta-container">
 
-<a href="/contact"
-  class="cta-link {{ if $showGradient }}has-bg-gradient{{ end }}">
+    {{ if .hand_frame }}
+    <img src="{{ .hand_frame | relURL }}" class="hand-frame"
+      alt="Hand holding phone">
+    {{ end }}
 
-  <img src="/images/CTA.svg" alt="Contactez-nous" class="cta-img cta-desktop">
+    <div class="cta-box {{ if eq .cta_background "transparent" }}shadow-none{{
+      end }}">
 
-  <img src="/images/CTA_PHONE.svg" alt="Contactez-nous"
-    class="cta-img cta-mobile">
+      <div class="row align-items-center">
 
-</a>
+        <div class="col-lg-6 order-2 order-lg-1">
+          <div class="cta-content p-4 p-lg-5">
+            <p class="overline-dash text-uppercase fw-bold small mb-2">VOUS
+              AVEZ UN BESOIN
+              ?</p>
+            <h4 class="display-5 fw-bold mb-4 cta-text">{{ .title }}</h4>
+            <a href="{{ .button_link | relURL }}"
+              class="btn-cta px-4 py-3"
+              style="border-radius: 4px;">
+              {{ .button_text }}
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+{{ end }}
