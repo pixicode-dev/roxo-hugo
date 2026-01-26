@@ -25,10 +25,13 @@
     {{ end }}
   </title>
 
+  {{/* --- DESCRIPTION & KEYWORDS --- */}}
   {{ $desc := .Description | plainify }}
   <meta name="description" content="{{ $desc }}">
-  {{ with .Site.Params.keywords }}<meta name="keywords" content="{{ delimit . "
-    , " }}">{{ end }}
+
+  {{ with .Site.Params.keywords }}
+  <meta name="keywords" content="{{ delimit . " , " }}">
+  {{ end }}
 
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="{{ .Permalink }}">
