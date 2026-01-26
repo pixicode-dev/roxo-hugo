@@ -2,17 +2,21 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="generator" content="Hugo {{ hugo.Version }}">
-  <meta property="og:site_name" content="{{ .Site.Title }}">
-  <meta property="og:locale" content="{{ .Site.LanguageCode }}">
 
+  <link rel="preload" href="/fonts/josefin-sans-latin-400-normal.woff2"
+    as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/fonts/josefin-sans-latin-600-normal.woff2"
+    as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/fonts/josefin-sans-latin-700-normal.woff2"
     as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/fonts/montserrat-latin-600-normal.woff2" as="font"
+    type="font/woff2" crossorigin>
   <link rel="preload" href="/fonts/montserrat-latin-400-normal.woff2" as="font"
     type="font/woff2" crossorigin>
-  <link rel="preload" href="/fonts/montserrat-latin-700-normal.woff2" as="font"
-    type="font/woff2" crossorigin>
 
-  {{/* --- TITRE DYNAMIQUE --- */}}
+  <link rel="preconnect" href="https://matomo.pixicode.dev">
+  <link rel="dns-prefetch" href="https://matomo.pixicode.dev">
+
   <title>
     {{ if .IsHome }}
     {{ .Site.Title }} | {{ .Site.Params.agency.slogan }}
@@ -21,20 +25,19 @@
     {{ end }}
   </title>
 
-  {{/* --- DESCRIPTION & KEYWORDS --- */}}
   {{ $desc := .Description | plainify }}
   <meta name="description" content="{{ $desc }}">
-
-  {{ with .Site.Params.keywords }}
-  <meta name="keywords" content="{{ delimit . " , " }}">
-  {{ end }}
+  {{ with .Site.Params.keywords }}<meta name="keywords" content="{{ delimit . "
+    , " }}">{{ end }}
 
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="{{ .Permalink }}">
   <meta name="author" content="{{ .Site.Params.client.name }}">
   <meta name="designer" content="Pixicode - https://pixicode.dev">
 
-  {{/* --- OPEN GRAPH / TWITTER --- */}}
+  {{/* Open Graph / Twitter */}}
+  <meta property="og:site_name" content="{{ .Site.Title }}">
+  <meta property="og:locale" content="{{ .Site.LanguageCode }}">
   {{ $ogImage := .Params.image | default .Site.Params.image | absURL }}
   <meta property="og:type" content="{{ if eq .Section "blog" }}article{{ else
     }}website{{ end }}">
@@ -45,7 +48,6 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:image" content="{{ $ogImage }}">
 
-  {{/* --- METADONNÉES BLOG & DATES --- */}}
   {{ if .IsPage }}
   {{ if not .PublishDate.IsZero }}
   <meta property="article:published_time"
@@ -57,53 +59,61 @@
   {{ end }}
   {{ end }}
 
-  {{/* Si c'est un article de blog, on ajoute les tags et la section */}}
   {{ if eq .Section "blog" }}
-  {{ with .Params.categories }}
-  <meta property="article:section" content="{{ index . 0 }}">
-  {{ end }}
-  {{ range .Params.tags }}
-  <meta property="article:tag" content="{{ . }}">
-  {{ end }}
+  {{ with .Params.categories }}<meta property="article:section"
+    content="{{ index . 0 }}">{{ end }}
+  {{ range .Params.tags }}<meta property="article:tag" content="{{ . }}">{{ end
+  }}
   {{ end }}
 
-  {{/* --- FAVICONS --- */}}
+  {{/* Favicons */}}
   <link rel="shortcut icon"
     href="{{ .Site.Params.favicon_shortcut_icon | absURL }}"
     type="image/x-icon">
   <link rel="icon" href="{{ .Site.Params.favicon_icon | absURL }}"
     type="image/x-icon">
+  <meta name="theme-color" content="#1d5d9b">
 
+  {{/* Bootstrap : Chargement différé via media='print' */}}
   {{ $bootstrap := resources.Get "css/bootstrap.css" | postCSS | minify |
   fingerprint }}
-  <link rel="stylesheet" href="{{ $bootstrap.Permalink }}">
+  <link rel="stylesheet" href="{{ $bootstrap.Permalink }}" media="print"
+    onload="this.media='all'">
 
+  {{/* FontAwesome : Chargement différé */}}
   {{ $fontawesome := resources.Get "css/font-awesome.min.css" | postCSS | minify
-  |
-  fingerprint }}
-  <link rel="stylesheet" href="{{ $fontawesome.Permalink }}">
+  | fingerprint }}
+  <link rel="stylesheet" href="{{ $fontawesome.Permalink }}" media="print"
+    onload="this.media='all'">
 
+  {{/* Style Principal : Chargement différé */}}
   {{ $style := resources.Get "scss/style.scss" | toCSS | postCSS | minify |
   fingerprint }}
-  <link rel="stylesheet" href="{{ $style.Permalink }}">
+  <link rel="stylesheet" href="{{ $style.Permalink }}" media="print"
+    onload="this.media='all'">
 
+  {{/* Custom Stylesheets (si existantes) */}}
   {{ range .Site.Params.custom_stylesheets }}
   {{ $res := resources.Get . }}
   {{ if $res }}
   {{ $s := $res | toCSS | postCSS | minify | fingerprint }}
-  <link rel="stylesheet" href="{{ $s.Permalink }}">
+  <link rel="stylesheet" href="{{ $s.Permalink }}" media="print"
+    onload="this.media='all'">
   {{ end }}
   {{ end }}
 
-  {{/* --- THEME COLOR (Pour mobile) --- */}}
-  <meta name="theme-color" content="#1d5d9b">
+  {{/* Fallback pour les navigateurs sans JS (Rare mais bonne pratique) */}}
+  <noscript>
+    <link rel="stylesheet" href="{{ $bootstrap.Permalink }}">
+    <link rel="stylesheet" href="{{ $fontawesome.Permalink }}">
+    <link rel="stylesheet" href="{{ $style.Permalink }}">
+  </noscript>
 
-  {{/* --- SCHEMA.ORG (JSON-LD) --- */}}
+  {{/* --- 4. SCHEMA.ORG (JSON-LD) --- */}}
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     {{ if eq .Section "blog" }}
-      {{/* CAS 1 : C'est un Article de Blog */}}
       "@type": "BlogPosting",
       "headline": "{{ .Title }}",
       "image": "{{ .Params.image | default .Site.Params.image | absURL }}",
@@ -123,7 +133,6 @@
       "dateModified": "{{ .Lastmod.Format "2006-01-02" }}",
       "description": "{{ .Description | plainify }}"
     {{ else }}
-      {{/* CAS 2 : C'est une page normale (Accueil, Contact...) */}}
       "@graph": [
         {
           "@type": "LocalBusiness",
@@ -150,7 +159,7 @@
   }
   </script>
 
-  {{/* --- MATOMO ANALYTICS --- */}}
+  {{/* --- 5. ANALYTICS --- */}}
   {{ with .Site.Params.matomo_id }}
   <script>
     var _paq = window._paq = window._paq || [];
