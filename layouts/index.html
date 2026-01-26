@@ -3,8 +3,14 @@
 {{/* --- HERO SECTION --- */}}
 {{ with .Site.Params.hero }}
 {{ if .enable }}
-<section class="site-hero container"
-  style="background-image: url('{{ .background_image | relURL }}');">
+<section class="site-hero container">
+  <img src="{{ .background_image | relURL }}"
+    alt
+    class="hero-bg-img"
+    width="1920"
+    height="1080"
+    fetchpriority="high">
+
   <div class="column-section">
     <h1 class="grand-titre">
       <span class="d-block">{{ .title }}</span>
@@ -17,12 +23,14 @@
         .secondary_btn }}</a>
     </div>
   </div>
-  <img src="{{ .image | relURL }}" alt="Présentation des interfaces PixiCode"
+
+  <img src="{{ .image | relURL }}"
+    alt="Présentation des interfaces PixiCode"
+    class="hero-foreground-img"
     width="800"
     height="600"
     fetchpriority="high">
-</section>
-{{ end }}
+</section>{{ end }}
 {{ end }}
 
 {{/* --- ABOUT SECTION --- */}}
