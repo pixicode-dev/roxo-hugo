@@ -115,10 +115,6 @@
 <script src="{{ $formhandler.Permalink }}" defer></script>
 {{ end }}
 
-{{ $vendor := resources.Get "js/vendor.js" | js.Build (dict "minify" true) |
-minify }}
-<script src="{{ $vendor.Permalink }}" defer></script>
-
 {{ $embla := resources.Get "js/embla-carousel.umd.js" | minify }}
 <script src="{{ $embla.Permalink }}" defer></script>
 
