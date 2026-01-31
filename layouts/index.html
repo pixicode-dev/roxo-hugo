@@ -103,11 +103,13 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   };
 
-  // 1. PORTFOLIO (News et Approach ne sont PAS ici car gérés ailleurs ou par défaut)
-  initIndexCarousels("#portfolio-carousel", ".portfolio-nav-desktop, .portfolio-nav-mobile");
+  window.requestAnimationFrame(() => {
+    // 1. PORTFOLIO (News et Approach ne sont PAS ici car gérés ailleurs ou par défaut)
+    initIndexCarousels("#portfolio-carousel", ".portfolio-nav-desktop, .portfolio-nav-mobile");
 
-  // 2. NEWS
-  initIndexCarousels("#news-carousel", ".btn-nav-arrow-news, .news-nav-mobile");
+    // 2. NEWS
+    initIndexCarousels("#news-carousel", ".btn-nav-arrow-news, .news-nav-mobile");
+  });
 
 });
 </script>
