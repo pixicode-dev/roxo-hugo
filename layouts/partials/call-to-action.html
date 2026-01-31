@@ -4,9 +4,14 @@
   <div class="container cta-container">
 
     {{ if .hand_frame }}
-    <img src="{{ .hand_frame | relURL }}" class="hand-frame"
-      alt="Hand holding phone">
-    {{ end }}
+    <img src="{{ .hand_frame | relURL }}"
+      srcset="/images/hand-mobile.webp 300w, {{ .hand_frame | relURL }} 500w"
+      sizes="(max-width: 768px) 300px, 500px"
+      class="hand-frame"
+      alt="Hand holding phone"
+      width="500"
+      height="657"
+      loading="lazy"> {{ end }}
 
     <div class="cta-box {{ if eq .cta_background "transparent" }}shadow-none{{
       end }}">
