@@ -1,7 +1,7 @@
 {{ define "main" }}
 <div class="bg-header">
   <img src="/images/Background2.svg" alt="Blog Header"
-    class="page-header2-bg img-fluid">
+    class="page-header2-bg img-fluid" fetchpriority="high">
 </div>
 
 <section class="page-header">
@@ -77,17 +77,19 @@
               <img src="{{ .photo | relURL }}" alt="{{ .name }}">
             </div>
             <h3 class="team-name">{{ .name }}</h3>
-            <p class="team-role text-yellow">> {{ .role }}</p>
+            <p class="team-role">> {{ .role }}</p>
           </div>
         </div>
         {{ end }}
       </div>
 
       <div class="d-flex justify-content-center gap-3 mt-4">
-        <button class="embla__prev btn-nav-arrow"><svg width="24" height="24"
+        <button class="embla__prev btn-nav-arrow"
+          aria-label="Voir les personnes précédente"><svg width="24" height="24"
             viewBox="0 0 24 24" fill="none" stroke="currentColor"
             stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7" /></svg></button>
-        <button class="embla__next btn-nav-arrow"><svg width="24" height="24"
+        <button class="embla__next btn-nav-arrow"
+          aria-label="Voir les personnes suivante"><svg width="24" height="24"
             viewBox="0 0 24 24" fill="none" stroke="currentColor"
             stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7" /></svg></button>
       </div>
