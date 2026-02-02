@@ -1,0 +1,34 @@
+{{ define "main" }}
+
+<section class="error-page d-flex align-items-center justify-content-center">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 text-center">
+
+                <div class="glitch-wrapper mb-4">
+                    <h1 class="error-code" data-text="404">404</h1>
+                </div>
+
+                <h2 class="h2 fw-bold mb-3">Oups ! Pixel introuvable.</h2>
+
+                <p class="lead mb-5 text-muted">
+                    Il semblerait que vous ayez atteint les limites du code.<br>
+                    Cette page a été débranchée ou n'a jamais existé.
+                </p>
+
+                <div
+                    class="d-flex flex-column flex-md-row gap-3 justify-content-center">
+                    <a href="{{ .Site.BaseURL }}" class="btn-pixi primary">
+                        Retour à l'accueil
+                    </a>
+                    <a href="/contact/" class="btn-pixi secondary">
+                        Signaler un bug
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+{{ end }}

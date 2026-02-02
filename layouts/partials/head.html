@@ -104,11 +104,6 @@
     media="print"
     onload="this.media='all'">
 
-  {{/* Fallback pour ceux qui n'ont pas JS (rare mais propre) */}}
-  <noscript>
-    <link rel="stylesheet" href="{{ $bundle.Permalink }}">
-  </noscript>
-
   {{/* Fallback pour les navigateurs sans JS (Rare mais bonne pratique) */}}
   <noscript>
     <link rel="stylesheet" href="{{ $bootstrap.Permalink }}">
