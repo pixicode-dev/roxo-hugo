@@ -77,12 +77,6 @@
   <link rel="stylesheet" href="{{ $bootstrap.Permalink }}" media="print"
     onload="this.media='all'">
 
-  {{/* FontAwesome : Chargement différé */}}
-  {{ $fontawesome := resources.Get "css/font-awesome.min.css" | postCSS | minify
-  | fingerprint }}
-  <link rel="stylesheet" href="{{ $fontawesome.Permalink }}" media="print"
-    onload="this.media='all'">
-
   {{/* Style Principal : Chargement différé */}}
   {{ $style := resources.Get "scss/style.scss" | toCSS | postCSS | minify |
   fingerprint }}
@@ -102,7 +96,6 @@
   {{/* Fallback pour les navigateurs sans JS (Rare mais bonne pratique) */}}
   <noscript>
     <link rel="stylesheet" href="{{ $bootstrap.Permalink }}">
-    <link rel="stylesheet" href="{{ $fontawesome.Permalink }}">
     <link rel="stylesheet" href="{{ $style.Permalink }}">
   </noscript>
 
