@@ -1,28 +1,36 @@
 {{ define "main" }}
+<div class="bg-header">
+  <img src="/images/Background2.svg" alt="Header"
+    class="page-header2-bg img-fluid" fetchpriority="high">
+</div>
 
-<section class="site-about-header">
-  <div class="container">
-    <div class="row">
-      <div class="col-12">
-        <div class="site-about-wrapper">
+<section class="legal-header">
+  <div
+    class="container h-100 d-flex flex-column justify-content-center align-items-center">
+    <h1 class="text-uppercase fw-bold mb-0">{{ .Title }}</h1>
 
-        </div>
-      </div>
-    </div>
+    <div class="header-decoration mt-3"></div>
+
+    <p class="breadcrumb-text mt-3 mb-0">ACCUEIL / {{ .Title | upper }}</p>
   </div>
+
+  <div class="header-bg-overlay"></div>
 </section>
 
-<!-- Section de contenu principal -->
-<section class="site-expertise section-padding">
+<section class="legal-section bg-light-gradient">
   <div class="container">
     <div class="row justify-content-center">
-      <div class="col-lg-10 col-md-11">
-        <h1>Mentions légales</h1>
-        <article class="about-content">
-          {{ .Content }}
-        </article>
+      <div class="col-lg-10 col-xl-9">
+
+        <div class="legal-paper">
+          <article class="legal-content">
+            {{ .Content }}
+          </article>
+        </div>
+
       </div>
     </div>
   </div>
 </section>
+
 {{ end }}

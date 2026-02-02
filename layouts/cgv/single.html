@@ -1,15 +1,50 @@
 {{ define "main" }}
-<section class="legal">
+
+<div class="bg-header">
+    <img src="/images/Background2.svg" alt class="page-header2-bg img-fluid"
+        fetchpriority="high">
+</div>
+
+<section class="legal-header">
+    <div
+        class="container h-100 d-flex flex-column justify-content-center align-items-center">
+        <h1 class="text-uppercase fw-bold mb-0">Conditions Générales de
+            Vente</h1>
+        <div class="header-decoration mt-3"></div>
+        <p class="breadcrumb-text mt-3 mb-0">ACCUEIL / CGV</p>
+    </div>
+    <div class="header-bg-overlay"></div>
+</section>
+
+<section class="legal-section bg-light-gradient">
     <div class="container">
-        <div class="row">
-            <div class="col-lg-12 mx-auto">
-                <h1 style="margin-top:100px;">Conditions Générales de Vente
-                </h1>
-                <iframe src="/docs/cgv.pdf"
-                    width="100%"
-                    height="800" style="border:none;"></iframe>
+        <div class="row justify-content-center">
+            <div class="col-lg-12 col-xl-10">
+
+                <div class="legal-paper">
+
+                    <div class="pdf-viewer-wrapper">
+                        <iframe src="/docs/cgv.pdf"
+                            width="100%"
+                            height="800"
+                            title="CGV PixiCode">
+                        </iframe>
+                    </div>
+
+                    <div class="text-center mt-4">
+                        <p class="small mb-2">Le document ne
+                            s'affiche pas ?</p>
+                        <a href="/docs/cgv.pdf" target="_blank"
+                            class="btn-pixi secondary btn-sm">
+                            Télécharger le PDF
+                        </a>
+                    </div>
+
+                </div>
+
             </div>
         </div>
     </div>
 </section>
+
 {{ end }}
