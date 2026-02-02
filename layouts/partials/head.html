@@ -71,27 +71,43 @@
     type="image/x-icon">
   <meta name="theme-color" content="#1d5d9b">
 
-  {{/* Bootstrap : Chargement différé via media='print' */}}
-  {{ $bootstrap := resources.Get "css/bootstrap.css" | postCSS | minify |
-  fingerprint }}
-  <link rel="stylesheet" href="{{ $bootstrap.Permalink }}" media="print"
-    onload="this.media='all'">
+  {{ $cssFiles := slice }}
 
-  {{/* Style Principal : Chargement différé */}}
-  {{ $style := resources.Get "scss/style.scss" | toCSS | postCSS | minify |
-  fingerprint }}
-  <link rel="stylesheet" href="{{ $style.Permalink }}" media="print"
-    onload="this.media='all'">
+  {{ $bootstrap := resources.Get "css/bootstrap.css" }}
+  {{ if $bootstrap }}
+  {{ $cssFiles = $cssFiles | append $bootstrap }}
+  {{ end }}
 
-  {{/* Custom Stylesheets (si existantes) */}}
+  {{ $style := resources.Get "scss/style.scss" | toCSS }}
+  {{ if $style }}
+  {{ $cssFiles = $cssFiles | append $style }}
+  {{ end }}
+
   {{ range .Site.Params.custom_stylesheets }}
-  {{ $res := resources.Get . }}
-  {{ if $res }}
-  {{ $s := $res | toCSS | postCSS | minify | fingerprint }}
-  <link rel="stylesheet" href="{{ $s.Permalink }}" media="print"
+  {{ $custom := resources.Get . }}
+  {{ if $custom }}
+  {{/* Si c'est du SCSS, on le compile, sinon on le prend tel quel */}}
+  {{ if eq $custom.MediaType.SubType "x-scss" }}
+  {{ $custom = $custom | toCSS }}
+  {{ end }}
+  {{ $cssFiles = $cssFiles | append $custom }}
+  {{ end }}
+  {{ end }}
+
+  {{ $bundle := $cssFiles | resources.Concat "css/bundle.css" | postCSS | minify
+  | fingerprint }}
+
+  {{/* 6. Affichage du lien unique */}}
+  <link rel="stylesheet"
+    href="{{ $bundle.Permalink }}"
+    integrity="{{ $bundle.Data.Integrity }}"
+    media="print"
     onload="this.media='all'">
-  {{ end }}
-  {{ end }}
+
+  {{/* Fallback pour ceux qui n'ont pas JS (rare mais propre) */}}
+  <noscript>
+    <link rel="stylesheet" href="{{ $bundle.Permalink }}">
+  </noscript>
 
   {{/* Fallback pour les navigateurs sans JS (Rare mais bonne pratique) */}}
   <noscript>
