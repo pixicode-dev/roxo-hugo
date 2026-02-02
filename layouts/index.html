@@ -75,7 +75,22 @@
 
 <script>
 document.addEventListener("DOMContentLoaded", function () {
-  
+  const navbarToggler = document.querySelector('.navbar-toggler');
+  const navbarMenu = document.querySelector('#sitenavbar');
+
+  if (navbarToggler && navbarMenu) {
+    navbarToggler.addEventListener('click', function() {
+      // 1. On bascule la classe 'show' qui affiche le menu (CSS Bootstrap standard)
+      navbarMenu.classList.toggle('show');
+      
+      // 2. On change l'état du bouton (pour le design ou l'accessibilité)
+      const isExpanded = navbarToggler.getAttribute('aria-expanded') === 'true';
+      navbarToggler.setAttribute('aria-expanded', !isExpanded);
+      
+      // 3. Optionnel : On bascule une classe sur le bouton pour l'animer (si vous avez du CSS pour ça)
+      navbarToggler.classList.toggle('collapsed');
+    });
+  }
   const initIndexCarousels = (id, navSelector) => {
     const node = document.querySelector(id);
     if (!node) return;
