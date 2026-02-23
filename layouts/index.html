@@ -9,7 +9,7 @@
     class="hero-bg-img"
     width="1920"
     height="1080"
-    fetchpriority="high">
+    fetchpriority="high" alt="Image de fond de la section héro">
 
   <div class="column-section">
     <h1 class="grand-titre">
@@ -37,8 +37,9 @@
 
 {{/* --- ABOUT SECTION --- */}}
 <section class="about-section">
-  <img src="{{ "images/2screen.svg" | relURL }}" alt class="about-decor-img"
-    aria-hidden="true" width="600" height="400" loading="lazy" decoding="async">
+  <img src="{{ "images/2screen.svg" | relURL }}" class="about-decor-img"
+    aria-hidden="true" width="600" height="400" loading="lazy" decoding="async"
+    alt="image décorative 2 écrans">
   <div class="container">
     <p class="text-uppercase overline-dash">À PROPOS</p>
     <h2 class="propos-title">{{ .Params.intro.title }}</h2>
