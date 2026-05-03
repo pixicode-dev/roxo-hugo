@@ -11,7 +11,7 @@
 
     <div class="header-decoration mt-3"></div>
 
-    <p class="breadcrumb-text mt-3 mb-0">ACCUEIL / {{ .Title | upper }}</p>
+    {{ partial "breadcrumb.html" . }}
   </div>
 
   <div class="header-bg-overlay"></div>

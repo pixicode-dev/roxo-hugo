@@ -12,7 +12,7 @@
 
     <div class="overline-dash"></div>
 
-    <p class="breadcrumb-text">ACCUEIL / {{ .Params.title_content }}</p>
+    {{ partial "breadcrumb.html" . }}
   </div>
 </section>
 
@@ -54,7 +54,7 @@
       <div class="col-lg-6 order-1 order-lg-2 mb-4 mb-lg-0">
         <p class="overline-dash text-uppercase">NOTRE HISTOIRE</p>
         <h2 class="section-title mb-4">{{ .Params.history.title }}</h2>
-        <p>{{ .Params.history.text }}</p>
+        <p>{{ .Params.history.text | markdownify }}</p>
       </div>
     </div>
   </div>
@@ -106,13 +106,16 @@
 document.addEventListener("DOMContentLoaded", function () {
     // Initialisation Team Carousel (Même logique que Portfolio)
     const teamNode = document.querySelector("#team-carousel");
-    if (teamNode && typeof EmblaCarousel !== "undefined") {
-        const teamApi = EmblaCarousel(teamNode, { loop: true, align: "start", slidesToScroll: 1, breakpoints: { "(min-width: 992px)": { slidesToScroll: 1 } } });
-        
-        const prevBtns = teamNode.querySelectorAll(".embla__prev");
-        const nextBtns = teamNode.querySelectorAll(".embla__next");
-        prevBtns.forEach(btn => btn.addEventListener("click", () => teamApi.scrollPrev()));
-        nextBtns.forEach(btn => btn.addEventListener("click", () => teamApi.scrollNext()));
+    if (teamNode) {
+        window.__lazyInit(teamNode, () => {
+            if (typeof EmblaCarousel === "undefined") return;
+            const teamApi = EmblaCarousel(teamNode, { loop: true, align: "start", slidesToScroll: 1, breakpoints: { "(min-width: 992px)": { slidesToScroll: 1 } } });
+
+            const prevBtns = teamNode.querySelectorAll(".embla__prev");
+            const nextBtns = teamNode.querySelectorAll(".embla__next");
+            prevBtns.forEach(btn => btn.addEventListener("click", () => teamApi.scrollPrev()));
+            nextBtns.forEach(btn => btn.addEventListener("click", () => teamApi.scrollNext()));
+        });
     }
 });
 </script>

@@ -1,0 +1,44 @@
+{{/*
+  Fil d'Ariane sémantique + Schema.org BreadcrumbList.
+  Libellé final : .Params.breadcrumb_label (fallback .LinkTitle).
+*/}}
+
+{{ $crumbs := slice (dict "name" "Accueil" "url" .Site.BaseURL) }}
+
+{{ if and .IsPage .Section }}
+  {{ $section := .Site.GetPage (printf "/%s" .Section) }}
+  {{ if and $section (ne $section.Permalink .Permalink) }}
+    {{ $sectionLabel := $section.Params.breadcrumb_label | default (humanize .Section) }}
+    {{ $crumbs = $crumbs | append (dict "name" $sectionLabel "url" $section.Permalink) }}
+  {{ end }}
+{{ end }}
+
+{{ $currentLabel := .Params.breadcrumb_label | default .LinkTitle }}
+{{ $crumbs = $crumbs | append (dict "name" $currentLabel "url" "") }}
+
+<nav class="breadcrumb-text breadcrumb-trail" aria-label="Fil d'Ariane">
+  <ol>
+    {{- range $i, $c := $crumbs }}
+    <li>
+      {{- if $c.url -}}
+      <a href="{{ $c.url }}">{{ $c.name }}</a>
+      {{- else -}}
+      <span aria-current="page">{{ $c.name }}</span>
+      {{- end -}}
+    </li>
+    {{- end }}
+  </ol>
+</nav>
+
+{{- $items := slice -}}
+{{- range $i, $c := $crumbs -}}
+  {{- $item := dict "@type" "ListItem" "position" (add $i 1) "name" $c.name -}}
+  {{- if $c.url -}}
+    {{- $item = merge $item (dict "item" $c.url) -}}
+  {{- end -}}
+  {{- $items = $items | append $item -}}
+{{- end -}}
+{{- $jsonld := dict "@context" "https://schema.org" "@type" "BreadcrumbList" "itemListElement" $items -}}
+<script type="application/ld+json">
+{{ $jsonld | jsonify (dict "indent" "  ") | safeJS }}
+</script>

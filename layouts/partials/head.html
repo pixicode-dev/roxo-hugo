@@ -3,9 +3,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="generator" content="Hugo {{ hugo.Version }}">
 
-  <link rel="preload" href="/fonts/josefin-sans-latin-700-normal.woff2"
+  {{/* Polices critiques (chemin d'accès LCP/FCP, audit PageSpeed) */}}
+  <link rel="preload" href="/fonts/josefin-sans-latin-400-normal.woff2"
     as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="/fonts/montserrat-latin-400-normal.woff2" as="font"
+  <link rel="preload" href="/fonts/josefin-sans-latin-600-normal.woff2"
+    as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/fonts/montserrat-latin-600-normal.woff2" as="font"
+    type="font/woff2" crossorigin>
+  <link rel="preload" href="/fonts/montserrat-latin-700-normal.woff2" as="font"
     type="font/woff2" crossorigin>
 
   <link rel="preconnect" href="https://matomo.pixicode.dev">
@@ -111,53 +116,6 @@
   </noscript>
 
   {{/* --- 4. SCHEMA.ORG (JSON-LD) --- */}}
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    {{ if eq .Section "blog" }}
-      "@type": "BlogPosting",
-      "headline": "{{ .Title }}",
-      "image": "{{ .Params.image | default .Site.Params.image | absURL }}",
-      "author": {
-        "@type": "Organization",
-        "name": "{{ .Site.Params.agency.name }}"
-      },
-      "publisher": {
-        "@type": "Organization",
-        "name": "{{ .Site.Params.client.name }}",
-        "logo": {
-          "@type": "ImageObject",
-          "url": "{{ .Site.Params.client.logo | absURL }}"
-        }
-      },
-      "datePublished": "{{ .PublishDate.Format "2006-01-02" }}",
-      "dateModified": "{{ .Lastmod.Format "2006-01-02" }}",
-      "description": "{{ .Description | plainify }}"
-    {{ else }}
-      "@graph": [
-        {
-          "@type": "LocalBusiness",
-          "name": "{{ .Site.Params.client.name }}",
-          "image": "{{ .Site.Params.client.logo | absURL }}",
-          "url": "{{ .Site.BaseURL }}",
-          "telephone": "{{ .Site.Params.client.phone }}",
-          "email": "{{ .Site.Params.client.email }}",
-          "address": {
-            "@type": "PostalAddress",
-            "streetAddress": "{{ .Site.Params.client.address }}",
-            "addressLocality": "Angoulême",
-            "postalCode": "16000",
-            "addressCountry": "FR"
-          }
-        },
-        {
-          "@type": "WebSite",
-          "name": "{{ .Site.Title }}",
-          "url": "{{ .Site.BaseURL }}"
-        }
-      ]
-    {{ end }}
-  }
-  </script>
+  {{ partial "schema.html" . }}
 
 </head>

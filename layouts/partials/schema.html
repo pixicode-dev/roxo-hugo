@@ -1,0 +1,124 @@
+{{/*
+  Données structurées Schema.org (JSON-LD) — émises sur toutes les pages.
+
+  Graphe :
+    - LocalBusiness (toujours)
+    - WebSite (toujours)
+    - BlogPosting (uniquement sur les articles de blog)
+    - Service + Offers (uniquement sur les pages services individuelles)
+*/}}
+
+{{ $base := .Site.BaseURL }}
+{{ $logoURL := .Site.Params.logo | absURL }}
+{{ $businessId := printf "%s#localbusiness" $base }}
+{{ $websiteId := printf "%s#website" $base }}
+
+{{/* --- LocalBusiness --- */}}
+{{ $localBusiness := dict
+  "@type" "LocalBusiness"
+  "@id" $businessId
+  "name" .Site.Title
+  "image" $logoURL
+  "logo" $logoURL
+  "url" $base
+  "telephone" .Site.Params.client.phone
+  "email" .Site.Params.client.email
+  "address" (dict
+    "@type" "PostalAddress"
+    "streetAddress" .Site.Params.client.address
+    "addressLocality" "Angoulême"
+    "postalCode" "16000"
+    "addressRegion" "Nouvelle-Aquitaine"
+    "addressCountry" "FR"
+  )
+  "areaServed" (dict "@type" "Country" "name" "France")
+}}
+
+{{/* --- WebSite --- */}}
+{{ $website := dict
+  "@type" "WebSite"
+  "@id" $websiteId
+  "name" .Site.Title
+  "url" $base
+  "publisher" (dict "@id" $businessId)
+  "inLanguage" .Site.LanguageCode
+}}
+
+{{ $graph := slice $localBusiness $website }}
+
+{{/* --- BlogPosting (articles de blog uniquement) --- */}}
+{{ if and .IsPage (eq .Section "blog") }}
+  {{ $img := .Params.image | default .Site.Params.image | absURL }}
+  {{ $post := dict
+    "@type" "BlogPosting"
+    "headline" .Title
+    "image" $img
+    "url" .Permalink
+    "author" (dict "@type" "Organization" "name" .Site.Params.agency.name "url" .Site.Params.agency.url)
+    "publisher" (dict "@id" $businessId)
+    "datePublished" (.PublishDate.Format "2006-01-02")
+    "dateModified" (.Lastmod.Format "2006-01-02")
+    "description" (.Description | plainify)
+    "mainEntityOfPage" (dict "@type" "WebPage" "@id" .Permalink)
+  }}
+  {{ $graph = $graph | append $post }}
+{{ end }}
+
+{{/* --- Service + Offers (pages services individuelles) --- */}}
+{{ if and .IsPage (eq .Section "services") }}
+  {{ $offers := slice }}
+  {{ with .Params.pricing }}
+    {{ range .items }}
+      {{ $priceDigits := replaceRE "[^0-9]" "" (.price | default "") }}
+      {{ $priceNum := 0 }}
+      {{ if $priceDigits }}{{ $priceNum = int $priceDigits }}{{ end }}
+      {{ $offer := dict
+        "@type" "Offer"
+        "name" .title
+        "description" .price
+      }}
+      {{ if .button_link }}
+        {{ $offer = merge $offer (dict "url" (.button_link | absURL)) }}
+      {{ end }}
+      {{ if $priceNum }}
+        {{ $offer = merge $offer (dict
+          "price" $priceNum
+          "priceCurrency" "EUR"
+          "priceSpecification" (dict
+            "@type" "PriceSpecification"
+            "price" $priceNum
+            "priceCurrency" "EUR"
+            "valueAddedTaxIncluded" false
+          )
+        ) }}
+      {{ end }}
+      {{ $offers = $offers | append $offer }}
+    {{ end }}
+  {{ end }}
+
+  {{ $service := dict
+    "@type" "Service"
+    "@id" (printf "%s#service" .Permalink)
+    "name" .Title
+    "description" (.Description | plainify)
+    "url" .Permalink
+    "provider" (dict "@id" $businessId)
+    "areaServed" (dict "@type" "Country" "name" "France")
+  }}
+  {{ with .Params.breadcrumb_label }}
+    {{ $service = merge $service (dict "serviceType" .) }}
+  {{ end }}
+  {{ if $offers }}
+    {{ $service = merge $service (dict "hasOfferCatalog" (dict
+      "@type" "OfferCatalog"
+      "name" (.Params.pricing.headline | default .Params.pricing.title | default "Tarifs")
+      "itemListElement" $offers
+    )) }}
+  {{ end }}
+  {{ $graph = $graph | append $service }}
+{{ end }}
+
+{{ $jsonld := dict "@context" "https://schema.org" "@graph" $graph }}
+<script type="application/ld+json">
+{{ $jsonld | jsonify (dict "indent" "  ") | safeJS }}
+</script>

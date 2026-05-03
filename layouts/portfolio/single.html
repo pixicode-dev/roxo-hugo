@@ -9,7 +9,7 @@
     class="container h-100 d-flex flex-column justify-content-center align-items-center">
     <h1 class="text-uppercase fw-bold mb-2">{{ .Title }}</h1>
     <div class="overline-dash"></div>
-    <p class="breadcrumb-text">ACCUEIL / PORTFOLIO / {{ .Title }}</p>
+    {{ partial "breadcrumb.html" . }}
   </div>
 </section>
 
@@ -152,22 +152,25 @@
   <script>
 document.addEventListener("DOMContentLoaded", function () {
     const projectNode = document.querySelector("#project-carousel");
-    
+
     // Initialisation uniquement si la galerie existe
-    if (projectNode && typeof EmblaCarousel !== "undefined") {
-        const viewportNode = projectNode.querySelector(".embla__viewport");
-        const prevBtn = projectNode.querySelector(".embla__prev");
-        const nextBtn = projectNode.querySelector(".embla__next");
-        
-        const emblaApi = EmblaCarousel(viewportNode, { 
-            loop: true, 
-            align: "center",
-            containScroll: "trimSnaps" 
+    if (projectNode) {
+        window.__lazyInit(projectNode, () => {
+            if (typeof EmblaCarousel === "undefined") return;
+            const viewportNode = projectNode.querySelector(".embla__viewport");
+            const prevBtn = projectNode.querySelector(".embla__prev");
+            const nextBtn = projectNode.querySelector(".embla__next");
+
+            const emblaApi = EmblaCarousel(viewportNode, {
+                loop: true,
+                align: "center",
+                containScroll: "trimSnaps"
+            });
+
+            // Ajout des écouteurs sur les boutons
+            prevBtn.addEventListener('click', () => emblaApi.scrollPrev());
+            nextBtn.addEventListener('click', () => emblaApi.scrollNext());
         });
-        
-        // Ajout des écouteurs sur les boutons
-        prevBtn.addEventListener('click', () => emblaApi.scrollPrev());
-        nextBtn.addEventListener('click', () => emblaApi.scrollNext());
     }
 });
 </script>

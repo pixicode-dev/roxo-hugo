@@ -19,7 +19,9 @@
               <h2 class="h2 fw-bold mb-3">{{ .company }}</h2> <div
                 class="quote-icon">
                 <img src="/images/quote.svg" alt="Icône de citation"
-                  aria-hidden="true">
+                  aria-hidden="true"
+                  width="51" height="39"
+                  loading="lazy" decoding="async">
                 <blockquote class="testimonial-quote mb-0">
                   {{ .quote }}
                 </blockquote>
@@ -51,7 +53,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // 1. Initialisation avec Autoplay
     const plugins = [EmblaCarouselAutoplay({ delay: 5000, stopOnInteraction: true })];
     const emblaApi = EmblaCarousel(testimonialNode, { loop: true }, plugins);
-    
+
     // 2. Gestion des Dots (Points)
     const dotsNode = testimonialNode.querySelector(".embla__dots");
     if (dotsNode) {
@@ -85,7 +87,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   };
 
-  initTestimonials();
+  window.__lazyInit(testimonialNode, initTestimonials);
 });
 </script>
 {{ end }}

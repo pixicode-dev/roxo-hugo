@@ -96,38 +96,40 @@ document.addEventListener("DOMContentLoaded", function () {
     const node = document.querySelector(id);
     if (!node) return;
 
-    // On attend que Embla soit chargé (depuis le footer)
-    if (typeof EmblaCarousel === "undefined") {
-      setTimeout(() => initIndexCarousels(id, navSelector), 100);
-      return;
-    }
+    const doInit = () => {
+      // On attend que Embla soit chargé (depuis le footer)
+      if (typeof EmblaCarousel === "undefined") {
+        setTimeout(doInit, 100);
+        return;
+      }
 
-    const api = EmblaCarousel(node, {
-      loop: false, align: "start", slidesToScroll: 1,
-      breakpoints: { "(min-width: 992px)": { slidesToScroll: 1 } },
-    });
+      const api = EmblaCarousel(node, {
+        loop: false, align: "start", slidesToScroll: 1,
+        breakpoints: { "(min-width: 992px)": { slidesToScroll: 1 } },
+      });
 
-    // Gestion des flèches
-    if (navSelector) {
-      const prevBtns = document.querySelectorAll(`${navSelector} .embla__prev`);
-      const nextBtns = document.querySelectorAll(`${navSelector} .embla__next`);
-      prevBtns.forEach(btn => btn.addEventListener("click", () => api.scrollPrev()));
-      nextBtns.forEach(btn => btn.addEventListener("click", () => api.scrollNext()));
-    }
-    
-    // Exception pour le portfolio qui boucle
-    if (id === "#portfolio-carousel") {
-       api.reInit({ loop: true }); 
-    }
+      // Gestion des flèches
+      if (navSelector) {
+        const prevBtns = document.querySelectorAll(`${navSelector} .embla__prev`);
+        const nextBtns = document.querySelectorAll(`${navSelector} .embla__next`);
+        prevBtns.forEach(btn => btn.addEventListener("click", () => api.scrollPrev()));
+        nextBtns.forEach(btn => btn.addEventListener("click", () => api.scrollNext()));
+      }
+
+      // Exception pour le portfolio qui boucle
+      if (id === "#portfolio-carousel") {
+        api.reInit({ loop: true });
+      }
+    };
+
+    window.__lazyInit(node, doInit);
   };
 
-  window.requestAnimationFrame(() => {
-    // 1. PORTFOLIO (News et Approach ne sont PAS ici car gérés ailleurs ou par défaut)
-    initIndexCarousels("#portfolio-carousel", ".portfolio-nav-desktop, .portfolio-nav-mobile");
+  // 1. PORTFOLIO (News et Approach ne sont PAS ici car gérés ailleurs ou par défaut)
+  initIndexCarousels("#portfolio-carousel", ".portfolio-nav-desktop, .portfolio-nav-mobile");
 
-    // 2. NEWS
-    initIndexCarousels("#news-carousel", ".btn-nav-arrow-news, .news-nav-mobile");
-  });
+  // 2. NEWS
+  initIndexCarousels("#news-carousel", ".btn-nav-arrow-news, .news-nav-mobile");
 
 });
 </script>
