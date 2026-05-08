@@ -331,6 +331,17 @@
         {{ end }}
       </div>
     </div>
+
+    {{ with .Params.pricing_notice }}
+    <div class="row justify-content-center mt-5">
+      <div class="col-lg-9">
+        <div class="pricing-notice text-center">
+          <p class="pricing-notice-title fw-bold mb-2">{{ .title }}</p>
+          <p class="pricing-notice-text mb-0">{{ .text | markdownify }}</p>
+        </div>
+      </div>
+    </div>
+    {{ end }}
   </div>
 </section>
 

@@ -60,6 +60,26 @@
   </div>
 </section>
 
+{{ with .Params.founder }}
+<section class="section-padding section-founder-word">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-lg-7 order-2 order-lg-1 mb-4 mb-lg-0">
+        <p class="overline-dash text-uppercase">{{ .overline }}</p>
+        <h2 class="section-title mb-4">{{ .title }}</h2>
+        <p>{{ .text | markdownify }}</p>
+      </div>
+      <div class="col-lg-5 order-1 order-lg-2 mb-4 mb-lg-0">
+        <div class="img-wrapper-rounded">
+          <img src="{{ .image | relURL }}" alt="Emric Pichonnier — fondateur de PixiCode"
+            class="img-fluid">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{{ end }}
+
 <section class="team-section">
   <div class="container">
     <div class="text-center mb-5 text-white">
