@@ -76,6 +76,11 @@
     type="image/x-icon">
   <meta name="theme-color" content="#1d5d9b">
 
+  {{/* --- Auto-découverte du flux RSS blog --- */}}
+  <link rel="alternate" type="application/rss+xml"
+    title="Blog PixiCode — Flux RSS"
+    href="{{ "blog/index.xml" | absURL }}">
+
   {{ $cssFiles := slice }}
 
   {{ $bootstrap := resources.Get "css/bootstrap.css" }}
