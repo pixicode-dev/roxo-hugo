@@ -5,7 +5,7 @@
     <div class="footer-top">
       <div class="row">
 
-        <div class="col-lg-4 mb-5 mb-lg-0">
+        <div class="col-lg-3 mb-5 mb-lg-0">
           <div class="site-footer-logo mb-3">
             <a href="{{ .Site.BaseURL }}">
               <img src="{{ .Site.Params.logo | absURL }}"
@@ -70,7 +70,7 @@
         {{ end }}
 
         {{ with .Site.Params.footer.contactInfo }}
-        <div class="col-lg-3 col-6 mb-4 mb-lg-0">
+        <div class="col-lg-2 col-6 mb-4 mb-lg-0">
           <h4 class="footer-title">{{ .title }}</h4>
           <ul class="footer-list contact-list">
             {{ if .address }}<li>{{ .address | safeHTML }}</li>{{ end }}
@@ -83,7 +83,19 @@
         </div>
         {{ end }}
 
-        <div class="col-lg-3 col-6 mb-4 mb-lg-0"> 
+        {{ with .Site.Params.footer.partners }}
+        <div class="col-lg-2 col-6 mb-4 mb-lg-0">
+          <h4 class="footer-title">{{ .title }}</h4>
+          <ul class="footer-list">
+            {{ range .link }}
+            <li><a href="{{ .url }}" target="_blank"
+                rel="noopener noreferrer">{{ .name }}</a></li>
+            {{ end }}
+          </ul>
+        </div>
+        {{ end }}
+
+        <div class="col-lg-3 col-6 mb-4 mb-lg-0">
           <div class="footer-badges">
             
             <a href="https://bff.ecoindex.fr/redirect/?url=https://pixicode.dev" target="_blank" rel="noopener">
