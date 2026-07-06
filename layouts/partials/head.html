@@ -16,30 +16,28 @@
   <link rel="preconnect" href="https://matomo.pixicode.dev">
   <link rel="dns-prefetch" href="https://matomo.pixicode.dev">
 
-  <title>
-    {{ if .IsHome }}
-    {{ .Site.Title }} | {{ .Title }}
-    {{ else }}
-    {{ .Title }} | {{ .Site.Title }}
-    {{ end }}
-  </title>
+  <title>{{ if .IsHome }}{{ .Site.Title }}{{ with .Title }} | {{ . }}{{ end }}{{ else }}{{ with .Title }}{{ . }} | {{ end }}{{ .Site.Title }}{{ end }}</title>
 
   {{/* --- DESCRIPTION & KEYWORDS --- */}}
-  {{ $desc := .Description | plainify }}
+  {{ $desc := .Description | plainify | default (.Site.Params.description | plainify) }}
   <meta name="description" content="{{ $desc }}">
 
   {{ with .Site.Params.keywords }}
   <meta name="keywords" content="{{ delimit . " , " }}">
   {{ end }}
 
-  <meta name="robots" content="index, follow">
+  <meta name="robots" content="{{ .Params.robots | default "index, follow" }}">
   <link rel="canonical" href="{{ .Permalink }}">
   <meta name="author" content="{{ .Site.Params.client.name }}">
   <meta name="designer" content="Pixicode - https://pixicode.dev">
 
   {{/* Open Graph / Twitter */}}
   <meta property="og:site_name" content="{{ .Site.Title }}">
-  <meta property="og:locale" content="{{ .Site.LanguageCode }}">
+  {{/* og:locale attend le format ISO fr_FR (underscore, région majuscule) */}}
+  {{ $langParts := split .Site.LanguageCode "-" }}
+  {{ $ogLocale := .Site.LanguageCode }}
+  {{ if eq (len $langParts) 2 }}{{ $ogLocale = printf "%s_%s" (index $langParts 0) (upper (index $langParts 1)) }}{{ end }}
+  <meta property="og:locale" content="{{ $ogLocale }}">
   {{ $ogImage := .Params.image | default .Site.Params.image | absURL }}
   <meta property="og:type" content="{{ if eq .Section "blog" }}article{{ else
     }}website{{ end }}">
@@ -48,6 +46,8 @@
   <meta property="og:description" content="{{ $desc }}">
   <meta property="og:image" content="{{ $ogImage }}">
   <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{{ .Title | default .Site.Title }}">
+  <meta name="twitter:description" content="{{ $desc }}">
   <meta name="twitter:image" content="{{ $ogImage }}">
 
   {{ if .IsPage }}

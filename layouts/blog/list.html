@@ -34,10 +34,12 @@
           {{ $mixed := union $blogs $projects }}
           {{ $posts := $mixed.ByDate.Reverse }}
 
-          {{ range $posts }}
+          {{ range $index, $element := $posts }}
 
+          {{/* Les 6 premières cartes (page 1) sont visibles sans JS :
+               contenu crawlable et premier rendu immédiat */}}
           <article class="blog-card mb-5 filter-item"
-            style="display: none;"
+            {{ if ge $index 6 }}style="display: none;"{{ end }}
             data-title="{{ .Title | lower }}"
             data-category="{{ range .Params.categories }}{{ . | urlize }} {{ end }}"
             data-tags="{{ range .Params.tags }}{{ . | urlize }} {{ end }}">

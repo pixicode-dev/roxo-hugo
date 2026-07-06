@@ -227,7 +227,7 @@
                         <p class="card-text small">{{ .description }}</p>
 
                         {{ if .link_text }}
-                        <a href="{{ .url }}" class="btn-approach">{{ .link_text
+                        <a href="{{ .url | relLangURL }}" class="btn-approach">{{ .link_text
                             }}</a>
                         {{ end }}
                     </div>

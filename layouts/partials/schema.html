@@ -14,6 +14,7 @@
 {{ $websiteId := printf "%s#website" $base }}
 
 {{/* --- LocalBusiness --- */}}
+{{ $client := .Site.Params.client }}
 {{ $localBusiness := dict
   "@type" "LocalBusiness"
   "@id" $businessId
@@ -21,18 +22,46 @@
   "image" $logoURL
   "logo" $logoURL
   "url" $base
-  "telephone" .Site.Params.client.phone
-  "email" .Site.Params.client.email
+  "telephone" $client.phone
+  "email" $client.email
+  "priceRange" ($client.price_range | default "€€")
   "address" (dict
     "@type" "PostalAddress"
-    "streetAddress" .Site.Params.client.address
-    "addressLocality" "Angoulême"
-    "postalCode" "16000"
-    "addressRegion" "Nouvelle-Aquitaine"
+    "streetAddress" ($client.street | default $client.address)
+    "addressLocality" ($client.city | default "Angoulême")
+    "postalCode" ($client.postal_code | default "16000")
+    "addressRegion" ($client.region | default "Nouvelle-Aquitaine")
     "addressCountry" "FR"
   )
   "areaServed" (dict "@type" "Country" "name" "France")
 }}
+
+{{ with $client.founding_date }}
+  {{ $localBusiness = merge $localBusiness (dict "foundingDate" .) }}
+{{ end }}
+{{ with $client.founder }}
+  {{ $localBusiness = merge $localBusiness (dict "founder" (dict "@type" "Person" "name" .)) }}
+{{ end }}
+{{ if and $client.latitude $client.longitude }}
+  {{ $localBusiness = merge $localBusiness (dict "geo" (dict
+    "@type" "GeoCoordinates"
+    "latitude" $client.latitude
+    "longitude" $client.longitude
+  )) }}
+{{ end }}
+
+{{/* sameAs : profils sociaux depuis la config du footer */}}
+{{ $sameAs := slice }}
+{{ with .Site.Params.footer.social }}
+  {{ range .link }}
+    {{ if and .url (not (in .url "google.com/search")) }}
+      {{ $sameAs = $sameAs | append .url }}
+    {{ end }}
+  {{ end }}
+{{ end }}
+{{ if $sameAs }}
+  {{ $localBusiness = merge $localBusiness (dict "sameAs" $sameAs) }}
+{{ end }}
 
 {{/* --- WebSite --- */}}
 {{ $website := dict
@@ -77,9 +106,9 @@
         "name" .title
         "description" .price
       }}
-      {{ if .button_link }}
-        {{ $offer = merge $offer (dict "url" (.button_link | absURL)) }}
-      {{ end }}
+      {{/* L'URL de l'offre pointe vers la page service elle-même (pas le bouton,
+           qui peut être un parcours externe) */}}
+      {{ $offer = merge $offer (dict "url" $.Permalink) }}
       {{ if $priceNum }}
         {{ $offer = merge $offer (dict
           "price" $priceNum
@@ -116,6 +145,29 @@
     )) }}
   {{ end }}
   {{ $graph = $graph | append $service }}
+{{ end }}
+
+{{/* --- FAQPage (toute page avec une FAQ en frontmatter) --- */}}
+{{ with .Params.faq }}
+  {{ if .items }}
+    {{ $questions := slice }}
+    {{ range .items }}
+      {{ $questions = $questions | append (dict
+        "@type" "Question"
+        "name" .question
+        "acceptedAnswer" (dict
+          "@type" "Answer"
+          "text" (.answer | markdownify | plainify)
+        )
+      ) }}
+    {{ end }}
+    {{ $faq := dict
+      "@type" "FAQPage"
+      "@id" (printf "%s#faq" $.Permalink)
+      "mainEntity" $questions
+    }}
+    {{ $graph = $graph | append $faq }}
+  {{ end }}
 {{ end }}
 
 {{ $jsonld := dict "@context" "https://schema.org" "@graph" $graph }}

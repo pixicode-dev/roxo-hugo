@@ -24,6 +24,20 @@
 
                 <div class="legal-paper">
 
+                    {{ if .Content }}
+                    {{/* Texte en HTML : crawlable par les moteurs, contrairement à l'iframe PDF */}}
+                    <article class="legal-content">
+                        {{ .Content }}
+                    </article>
+
+                    <div class="text-center mt-4">
+                        <a href="/docs/cgv.pdf" target="_blank"
+                            rel="noopener"
+                            class="btn-pixi secondary btn-sm">
+                            Télécharger la version PDF
+                        </a>
+                    </div>
+                    {{ else }}
                     <div class="pdf-viewer-wrapper">
                         <iframe src="/docs/cgv.pdf"
                             width="100%"
@@ -40,6 +54,7 @@
                             Télécharger le PDF
                         </a>
                     </div>
+                    {{ end }}
 
                 </div>
 

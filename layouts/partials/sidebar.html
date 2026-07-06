@@ -19,6 +19,21 @@
         </form>
     </div>
 
+    {{/* Maillage interne : liens profonds vers les pages services */}}
+    {{ $services := where .Site.RegularPages "Section" "services" }}
+    {{ if $services }}
+    <div class="sidebar-widget">
+        <span class="widget-dash"></span>
+        <h4 class="widget-title">NOS SERVICES</h4>
+        <ul class="widget-list">
+            {{ range $services.ByWeight }}
+            <li><a href="{{ .RelPermalink }}">{{ .Params.breadcrumb_label |
+                default .Title }}</a></li>
+            {{ end }}
+        </ul>
+    </div>
+    {{ end }}
+
     {{ $allPages := where .Site.RegularPages "Section" "in" (slice "blog"
     "portfolio") }}
 

@@ -29,7 +29,7 @@
       <div class="col-lg-6">
         <div class="img-wrapper-rounded">
           <img src="{{ .Params.service_intro.image | relURL }}"
-            alt="{{ .Title }}" class="img-fluid">
+            alt="{{ .Title }}" class="img-fluid" decoding="async">
         </div>
       </div>
     </div>
@@ -58,7 +58,8 @@
             <div class="benefit-top">
               <span class=" overline-dash benefit-number"> {{ .number }}</span>
               <div class="benefit-icon">
-                <img src="{{ .icon | relURL }}" alt="{{ .title }}">
+                <img src="{{ .icon | relURL }}" alt="{{ .title }}"
+                  loading="lazy" decoding="async">
               </div>
             </div>
 
@@ -81,7 +82,8 @@
       <div class="col-lg-6 order-2 order-lg-1">
         <div class="img-wrapper-rounded">
           <img src="{{ .Params.service_process.image | relURL }}"
-            alt="Notre approche" class="img-fluid">
+            alt="La méthode de travail PixiCode" class="img-fluid"
+            loading="lazy" decoding="async">
         </div>
       </div>
       <div class="col-lg-6 order-1 order-lg-2 mb-4 mb-lg-0">
@@ -357,12 +359,43 @@
       <div class="col-lg-6">
         <div class="img-wrapper-rounded">
           <img src="{{ .Params.service_cta.image | relURL }}"
-            alt="Collaboration" class="img-fluid">
+            alt="Collaboration avec l'équipe PixiCode" class="img-fluid"
+            loading="lazy" decoding="async">
         </div>
       </div>
     </div>
   </div>
 </section>
+
+{{ partial "faq.html" . }}
+
+{{/* --- Maillage interne : les autres services de la section --- */}}
+{{ $siblings := where .CurrentSection.RegularPages "Permalink" "ne" .Permalink }}
+{{ if $siblings }}
+<section class="section-padding related-services">
+  <div class="container">
+    <div class="text-center mb-5">
+      <p class="overline-dash justify-content-center text-uppercase">NOS AUTRES EXPERTISES</p>
+      <h2 class="section-headline fw-bold">Ces services peuvent aussi vous intéresser</h2>
+    </div>
+    <div class="row g-4 justify-content-center">
+      {{ range $siblings }}
+      <div class="col-12 col-md-6 col-lg-4 mb-4">
+        <div class="service-card h-100">
+          <h3 class="service-card-title">
+            <a href="{{ .RelPermalink }}">{{ .Params.breadcrumb_label | default .Title }}</a>
+          </h3>
+          <p class="service-card-desc">{{ .Description | plainify | truncate 130 }}</p>
+          <a href="{{ .RelPermalink }}" class="btn-pixi secondary btn-sm mt-auto">
+            Découvrir : {{ .Params.breadcrumb_label | default .Title }}
+          </a>
+        </div>
+      </div>
+      {{ end }}
+    </div>
+  </div>
+</section>
+{{ end }}
 
 {{ partial "call-to-action.html" .}}
 

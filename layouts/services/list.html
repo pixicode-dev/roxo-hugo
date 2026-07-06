@@ -34,7 +34,7 @@
           <h3 class="service-card-title">{{ .title }}</h3>
           <p class="service-card-desc">{{ .description }}</p>
 
-          <a href="{{ .link_url }}" class="btn-pixi secondary btn-sm mt-auto">
+          <a href="{{ .link_url | relLangURL }}" class="btn-pixi secondary btn-sm mt-auto">
             {{ .link_text }}
           </a>
         </div>
@@ -46,65 +46,8 @@
 
 {{ partial "approach.html" . }}
 
-<section class="faq-section">
-  <div class="container">
-    <div class="row gy-5 align-items-start">
-
-      <div class="col-lg-4 text-white">
-        <p class="overline-dash text-white mb-2">{{ .Params.faq.title }}</p>
-        <h2 class="fw-bold mb-3 text-white display-6">{{ .Params.faq.subtitle
-          }}</h2>
-        <p class="opacity-75 text-white mb-4">
-          Vous ne trouvez pas la réponse à votre question ?
-          Notre équipe est disponible pour vous répondre directement.
-        </p>
-        <a href="/contact" class="btn-pixi secondary">Poser ma question</a>
-      </div>
-
-      <div class="col-lg-7 offset-lg-1">
-        <div class="faq-wrapper">
-          {{ range $index, $element := .Params.faq.items }}
-          <div class="faq-item">
-            <button class="faq-btn" aria-expanded="false"
-              aria-controls="faq-content-{{ $index }}">
-              <span class="faq-question-text">{{ .question }}</span>
-              <div class="faq-icon">
-                <span class="line-h"></span>
-                <span class="line-v"></span>
-              </div>
-            </button>
-            <div id="faq-content-{{ $index }}" class="faq-content">
-              <div class="faq-body">
-                {{ .answer | markdownify }}
-              </div>
-            </div>
-          </div>
-          {{ end }}
-        </div>
-      </div>
-
-    </div>
-  </div>
-</section>
+{{ partial "faq.html" . }}
 
 {{ partial "call-to-action.html" .}}
-
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-    const toggles = document.querySelectorAll('.faq-btn');
-
-    toggles.forEach(toggle => {
-        toggle.addEventListener('click', () => {
-            // 1. Gestion de l'état ouvert/fermé
-            const isExpanded = toggle.getAttribute('aria-expanded') === 'true';
-            
-            // Optionnel : Fermer les autres (Accordion strict)
-            // document.querySelectorAll('.faq-btn').forEach(btn => btn.setAttribute('aria-expanded', 'false'));
-            
-            toggle.setAttribute('aria-expanded', !isExpanded);
-        });
-    });
-});
-</script>
 
 {{ end }}
