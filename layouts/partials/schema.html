@@ -6,6 +6,7 @@
     - WebSite (toujours)
     - BlogPosting (uniquement sur les articles de blog)
     - Service + Offers (uniquement sur les pages services individuelles)
+    - FAQPage (pages disposant d'une section FAQ)
 */}}
 
 {{ $base := .Site.BaseURL }}
@@ -116,6 +117,24 @@
     )) }}
   {{ end }}
   {{ $graph = $graph | append $service }}
+{{ end }}
+
+{{/* --- FAQPage (pages disposant d'une section FAQ visible) --- */}}
+{{ with .Params.faq }}
+  {{ $questions := slice }}
+  {{ range .items }}
+    {{ $questions = $questions | append (dict
+      "@type" "Question"
+      "name" .question
+      "acceptedAnswer" (dict
+        "@type" "Answer"
+        "text" (.answer | markdownify | plainify)
+      )
+    ) }}
+  {{ end }}
+  {{ if $questions }}
+    {{ $graph = $graph | append (dict "@type" "FAQPage" "mainEntity" $questions) }}
+  {{ end }}
 {{ end }}
 
 {{ $jsonld := dict "@context" "https://schema.org" "@graph" $graph }}

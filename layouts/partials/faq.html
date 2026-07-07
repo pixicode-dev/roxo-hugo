@@ -1,0 +1,54 @@
+{{ with .Params.faq }}
+<section class="faq-section">
+  <div class="container">
+    <div class="row gy-5 align-items-start">
+
+      <div class="col-lg-4 text-white">
+        <p class="overline-dash text-white mb-2">{{ .title }}</p>
+        <h2 class="fw-bold mb-3 text-white display-6">{{ .subtitle }}</h2>
+        <p class="opacity-75 text-white mb-4">
+          Vous ne trouvez pas la réponse à votre question ?
+          Notre équipe est disponible pour vous répondre directement.
+        </p>
+        <a href="/contact" class="btn-pixi secondary">Poser ma question</a>
+      </div>
+
+      <div class="col-lg-7 offset-lg-1">
+        <div class="faq-wrapper">
+          {{ range $index, $element := .items }}
+          <div class="faq-item">
+            <button class="faq-btn" aria-expanded="false"
+              aria-controls="faq-content-{{ $index }}">
+              <span class="faq-question-text">{{ .question }}</span>
+              <div class="faq-icon">
+                <span class="line-h"></span>
+                <span class="line-v"></span>
+              </div>
+            </button>
+            <div id="faq-content-{{ $index }}" class="faq-content">
+              <div class="faq-body">
+                {{ .answer | markdownify }}
+              </div>
+            </div>
+          </div>
+          {{ end }}
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const toggles = document.querySelectorAll('.faq-btn');
+
+    toggles.forEach(toggle => {
+        toggle.addEventListener('click', () => {
+            const isExpanded = toggle.getAttribute('aria-expanded') === 'true';
+            toggle.setAttribute('aria-expanded', !isExpanded);
+        });
+    });
+});
+</script>
+{{ end }}
