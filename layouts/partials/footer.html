@@ -59,7 +59,8 @@
         </div>
 
         {{ with .Site.Params.footer.sitemap }}
-        <div class="col-lg-2 col-6 mb-4 mb-lg-0">
+        {{ range .group }}
+        <div class="col-lg-2 col-md-4 col-6 mb-4 mb-lg-0">
           <h4 class="footer-title">{{ .title }}</h4>
           <ul class="footer-list">
             {{ range .link }}
@@ -68,9 +69,10 @@
           </ul>
         </div>
         {{ end }}
+        {{ end }}
 
-        {{ with .Site.Params.footer.contactInfo }}
-        <div class="col-lg-2 col-6 mb-4 mb-lg-0">
+        <div class="col-lg-3 col-md-4 col-6 mb-4 mb-lg-0">
+          {{ with .Site.Params.footer.contactInfo }}
           <h4 class="footer-title">{{ .title }}</h4>
           <ul class="footer-list contact-list">
             {{ if .address }}<li>{{ .address | safeHTML }}</li>{{ end }}
@@ -80,24 +82,24 @@
                 href="mailto:{{ .email }}">{{ .email
                 }}</a></li>{{ end }}
           </ul>
-        </div>
-        {{ end }}
+          {{ end }}
 
-        {{ with .Site.Params.footer.partners }}
-        <div class="col-lg-2 col-6 mb-4 mb-lg-0">
-          <h4 class="footer-title">{{ .title }}</h4>
+          {{ with .Site.Params.footer.partners }}
+          <h4 class="footer-title mt-4">{{ .title }}</h4>
           <ul class="footer-list">
             {{ range .link }}
             <li><a href="{{ .url }}" target="_blank"
                 rel="noopener noreferrer">{{ .name }}</a></li>
             {{ end }}
           </ul>
+          {{ end }}
         </div>
-        {{ end }}
 
-        <div class="col-lg-3 col-6 mb-4 mb-lg-0">
+      </div>
+
+      <div class="row mt-4">
+        <div class="col-12">
           <div class="footer-badges">
-            
             <a href="https://bff.ecoindex.fr/redirect/?url=https://pixicode.dev" target="_blank" rel="noopener">
                 <img src="https://bff.ecoindex.fr/badge/?theme=light&url=https://pixicode.dev"
                      alt="Ecoindex Badge"
@@ -117,29 +119,28 @@
             </a>
           </div>
         </div>
-        </div> </div>
-
       </div>
     </div>
 
-    <hr class="footer-divider">
+  </div>
 
-    <div class="footer-bottom">
-      <div class="row align-items-center">
-        <div class="col-md-6 text-center text-md-start">
-          <p class="copyright mb-2 mb-md-0">
-            © Copyright 2023 - {{ now.Format "2006" }} <span
-              class="text-blue fw-bold">PIXICODE</span>. All Rights Reserved
-          </p>
-        </div>
-        <div class="col-md-6 text-center text-md-end">
-          <div class="footer-legal-inline">
-            {{ with .Site.Params.footer.legal }}
-            {{ range .link }}
-            <a href="{{ .url | absURL }}">{{ .name }}</a>
-            {{ end }}
-            {{ end }}
-          </div>
+  <hr class="footer-divider">
+
+  <div class="footer-bottom">
+    <div class="row align-items-center">
+      <div class="col-md-6 text-center text-md-start">
+        <p class="copyright mb-2 mb-md-0">
+          © Copyright 2023 - {{ now.Format "2006" }} <span
+            class="text-blue fw-bold">PIXICODE</span>. All Rights Reserved
+        </p>
+      </div>
+      <div class="col-md-6 text-center text-md-end">
+        <div class="footer-legal-inline">
+          {{ with .Site.Params.footer.legal }}
+          {{ range .link }}
+          <a href="{{ .url | absURL }}">{{ .name }}</a>
+          {{ end }}
+          {{ end }}
         </div>
       </div>
     </div>

@@ -32,16 +32,79 @@
   </div>
 </section>
 
-{{/* --- Contenu SEO : comment ça marche + grille visible + FAQ (depuis _index.md).
-       On réutilise le style d'article `.post-content` du reste du site
-       (titres à trait jaune, tableaux, citations) pour rester cohérent. --- */}}
-{{ with .Content }}
-<section class="section-padding pt-0">
+{{/* --- Comment ça marche (3 étapes) --- */}}
+{{ with .Params.steps }}
+<section class="section-padding pt-0 est-steps-section">
   <div class="container">
-    <div class="row justify-content-center">
-      <div class="col-lg-9 post-content est-content">
-        {{ . }}
+    <div class="text-center mb-5">
+      <p class="overline-dash justify-content-center text-uppercase">{{ $.Params.steps_overline }}</p>
+      <h2 class="section-headline fw-bold">{{ $.Params.steps_title }}</h2>
+      {{ with $.Params.steps_lead }}<p class="est-section-lead">{{ . }}</p>{{ end }}
+    </div>
+    <div class="row gx-4 gy-4 justify-content-center est-card-grid">
+      {{ range . }}
+      <div class="col-lg-4 col-md-6">
+        <div class="benefit-card">
+          <div class="benefit-top">
+            <div class="est-step-badge">{{ .number }}</div>
+          </div>
+          <div class="benefit-content text-center">
+            <h3 class="benefit-title text-uppercase">{{ .title }}</h3>
+            <p class="benefit-desc">{{ .text }}</p>
+          </div>
+        </div>
       </div>
+      {{ end }}
+    </div>
+  </div>
+</section>
+{{ end }}
+
+{{/* --- Un devis pour chaque type de projet (SEO : tous les produits) --- */}}
+{{ with .Params.types }}
+<section class="section-padding est-types-section">
+  <div class="container">
+    <div class="text-center mb-5">
+      <p class="overline-dash justify-content-center text-uppercase">{{ $.Params.types_overline }}</p>
+      <h2 class="section-headline fw-bold">{{ $.Params.types_title }}</h2>
+      {{ with $.Params.types_lead }}<p class="est-section-lead">{{ . }}</p>{{ end }}
+    </div>
+    <div class="row g-4 justify-content-center est-card-grid">
+      {{ range . }}
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="service-card h-100">
+          <h3 class="service-card-title">{{ .title }}</h3>
+          <p class="service-card-desc">{{ .text }}</p>
+          {{ if .link }}
+          <a href="{{ .link | relURL }}" class="btn-pixi secondary btn-sm mt-auto">
+            {{ .link_label | default "En savoir plus" }}
+          </a>
+          {{ end }}
+        </div>
+      </div>
+      {{ end }}
+    </div>
+  </div>
+</section>
+{{ end }}
+
+{{/* --- Pourquoi PixiCode --- */}}
+{{ with .Params.why_points }}
+<section class="section-padding">
+  <div class="container">
+    <div class="text-center mb-5">
+      <p class="overline-dash justify-content-center text-uppercase">{{ $.Params.why_overline }}</p>
+      <h2 class="section-headline fw-bold">{{ $.Params.why_title }}</h2>
+    </div>
+    <div class="row g-4 justify-content-center est-card-grid">
+      {{ range . }}
+      <div class="col-md-6 col-lg-3">
+        <div class="est-why-card h-100">
+          <h3 class="est-why-title">{{ .title }}</h3>
+          <p class="est-why-text mb-0">{{ .text }}</p>
+        </div>
+      </div>
+      {{ end }}
     </div>
   </div>
 </section>
@@ -78,6 +141,30 @@
 }
 .est-lead{max-width:640px;margin:.75rem auto 0;color:var(--est-muted);}
 #estimateur *{box-sizing:border-box;}
+
+/* ===== Sections de contenu (design system : overline + cartes) ===== */
+.est-section-lead{max-width:640px;margin:1rem auto 0;color:#5b6b7c;}
+
+/* Le bootstrap du thème n'implémente pas le gutter vertical (g-4 / gy-4) :
+   on rétablit l'espace entre les lignes de cartes quand elles passent à la ligne. */
+.est-card-grid{row-gap:1.75rem;}
+
+/* Fond doux pour distinguer la section "types de projet" */
+.est-types-section{background-color:var(--clr-yellow-light);}
+
+/* Étapes "comment ça marche" — réutilise .benefit-card ; le badge numéro
+   remplace l'icône. Bleu foncé pour rester visible quand la carte passe au
+   jaune au survol. */
+.est-step-badge{display:inline-flex;align-items:center;justify-content:center;width:56px;height:56px;
+  margin-top:10px;border-radius:50%;background:var(--clr-blue-dark);color:#fff;
+  font-family:var(--ff-heading);font-weight:700;font-size:1.2rem;}
+
+/* Cartes "pourquoi PixiCode" */
+.est-why-card{background:#fff;border:1px solid #eef1f5;border-radius:12px;padding:1.6rem 1.4rem;height:100%;
+  border-top:3px solid var(--clr-yellow-dark);box-shadow:0 10px 30px rgba(0,0,0,.04);transition:transform .3s ease;}
+.est-why-card:hover{transform:translateY(-5px);}
+.est-why-title{font-family:var(--ff-heading);font-size:1.08rem;font-weight:700;color:var(--clr-blue-dark);margin-bottom:.5rem;}
+.est-why-text{color:#555;line-height:1.6;font-size:.92rem;}
 .est-widget{background:var(--est-bg);border:1px solid var(--est-line);border-radius:var(--est-radius);
   box-shadow:0 12px 40px -18px rgba(29,93,155,.35);padding:clamp(1.1rem,3vw,2rem);}
 

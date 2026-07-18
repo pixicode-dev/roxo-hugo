@@ -1,41 +1,35 @@
 {{ define "main" }}
 
-{{/*
-  Layout générique de landing (secteurs, local, guides de prix).
-  Piloté par le front matter :
-    - title_content            : H1
-    - sections (liste)         : overline, title, text (markdown), image (opt.),
-                                 reverse (opt., image à gauche)
-    - corps markdown (.Content): rendu après les sections
-    - estimation_cta           : bandeau intermédiaire vers /estimation/ (opt.)
-    - faq / cta_block          : partials existants
-  Le contenu vit dans content/<page>/_index.md avec type: "landing".
-*/}}
-
 <div class="bg-header">
-  <img src="/images/Background2.svg" alt="" class="page-header2-bg img-fluid" fetchpriority="high">
+  <img src="/images/Background2.svg" alt class="page-header2-bg img-fluid"
+    fetchpriority="high">
 </div>
 <section class="page-header">
-  <div class="container h-100 d-flex flex-column justify-content-center align-items-center">
-    <h1 class="text-uppercase fw-bold mb-2">{{ .Params.title_content | default .Title }}</h1>
+  <div
+    class="container h-100 d-flex flex-column justify-content-center align-items-center">
+    <h1 class="text-uppercase fw-bold mb-2">{{ .Params.title_content | default
+      .Title }}</h1>
     <div class="overline-dash"></div>
     {{ partial "breadcrumb.html" . }}
   </div>
 </section>
 
 {{ range $i, $s := .Params.sections }}
-<section class="section-padding{{ if modBool $i 2 }} landing-alt{{ end }}">
+<section class="section-padding{{ if eq $i 1 }} landing-alt{{ else if ge $i 2 }} landing-solid{{ end }}">
   <div class="container">
-    <div class="row align-items-center gy-5{{ if $s.reverse }} flex-lg-row-reverse{{ end }}">
+    <div
+      class="row align-items-center gy-5{{ if $s.reverse }} flex-lg-row-reverse{{ end }}">
       <div class="col-lg-{{ if $s.image }}7{{ else }}9 mx-auto{{ end }}">
-        {{ with $s.overline }}<p class="overline-dash text-uppercase">{{ . }}</p>{{ end }}
+        {{ with $s.overline }}<p class="overline-dash text-uppercase">{{ .
+          }}</p>{{ end }}
         <h2 class="section-headline fw-bold mb-4">{{ $s.title }}</h2>
         <div>{{ $s.text | markdownify }}</div>
       </div>
       {{ with $s.image }}
       <div class="col-lg-5">
         <div class="img-wrapper-rounded">
-          <img src="{{ . | relURL }}" alt="{{ $s.title }}" class="img-fluid" loading="lazy" decoding="async">
+          <img src="{{ . | relURL }}" alt="{{ $s.title }}" class="img-fluid"
+            loading="lazy" decoding="async">
         </div>
       </div>
       {{ end }}
@@ -44,13 +38,15 @@
 </section>
 {{ end }}
 
-{{/* --- Bandeau estimation (optionnel) --- */}}
+{{/* --- Bandeau estimation (CTA intermédiaire vers /devis-en-ligne/) --- */}}
 {{ with .Params.estimation_cta }}
-<section class="section-padding bg-blue-dark text-white text-center">
+<section class="section-padding estimation-cta text-center">
   <div class="container">
+    <p class="overline-dash text-uppercase justify-content-center mb-3">{{ .overline | default "Devis en ligne" }}</p>
     <h2 class="fw-bold mb-3">{{ .title }}</h2>
-    {{ with .text }}<p class="opacity-75 mb-4">{{ . }}</p>{{ end }}
-    <a href="{{ .button_link | default "/estimation/" | relURL }}" class="btn-cta px-4 py-3" style="border-radius: 4px;">
+    {{ with .text }}<p class="estimation-cta-text mb-4">{{ . }}</p>{{ end }}
+    <a href="{{ .button_link | default "/devis-en-ligne/" | relURL }}"
+      class="btn-pixi secondary">
       {{ .button_text | default "Estimer mon projet en 2 minutes" }}
     </a>
   </div>
