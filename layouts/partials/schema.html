@@ -49,12 +49,17 @@
     "longitude" $client.longitude
   )) }}
 {{ end }}
+{{ with $client.map_url }}
+  {{ $localBusiness = merge $localBusiness (dict "hasMap" .) }}
+{{ end }}
 
-{{/* sameAs : profils sociaux depuis la config du footer */}}
+{{/* sameAs : profils sociaux depuis la config du footer.
+     On exclut les liens vers la fiche Google (google.com/search, share.google) :
+     elle est déjà référencée via hasMap. */}}
 {{ $sameAs := slice }}
 {{ with .Site.Params.footer.social }}
   {{ range .link }}
-    {{ if and .url (not (in .url "google.com/search")) }}
+    {{ if and .url (not (in .url "google.com/search")) (not (in .url "share.google")) }}
       {{ $sameAs = $sameAs | append .url }}
     {{ end }}
   {{ end }}

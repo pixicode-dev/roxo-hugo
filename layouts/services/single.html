@@ -96,6 +96,28 @@
   </div>
 </section>
 
+{{/* --- Section libre optionnelle (frontmatter extra_section) --- */}}
+{{ with .Params.extra_section }}
+<section class="section-padding extra-section">
+  <div class="container">
+    <div class="row align-items-center gy-5">
+      <div class="col-lg-{{ if .image }}7{{ else }}9 mx-auto{{ end }}">
+        {{ with .overline }}<p class="overline-dash text-uppercase">{{ . }}</p>{{ end }}
+        <h2 class="section-headline fw-bold mb-4">{{ .title }}</h2>
+        <div>{{ .text | markdownify }}</div>
+      </div>
+      {{ with .image }}
+      <div class="col-lg-5">
+        <div class="img-wrapper-rounded">
+          <img src="{{ . | relURL }}" alt="" class="img-fluid" loading="lazy" decoding="async">
+        </div>
+      </div>
+      {{ end }}
+    </div>
+  </div>
+</section>
+{{ end }}
+
 <section class="section-padding pricing-section">
   <div class="container">
     <div class="text-center mb-5">

@@ -16,7 +16,9 @@
   <link rel="preconnect" href="https://matomo.pixicode.dev">
   <link rel="dns-prefetch" href="https://matomo.pixicode.dev">
 
-  <title>{{ if .IsHome }}{{ .Site.Title }}{{ with .Title }} | {{ . }}{{ end }}{{ else }}{{ with .Title }}{{ . }} | {{ end }}{{ .Site.Title }}{{ end }}</title>
+  {{/* Mot-clé d'abord, marque en suffixe — y compris sur la home (meilleur
+       CTR et pas de troncature du mot-clé sur les requêtes hors-marque) */}}
+  <title>{{ with .Title }}{{ . }} | {{ end }}{{ .Site.Title }}</title>
 
   {{/* --- DESCRIPTION & KEYWORDS --- */}}
   {{ $desc := .Description | plainify | default (.Site.Params.description | plainify) }}

@@ -58,6 +58,31 @@
   </div>
 </div>
 
+{{/* --- POUR QUI ? (audiences : PME, collectivités, associations) --- */}}
+{{ with .Params.audiences }}
+<section class="section-padding audiences-section">
+  <div class="container">
+    <div class="text-center mb-5">
+      <p class="overline-dash justify-content-center text-uppercase">{{ .title }}</p>
+      <h2 class="section-headline fw-bold">{{ .headline }}</h2>
+    </div>
+    <div class="row g-4 justify-content-center">
+      {{ range .items }}
+      <div class="col-12 col-md-6 col-lg-4 mb-4">
+        <div class="service-card h-100">
+          <h3 class="service-card-title">{{ .title }}</h3>
+          <p class="service-card-desc">{{ .description }}</p>
+          <a href="{{ .link_url | relURL }}" class="btn-pixi secondary btn-sm mt-auto">
+            {{ .link_text }}
+          </a>
+        </div>
+      </div>
+      {{ end }}
+    </div>
+  </div>
+</section>
+{{ end }}
+
 {{/* --- PORTFOLIO (JS géré en bas de cette page) --- */}}
 {{ partial "portfolio.html" . }}
 
