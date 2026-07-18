@@ -45,15 +45,16 @@
 </section>
 
 <script>
-document.addEventListener("DOMContentLoaded", function() {
-    const toggles = document.querySelectorAll('.faq-btn');
-
-    toggles.forEach(toggle => {
-        toggle.addEventListener('click', () => {
-            const isExpanded = toggle.getAttribute('aria-expanded') === 'true';
-            toggle.setAttribute('aria-expanded', !isExpanded);
-        });
+document.addEventListener("DOMContentLoaded", function () {
+  var wrappers = document.querySelectorAll('.faq-wrapper');
+  wrappers.forEach(function (wrapper) {
+    wrapper.addEventListener('click', function (e) {
+      var btn = e.target.closest('.faq-btn');
+      if (!btn || !wrapper.contains(btn)) return;
+      var expanded = btn.getAttribute('aria-expanded') === 'true';
+      btn.setAttribute('aria-expanded', expanded ? 'false' : 'true');
     });
+  });
 });
 </script>
 {{ end }}
