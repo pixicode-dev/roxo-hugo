@@ -130,4 +130,45 @@
   <script>function loadScript(a){var b=document.getElementsByTagName("head")[0],c=document.createElement("script");c.type="text/javascript",c.src="https://tracker.metricool.com/resources/be.js",c.onreadystatechange=a,c.onload=a,b.appendChild(c)}loadScript(function(){beTracker.t({hash:"2b241e92cb42866d33de650de745ddac"})});</script>
   {{ end }}
 
+  {{/* --- Menu burger (toutes les pages) + init carrousels de la home --- */}}
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      var navbarToggler = document.querySelector('.navbar-toggler');
+      var navbarMenu = document.querySelector('#sitenavbar');
+      if (navbarToggler && navbarMenu) {
+        navbarToggler.addEventListener('click', function () {
+          navbarMenu.classList.toggle('show');
+          var isExpanded = navbarToggler.getAttribute('aria-expanded') === 'true';
+          navbarToggler.setAttribute('aria-expanded', String(!isExpanded));
+          navbarToggler.classList.toggle('collapsed');
+        });
+      }
+
+      var initIndexCarousels = function (id, navSelector) {
+        var node = document.querySelector(id);
+        if (!node) return;
+        var doInit = function () {
+          if (typeof EmblaCarousel === "undefined") { setTimeout(doInit, 100); return; }
+          var api = EmblaCarousel(node, {
+            loop: false, align: "start", slidesToScroll: 1,
+            breakpoints: { "(min-width: 992px)": { slidesToScroll: 1 } }
+          });
+          if (navSelector) {
+            document.querySelectorAll(navSelector + ' .embla__prev').forEach(function (b) {
+              b.addEventListener("click", function () { api.scrollPrev(); });
+            });
+            document.querySelectorAll(navSelector + ' .embla__next').forEach(function (b) {
+              b.addEventListener("click", function () { api.scrollNext(); });
+            });
+          }
+          if (id === "#portfolio-carousel") { api.reInit({ loop: true }); }
+        };
+        if (window.__lazyInit) { window.__lazyInit(node, doInit); } else { doInit(); }
+      };
+
+      initIndexCarousels("#portfolio-carousel", ".portfolio-nav-desktop, .portfolio-nav-mobile");
+      initIndexCarousels("#news-carousel", ".btn-nav-arrow-news, .news-nav-mobile");
+    });
+  </script>
+
 </head>

@@ -22,7 +22,7 @@
         <div class="faq-wrapper">
           {{ range $index, $element := .items }}
           <div class="faq-item">
-            <button class="faq-btn" aria-expanded="false"
+            <button type="button" class="faq-btn" aria-expanded="false"
               aria-controls="faq-content-{{ $index }}">
               <span class="faq-question-text">{{ .question }}</span>
               <div class="faq-icon">

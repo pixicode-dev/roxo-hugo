@@ -98,64 +98,6 @@
 
 {{ partial "call-to-action.html" .}}
 
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-  const navbarToggler = document.querySelector('.navbar-toggler');
-  const navbarMenu = document.querySelector('#sitenavbar');
-
-  if (navbarToggler && navbarMenu) {
-    navbarToggler.addEventListener('click', function() {
-      // 1. On bascule la classe 'show' qui affiche le menu (CSS Bootstrap standard)
-      navbarMenu.classList.toggle('show');
-      
-      // 2. On change l'état du bouton (pour le design ou l'accessibilité)
-      const isExpanded = navbarToggler.getAttribute('aria-expanded') === 'true';
-      navbarToggler.setAttribute('aria-expanded', !isExpanded);
-      
-      // 3. Optionnel : On bascule une classe sur le bouton pour l'animer (si vous avez du CSS pour ça)
-      navbarToggler.classList.toggle('collapsed');
-    });
-  }
-  const initIndexCarousels = (id, navSelector) => {
-    const node = document.querySelector(id);
-    if (!node) return;
-
-    const doInit = () => {
-      // On attend que Embla soit chargé (depuis le footer)
-      if (typeof EmblaCarousel === "undefined") {
-        setTimeout(doInit, 100);
-        return;
-      }
-
-      const api = EmblaCarousel(node, {
-        loop: false, align: "start", slidesToScroll: 1,
-        breakpoints: { "(min-width: 992px)": { slidesToScroll: 1 } },
-      });
-
-      // Gestion des flèches
-      if (navSelector) {
-        const prevBtns = document.querySelectorAll(`${navSelector} .embla__prev`);
-        const nextBtns = document.querySelectorAll(`${navSelector} .embla__next`);
-        prevBtns.forEach(btn => btn.addEventListener("click", () => api.scrollPrev()));
-        nextBtns.forEach(btn => btn.addEventListener("click", () => api.scrollNext()));
-      }
-
-      // Exception pour le portfolio qui boucle
-      if (id === "#portfolio-carousel") {
-        api.reInit({ loop: true });
-      }
-    };
-
-    window.__lazyInit(node, doInit);
-  };
-
-  // 1. PORTFOLIO (News et Approach ne sont PAS ici car gérés ailleurs ou par défaut)
-  initIndexCarousels("#portfolio-carousel", ".portfolio-nav-desktop, .portfolio-nav-mobile");
-
-  // 2. NEWS
-  initIndexCarousels("#news-carousel", ".btn-nav-arrow-news, .news-nav-mobile");
-
-});
-</script>
+{{/* Le menu burger et l'init des carrousels sont gérés une seule fois dans head.html. */}}
 
 {{ end }}
