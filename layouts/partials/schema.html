@@ -99,8 +99,9 @@
   {{ $graph = $graph | append $post }}
 {{ end }}
 
-{{/* --- Service + Offers (pages services individuelles) --- */}}
-{{ if and .IsPage (eq .Section "services") }}
+{{/* --- Service + Offers (pages services individuelles, et toute page
+     affichant une grille tarifaire — ex. /collectivites/) --- */}}
+{{ if or (and .IsPage (eq .Section "services")) .Params.pricing.items }}
   {{ $offers := slice }}
   {{ with .Params.pricing }}
     {{ range .items }}

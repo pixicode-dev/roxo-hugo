@@ -39,6 +39,9 @@
 </section>
 {{ end }}
 
+{{/* --- Tarifs (rendu si la page a `pricing.items` en frontmatter) --- */}}
+{{ partial "pricing.html" . }}
+
 {{/* --- Bandeau estimation (CTA intermédiaire vers /devis-en-ligne/) --- */}}
 {{ with .Params.estimation_cta }}
 <section class="section-padding estimation-cta text-center">
