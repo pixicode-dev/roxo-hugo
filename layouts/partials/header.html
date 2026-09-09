@@ -1,27 +1,33 @@
-<nav class="navbar navbar-expand-lg site-navigation">
+<nav class="navbar navbar-expand-lg site-navigation"
+  aria-label="Navigation principale">
   <div class="container">
-    <a class="navbar-brand" href="{{ .Site.BaseURL }}">
-      <img src="{{ .Site.Params.logo | absURL }}"
-        alt="Logo de PixiCode, agence de développement web à Angoulême"
+    <a class="navbar-brand" href="{{ .Site.BaseURL }}"
+      {{ if .IsHome }}aria-current="page"{{ end }}>
+      <img src="{{ .Site.Params.logo | absURL }}" alt="PixiCode — accueil"
         width="180" height="60" />
     </a>
     <button class="navbar-toggler collapsed" type="button"
       data-toggle="collapse" data-target="#sitenavbar"
+      aria-controls="sitenavbar" aria-expanded="false"
       aria-label="Ouvrir le menu de navigation">
-      <span class="icon-bar"></span>
-      <span class="icon-bar"></span>
-      <span class="icon-bar"></span>
+      <span class="icon-bar" aria-hidden="true"></span>
+      <span class="icon-bar" aria-hidden="true"></span>
+      <span class="icon-bar" aria-hidden="true"></span>
     </button>
 
     <div class="collapse navbar-collapse" id="sitenavbar">
       <ul class="navbar-nav ml-auto main-nav">
+        {{$currentPage := .}}
         {{$menu := (.Site.Menus.nav)}}
         {{$len := (len $menu)}}
         {{ range $index, $element := $menu }}
+        {{/* aria-current signale la page courante autrement que par la
+             couleur du lien (RGAA 12.x). */}}
+        {{ $isCurrent := or ($currentPage.IsMenuCurrent "nav" .) ($currentPage.HasMenuCurrent "nav" .) }}
         {{ if eq (add $index 1) $len }}
         <li class="nav-item">
           <a class="nav-link btn-contact btn-sm"
-            href="{{ .URL | absURL }}">
+            href="{{ .URL | absURL }}"{{ if $isCurrent }} aria-current="page"{{ end }}>
             <span class="btn-area">
               <span data-text="{{ .Name }}">
                 {{ .Name }}
@@ -31,7 +37,8 @@
         </li>
         {{ else }}
         <li class="nav-item">
-          <a class="nav-link" href="{{ .URL | absURL }}">{{ .Name }}</a>
+          <a class="nav-link"
+            href="{{ .URL | absURL }}"{{ if $isCurrent }} aria-current="page"{{ end }}>{{ .Name }}</a>
         </li>
         {{ end }}
         {{ end }}

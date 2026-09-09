@@ -18,39 +18,53 @@
 
       <div class="col-lg-6">
         <div class="contact-form-card">
-          <h3 class="form-title mb-4">PARLEZ-NOUS DE VOS BESOINS</h3>
+          <h2 class="form-title mb-4" id="contact-form-title">PARLEZ-NOUS DE
+            VOS BESOINS</h2>
 
           <form id="contact-form" action="{{ .Site.Params.contactForm.action }}"
-            method="post">
+            method="post" aria-labelledby="contact-form-title">
+
+            <p class="pixi-required-note" id="contact-required-note">
+              Les champs suivis d'un astérisque (<span aria-hidden="true">*</span><span
+                class="visually-hidden">obligatoire</span>) sont obligatoires.
+            </p>
 
             <div class="row g-3 mb-3">
               <div class="col-md-6">
+                <label class="pixi-label" for="lastname">Nom <span
+                    class="pixi-required" aria-hidden="true">*</span></label>
                 <input type="text" class="form-control pixi-input"
-                  name="lastname" id="lastname" placeholder="Votre nom*"
-                  required>
+                  name="lastname" id="lastname" placeholder="Votre nom"
+                  autocomplete="family-name" required aria-required="true">
               </div>
               <div class="col-md-6">
+                <label class="pixi-label" for="firstname">Prénom <span
+                    class="pixi-required" aria-hidden="true">*</span></label>
                 <input type="text" class="form-control pixi-input"
-                  name="firstname" id="firstname" placeholder="Votre prénom*"
-                  required>
+                  name="firstname" id="firstname" placeholder="Votre prénom"
+                  autocomplete="given-name" required aria-required="true">
               </div>
             </div>
 
             <div class="mb-3">
+              <label class="pixi-label" for="email">Adresse e-mail <span
+                  class="pixi-required" aria-hidden="true">*</span></label>
               <input type="email" class="form-control pixi-input" name="email"
-                id="email" placeholder="Votre email*" required>
+                id="email" placeholder="prenom.nom@exemple.fr"
+                autocomplete="email" required aria-required="true">
             </div>
 
             <div class="mb-4">
+              <label class="pixi-label" for="message">Votre projet</label>
               <textarea class="form-control pixi-input" id="message"
                 name="message" rows="5"
                 placeholder="Racontez-nous votre projet..."></textarea>
             </div>
 
             <div class="form-check mb-4">
-              <input class="form-check-input" type="checkbox" value
-                id="gdprCheck" required>
-              <label class="form-check-label small text-muted" for="gdprCheck">
+              <input class="form-check-input" type="checkbox" name="gdpr"
+                value="1" id="gdprCheck" required aria-required="true">
+              <label class="form-check-label small" for="gdprCheck">
                 Je suis d'accord pour que mes données soient collectées et
                 stockées. Pour plus d'informations, consultez notre <a
                   href="{{ "politique-confidentialite/" | relLangURL }}"
@@ -67,7 +81,10 @@
               LANCER MON PROJET
             </button>
 
-            <p id="contact-form-status" class="mt-3 text-center"></p>
+            {{/* role="status" : les messages de formhandler.js sont restitués
+                 par les lecteurs d'écran sans interrompre la saisie. */}}
+            <p id="contact-form-status" class="mt-3 text-center" role="status"
+              aria-live="polite" aria-atomic="true"></p>
           </form>
         </div>
       </div>

@@ -136,11 +136,28 @@
       var navbarToggler = document.querySelector('.navbar-toggler');
       var navbarMenu = document.querySelector('#sitenavbar');
       if (navbarToggler && navbarMenu) {
+        /* L'état est dérivé du DOM plutôt que de l'attribut : aria-expanded
+           et l'intitulé du bouton restent ainsi toujours cohérents avec ce
+           qui est réellement affiché (RGAA 7.1). */
+        var setMenuState = function (open) {
+          navbarMenu.classList.toggle('show', open);
+          navbarToggler.classList.toggle('collapsed', !open);
+          navbarToggler.setAttribute('aria-expanded', String(open));
+          navbarToggler.setAttribute(
+            'aria-label',
+            open ? 'Fermer le menu de navigation' : 'Ouvrir le menu de navigation'
+          );
+        };
+
         navbarToggler.addEventListener('click', function () {
-          navbarMenu.classList.toggle('show');
-          var isExpanded = navbarToggler.getAttribute('aria-expanded') === 'true';
-          navbarToggler.setAttribute('aria-expanded', String(!isExpanded));
-          navbarToggler.classList.toggle('collapsed');
+          setMenuState(!navbarMenu.classList.contains('show'));
+        });
+
+        document.addEventListener('keydown', function (event) {
+          if (event.key === 'Escape' && navbarMenu.classList.contains('show')) {
+            setMenuState(false);
+            navbarToggler.focus();
+          }
         });
       }
 

@@ -5,14 +5,19 @@
         <h4 class="widget-title">RECHERCHER</h4>
 
         <form action="{{ .Site.BaseURL }}blog/" method="get"
-            class="search-form-design">
-            <input type="text" name="q" placeholder="Mot-clé..."
+            class="search-form-design" role="search"
+            aria-label="Rechercher dans le blog">
+            <label class="visually-hidden" for="searchInput">Rechercher un
+                mot-clé dans le blog</label>
+            <input type="search" name="q" placeholder="Mot-clé..."
                 class="search-input" id="searchInput">
             <button type="submit" class="search-btn">
+                <span class="visually-hidden">Lancer la recherche</span>
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
                     stroke-width="2.5" stroke-linecap="round"
-                    stroke-linejoin="round"><circle cx="11" cy="11"
+                    stroke-linejoin="round" aria-hidden="true"
+                    focusable="false"><circle cx="11" cy="11"
                         r="8"></circle><line x1="21" y1="21" x2="16.65"
                         y2="16.65"></line></svg>
             </button>

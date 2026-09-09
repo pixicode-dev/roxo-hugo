@@ -207,7 +207,9 @@
 .est-chip:hover{border-color:var(--est-primary);}
 .est-chip.is-active{background:var(--est-primary);border-color:var(--est-primary);color:#fff;}
 .est-textarea,.est-input{width:100%;border:1.5px solid var(--est-line);border-radius:8px;padding:.7rem .85rem;font:inherit;color:var(--est-ink);background:#fff;transition:border .15s;}
-.est-textarea:focus,.est-input:focus,.est-chip:focus-visible,.est-type-card:focus-visible,.est-btn:focus-visible{outline:3px solid rgba(29,93,155,.35);outline-offset:1px;}
+/* Anneau opaque : le rgba(...,.35) précédent donnait 1,76:1 sur blanc,
+   sous le seuil de 3:1 exigé pour un indicateur de focus (RGAA 10.7). */
+.est-textarea:focus-visible,.est-input:focus-visible,.est-chip:focus-visible,.est-type-card:focus-visible,.est-btn:focus-visible{outline:3px solid #1d5d9b;outline-offset:2px;}
 
 /* Contact */
 .est-contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}

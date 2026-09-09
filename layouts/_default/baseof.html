@@ -1,9 +1,12 @@
 <!DOCTYPE html>
-<html lang="{{ with .Site.LanguageCode }}{{ . }}{{ else }}en-US{{ end }}">
+<html lang="{{ with .Site.LanguageCode }}{{ . }}{{ else }}fr-FR{{ end }}">
     {{- partial "head.html" . -}}
     <body>
-        {{- partial "header.html" . -}}
-        <main>
+        <a class="skip-link visually-hidden-focusable" href="#contenu">Aller au contenu principal</a>
+        <header>
+            {{- partial "header.html" . -}}
+        </header>
+        <main id="contenu" tabindex="-1">
             {{- block "main" . }}{{- end }}
         </main>
         {{- partial "footer.html" . -}}
