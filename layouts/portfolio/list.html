@@ -37,26 +37,37 @@
       <div class="col-lg-4 col-md-6 portfolio-item"
         data-category="{{ $currentCat | urlize }}">
 
-        <div class="project-card">
+        <div class="project-card{{ if .Params.image_fill }} project-card--fill{{ end }}">
           <img src="{{ .Params.image | relURL }}" alt="{{ .Title }}"
             class="img-fluid project-img">
+
+          {{/* Toute la carte renvoie vers la fiche projet. Le lien vers le
+               site du client reste cliquable par-dessus (icon-circle--external),
+               d'où un lien de couverture distinct plutôt qu'un <a> englobant
+               (imbrication de liens interdite). */}}
+          <a href="{{ .Permalink }}" class="project-cover-link"
+            aria-label="Voir la fiche du projet {{ .Title }}"></a>
 
           <div class="project-overlay">
             <div class="overlay-icons d-flex justify-content-center gap-3">
 
-              <a href="{{ .Permalink }}" class="icon-circle"
-                title="Voir la fiche">
+              {{/* Purement décoratif : c'est le lien de couverture qui porte
+                   l'action, inutile de dupliquer la cible pour les lecteurs
+                   d'écran. */}}
+              <span class="icon-circle icon-circle--plus" aria-hidden="true">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                   viewBox="0 0 24 24" fill="none" stroke="currentColor"
                   stroke-width="2" stroke-linecap="round"
                   stroke-linejoin="round"><line x1="12" y1="5" x2="12"
                     y2="19"></line><line x1="5" y1="12" x2="19"
                     y2="12"></line></svg>
-              </a>
+              </span>
 
               {{ if .Params.external_link }}
               <a href="{{ .Params.external_link }}" target="_blank"
-                class="icon-circle" title="Visiter le site">
+                rel="noopener"
+                class="icon-circle icon-circle--external"
+                aria-label="Visiter le site de {{ .Title }} (nouvelle fenêtre)">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                   viewBox="0 0 24 24" fill="none" stroke="currentColor"
                   stroke-width="2" stroke-linecap="round"

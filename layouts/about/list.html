@@ -117,6 +117,31 @@
   </div>
 </section>
 
+{{ with .Params.partners }}
+<section class="section-padding"
+  style="background-color: var(--clr-gray-light);">
+  <div class="container">
+    <div class="text-center mb-5">
+      <p class="overline-dash text-uppercase justify-content-center">{{ .title }}</p>
+      <h2 class="section-title">{{ .headline }}</h2>
+    </div>
+
+    <div class="row g-4 justify-content-center">
+      {{ range .items }}
+      <div class="col-md-6 col-lg-5">
+        <div class="service-card h-100">
+          <h3 class="service-card-title">{{ .name }}</h3>
+          <p class="service-card-desc">{{ .description }}</p>
+          <a href="{{ .url }}" class="btn-approach" target="_blank"
+            rel="noopener noreferrer">{{ .link_text }}</a>
+        </div>
+      </div>
+      {{ end }}
+    </div>
+  </div>
+</section>
+{{ end }}
+
 {{ partial "testimonials.html" . }}
 
 {{ partial "call-to-action.html" .}}

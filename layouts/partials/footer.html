@@ -83,16 +83,6 @@
                 }}</a></li>{{ end }}
           </ul>
           {{ end }}
-
-          {{ with .Site.Params.footer.partners }}
-          <h4 class="footer-title mt-4">{{ .title }}</h4>
-          <ul class="footer-list">
-            {{ range .link }}
-            <li><a href="{{ .url }}" target="_blank"
-                rel="noopener noreferrer">{{ .name }}</a></li>
-            {{ end }}
-          </ul>
-          {{ end }}
         </div>
 
       </div>
@@ -117,6 +107,8 @@
                    loading="lazy" decoding="async"
                    class="badge-img">
             </a>
+            {{/* Badge La Fabrique du Net : le script insère le badge juste avant sa propre balise <script> */}}
+            <script src="https://www.lafabriquedunet.fr/agences/badge/pixicode/badge.js?color=outline" defer></script>
           </div>
         </div>
       </div>

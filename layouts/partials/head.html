@@ -116,10 +116,17 @@
     media="print"
     onload="this.media='all'">
 
-  {{/* Fallback pour les navigateurs sans JS (Rare mais bonne pratique) */}}
+  {{/* Fallback pour les navigateurs sans JS : on pointe le bundle traité
+       (purgé + minifié + fingerprinté), surtout PAS les sources brutes.
+       Appeler $bootstrap.Permalink / $style.Permalink forçait Hugo à
+       publier /css/bootstrap.css (172 Ko) et /scss/style.css (27 Ko) non
+       purgés ni minifiés, liés depuis chaque page (Ahrefs : « CSS file
+       size too large »), et privait les visiteurs sans JS de custom.scss
+       et _a11y.scss. */}}
   <noscript>
-    <link rel="stylesheet" href="{{ $bootstrap.Permalink }}">
-    <link rel="stylesheet" href="{{ $style.Permalink }}">
+    <link rel="stylesheet"
+      href="{{ $bundle.Permalink }}"
+      integrity="{{ $bundle.Data.Integrity }}">
   </noscript>
 
   {{/* --- 4. SCHEMA.ORG (JSON-LD) --- */}}
