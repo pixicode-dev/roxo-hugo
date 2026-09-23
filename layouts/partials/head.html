@@ -109,25 +109,17 @@
   {{ $bundle := $cssFiles | resources.Concat "css/bundle.css" | postCSS | minify
   | fingerprint }}
 
-  {{/* 6. Affichage du lien unique */}}
+  {{/* 6. Affichage du lien unique.
+       Feuille BLOQUANTE volontairement : le bundle purgé fait ~12 Ko gzip,
+       soit un aller-retour same-origin déjà connecté. L'astuce
+       media="print" onload="this.media='all'" a été retirée — elle rendait
+       la feuille non bloquante et la page s'affichait donc entièrement non
+       stylée avant de sauter (FOUC + CLS), le header en premier : sans CSS,
+       `.collapse:not(.show){display:none}` n'existe pas encore et le menu
+       mobile s'affichait déplié. Gagner ~100 ms de FCP ne vaut pas ça. */}}
   <link rel="stylesheet"
     href="{{ $bundle.Permalink }}"
-    integrity="{{ $bundle.Data.Integrity }}"
-    media="print"
-    onload="this.media='all'">
-
-  {{/* Fallback pour les navigateurs sans JS : on pointe le bundle traité
-       (purgé + minifié + fingerprinté), surtout PAS les sources brutes.
-       Appeler $bootstrap.Permalink / $style.Permalink forçait Hugo à
-       publier /css/bootstrap.css (172 Ko) et /scss/style.css (27 Ko) non
-       purgés ni minifiés, liés depuis chaque page (Ahrefs : « CSS file
-       size too large »), et privait les visiteurs sans JS de custom.scss
-       et _a11y.scss. */}}
-  <noscript>
-    <link rel="stylesheet"
-      href="{{ $bundle.Permalink }}"
-      integrity="{{ $bundle.Data.Integrity }}">
-  </noscript>
+    integrity="{{ $bundle.Data.Integrity }}">
 
   {{/* --- 4. SCHEMA.ORG (JSON-LD) --- */}}
   {{ partial "schema.html" . }}
